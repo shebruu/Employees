@@ -8,13 +8,21 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
+use Symfony\Component\Security\Core\User\UserInterface;
+
+enum Gender: string {
+    case Homme = 'M';
+    case Femme = 'F';
+    case Non_Binary = 'X';
+}
 
 #[ORM\Table('employees')]
 #[ORM\Entity(repositoryClass: EmployeeRepository::class)]
-class Employee
+class Employee implements UserInterface, PasswordAuthenticatedUserInterface
 {
     #[ORM\Id]
-    #[ORM\GeneratedValue]
+    #[ORM\GeneratedValue(strategy:"NONE")]
     #[ORM\Column(name:'emp_no')]
     private ?int $id = null;
 
@@ -29,8 +37,8 @@ class Employee
     #[Assert\Length(min: 3, max: 16)]
     private ?string $lastName = null;
 
-    #[ORM\Column(length: 1)]
-    private ?string $gender = null;
+    #[ORM\Column(length: 1, enumType: Gender::class)]
+    private ?Gender $gender = null;
 
     #[ORM\Column(type: Types::DATE_MUTABLE)]
     private ?\DateTimeInterface $hireDate = null;
@@ -38,12 +46,21 @@ class Employee
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $photo = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(length: 255, unique: true)]
     #[Assert\Email]
     private ?string $email = null;
 
     #[ORM\OneToMany(mappedBy: 'employe', targetEntity: Demand::class)]
     private Collection $demands;
+
+    #[ORM\Column]
+    private array $roles = [];
+
+    /**
+     * @var string The hashed password
+     */
+    #[ORM\Column]
+    private ?string $password = null;
 
     public function __construct()
     {
@@ -91,12 +108,12 @@ class Employee
         return $this;
     }
 
-    public function getGender(): ?string
+    public function getGender(): ?Gender
     {
         return $this->gender;
     }
 
-    public function setGender(string $gender): static
+    public function setGender(Gender $gender): static
     {
         $this->gender = $gender;
 
@@ -171,5 +188,63 @@ class Employee
         }
 
         return $this;
+    }
+
+        /**
+     * A visual identifier that represents this user.
+     *
+     * @see UserInterface
+     */
+    public function getUserIdentifier(): string
+    {
+        return (string) $this->email;
+    }
+
+    /**
+     * @see UserInterface
+     */
+    public function getRoles(): array
+    {
+        $roles = $this->roles;
+        // guarantee every user at least has ROLE_USER
+        $roles[] = 'ROLE_USER';
+
+        return array_unique($roles);
+    }
+
+    public function setRoles(array $roles): static
+    {
+        $this->roles = $roles;
+
+        return $this;
+    }
+
+    /**
+     * @see PasswordAuthenticatedUserInterface
+     */
+    public function getPassword(): string
+    {
+        return $this->password;
+    }
+
+    public function setPassword(string $password): static
+    {
+        $this->password = $password;
+
+        return $this;
+    }
+
+    /**
+     * @see UserInterface
+     */
+    public function eraseCredentials(): void
+    {
+        // If you store any temporary, sensitive data on the user, clear it here
+        // $this->plainPassword = null;
+    }
+
+    public function isAdmin(): bool
+    {
+        return in_array('ROLE_ADMIN',$this->roles);
     }
 }

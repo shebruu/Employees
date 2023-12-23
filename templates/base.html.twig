@@ -13,6 +13,20 @@
         {% endblock %}
     </head>
     <body>
+        <ul>
+        {% if not app.user %}
+            <li><a href="{{ path('app_login') }}">Se connecter</a></li>
+        {% else %} 
+            <li><a href="/logout">Se déconnecter</a></li>
+        {% endif %}
+        </ul>
+    
+    {% if app.user %}
+        <div>
+            Bonjour {{ app.user.firstName }}
+        </div>
+    {% endif %}
+
         {% block body %}{% endblock %}
     </body>
 </html>
