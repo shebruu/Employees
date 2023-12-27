@@ -205,6 +205,7 @@ class Employee implements UserInterface, PasswordAuthenticatedUserInterface
      */
     public function getRoles(): array
     {
+        var_dump($this);
         $roles = $this->roles;
         // guarantee every user at least has ROLE_USER
         $roles[] = 'ROLE_USER';
