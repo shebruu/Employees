@@ -11,7 +11,8 @@ use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 
-enum Gender: string {
+enum Gender: string
+{
     case Homme = 'M';
     case Femme = 'F';
     case Non_Binary = 'X';
@@ -22,8 +23,8 @@ enum Gender: string {
 class Employee implements UserInterface, PasswordAuthenticatedUserInterface
 {
     #[ORM\Id]
-    #[ORM\GeneratedValue(strategy:"NONE")]
-    #[ORM\Column(name:'emp_no')]
+    #[ORM\GeneratedValue(strategy: "NONE")]
+    #[ORM\Column(name: 'emp_no')]
     private ?int $id = null;
 
     #[ORM\Column(type: Types::DATE_MUTABLE)]
@@ -156,7 +157,8 @@ class Employee implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    public function __toString(): string {
+    public function __toString(): string
+    {
         return "{$this->firstName} {$this->lastName}";
     }
 
@@ -190,7 +192,7 @@ class Employee implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-        /**
+    /**
      * A visual identifier that represents this user.
      *
      * @see UserInterface
@@ -205,9 +207,9 @@ class Employee implements UserInterface, PasswordAuthenticatedUserInterface
      */
     public function getRoles(): array
     {
-        var_dump($this);
+        //var_dump($this);
         $roles = $this->roles;
-        // guarantee every user at least has ROLE_USER
+
         $roles[] = 'ROLE_USER';
 
         return array_unique($roles);
@@ -246,6 +248,6 @@ class Employee implements UserInterface, PasswordAuthenticatedUserInterface
 
     public function isAdmin(): bool
     {
-        return in_array('ROLE_ADMIN',$this->roles);
+        return in_array('ROLE_ADMIN', $this->roles);
     }
 }

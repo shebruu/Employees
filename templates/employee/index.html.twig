@@ -32,7 +32,13 @@
                 <td>{{ employee.email }}</td>
                 <td>
                     <a href="{{ path('app_employee_show', {'id': employee.id}) }}">show</a>
+                {#% if 'ROLE_ADMIN' in app.user %
+                isAdmin () de employee.php
+                #}
                 {% if app.user.isAdmin %}
+                {#
+                {{dump(app.user)}}
+                #}
                     <a href="{{ path('app_employee_edit', {'id': employee.id}) }}">edit</a>
                 {% endif %}
                 </td>
