@@ -4,21 +4,19 @@ namespace App\Entity;
 
 use App\Repository\DepartmentRepository;
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\UX\Turbo\Attribute\Broadcast;
 
+#[ORM\Table('departments')]
 #[ORM\Entity(repositoryClass: DepartmentRepository::class)]
-#[Broadcast]
 class Department
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
-    #[ORM\Column]
+    #[ORM\Column (name:'dept_no')]
     private ?int $id = null;
 
-    #[ORM\Column(length: 15)]
-    private ?string $deptNo = null;
+   
 
-    #[ORM\Column(length: 15)]
+    #[ORM\Column(length: 255)]
     private ?string $deptName = null;
 
     #[ORM\Column(length: 255)]
@@ -27,22 +25,17 @@ class Department
     #[ORM\Column(length: 255)]
     private ?string $address = null;
 
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $roi_url = null;
+
+    
+
     public function getId(): ?int
     {
         return $this->id;
     }
 
-    public function getDeptNo(): ?string
-    {
-        return $this->deptNo;
-    }
-
-    public function setDeptNo(string $deptNo): static
-    {
-        $this->deptNo = $deptNo;
-
-        return $this;
-    }
+  
 
     public function getDeptName(): ?string
     {
@@ -79,4 +72,24 @@ class Department
 
         return $this;
     }
+
+    public function getRoi_url(): ?string
+    {
+        return $this->roi_url;
+    }
+
+    public function setRoi_url(?string $roi_url): static
+    {
+        $this->roi_url = $roi_url;
+
+        return $this;
+    }
+
+    public function __toString(): string {
+        return "{$this->deptName}";
+    }
+
+    
+
+   
 }

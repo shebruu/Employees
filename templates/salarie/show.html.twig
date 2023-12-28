@@ -1,0 +1,34 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Salarie{% endblock %}
+
+{% block body %}
+    <h1>Salarie</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ salarie.id }}</td>
+            </tr>
+            <tr>
+                <th>Salary</th>
+                <td>{{ salarie.salary }}</td>
+            </tr>
+            <tr>
+                <th>FromDate</th>
+                <td>{{ salarie.fromDate ? salarie.fromDate|date('Y-m-d') : '' }}</td>
+            </tr>
+            <tr>
+                <th>ToDate</th>
+                <td>{{ salarie.toDate ? salarie.toDate|date('Y-m-d') : '' }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_salarie_index') }}">back to list</a>
+
+    <a href="{{ path('app_salarie_edit', {'id': salarie.id}) }}">edit</a>
+
+    {{ include('salarie/_delete_form.html.twig') }}
+{% endblock %}
