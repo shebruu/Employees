@@ -1,20 +1,43 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello DepartmentController!{% endblock %}
+{% block title %}Department index{% endblock %}
 
 {% block body %}
-<style>
-    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
-    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
-</style>
+    <h1>Department index</h1>
 
-<div class="example-wrapper">
-    <h1>Hello {{ controller_name }}! ✅</h1>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>DeptNo</th>
+                <th>DeptName</th>
+                <th>Description</th>
+                <th>Address</th>
+                <th>roi_url</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for department in departments %}
+            <tr>
+                <td>{{ department.id }}</td>
+              
+                <td>{{ department.deptName }}</td>
+                <td>{{ department.description }}</td>
+                <td>{{ department.address }}</td>
+                <td>{{ department.roi_url }}</td>
+                <td>
+                    <a href="{{ path('app_department_show', {'id': department.id}) }}">show</a>
+                    <a href="{{ path('app_department_edit', {'id': department.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="7">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
 
-    This friendly message is coming from:
-    <ul>
-        <li>Your controller at <code><a href="{{ 'D:/Mes Documents/Ecole/BES WEB DEVELOPPER/2eme Année WEB DEV/POO PHP/Projet Employées/employees/src/Controller/DepartmentController.php'|file_link(0) }}">src/Controller/DepartmentController.php</a></code></li>
-        <li>Your template at <code><a href="{{ 'D:/Mes Documents/Ecole/BES WEB DEVELOPPER/2eme Année WEB DEV/POO PHP/Projet Employées/employees/templates/department/index.html.twig'|file_link(0) }}">templates/department/index.html.twig</a></code></li>
-    </ul>
-</div>
+    <a href="{{ path('app_department_new') }}">Create new</a>
 {% endblock %}
