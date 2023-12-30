@@ -47,7 +47,7 @@ class Employee implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $photo = null;
 
-    #[ORM\Column(length: 255, unique: true)]
+    #[ORM\Column(length: 255, unique: true, nullable: true)]
     #[Assert\Email]
     private ?string $email = null;
 
