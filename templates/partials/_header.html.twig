@@ -1,0 +1,42 @@
+<nav class="navbar navbar-expand-lg bg-primary" data-bs-theme="dark">
+  <div class="container-fluid">
+
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarColor01" aria-controls="navbarColor01" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarColor01">
+      <ul class="navbar-nav me-auto">
+        <li class="nav-item">
+          <a class="nav-link active" href="#">Home
+            <span class="visually-hidden">(current)</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#">Departements</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="{{ path('app_employee_index') }}">Employees</a>
+        </li>
+
+          <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle show" data-bs-toggle="dropdown" href="{{ path('app_women_at_work_index') }}" role="button" aria-haspopup="true" aria-expanded="true">Women at work</a>
+          <div class="dropdown-menu show" data-bs-popper="static">
+            <a class="dropdown-item" href="{{ path('app_women_at_work_ml') }}"> Departementments stat </a>
+          
+          </div>
+        </li>
+      
+
+        <li class="nav-item">
+          <a class="nav-link" href="#">Partners</a>
+        </li>
+        
+     
+      </ul>
+     
+    </div>
+  </div>
+</nav>
+
+
+

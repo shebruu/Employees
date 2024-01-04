@@ -16,36 +16,45 @@
                 <th>HireDate</th>
                 <th>Photo</th>
                 <th>Email</th>
-                <th>actions</th>
+                <th>Actions</th>
             </tr>
         </thead>
         <tbody>
-        {% for employee in employees %}
-            <tr>
-                <td>{{ employee.id }}</td>
-                <td>{{ employee.birthDate ? employee.birthDate|date('Y-m-d') : '' }}</td>
-                <td>{{ employee.firstName }}</td>
-                <td>{{ employee.lastName }}</td>
-                <td>{{ employee.gender.value }}</td>
-                <td>{{ employee.hireDate ? employee.hireDate|date('Y-m-d') : '' }}</td>
-                <td>{{ employee.photo }}</td>
-                <td>{{ employee.email }}</td>
-                <td>
-                    <a href="{{ path('app_employee_show', {'id': employee.id}) }}">show</a>
-                {% if app.user.isAdmin %}
-                    <a href="{{ path('app_employee_edit', {'id': employee.id}) }}">edit</a>
-                {% endif %}
-                </td>
-            </tr>
-        {% else %}
-            <tr>
-                <td colspan="9">no records found</td>
-            </tr>
-        {% endfor %}
+           {% if app.user %}
+        <h3> </h3>
+    {% endif %}
+            {% if employees is not empty %}
+                {% for employee in employees %}
+                    <tr>
+                        <td>{{ employee.emp_no }}</td>
+                        <td>{{ employee.birthDate ? employee.birthDate|date('Y-m-d') : '' }}</td>
+                        <td>{{ employee.firstName }}</td>
+                        <td>{{ employee.lastName }}</td>
+                        <td>{{ employee.gender.value }}</td>
+                        <td>{{ employee.hireDate ? employee.hireDate|date('Y-m-d') : '' }}</td>
+                        <td>{{ employee.photo }}</td>
+                        <td>{{ employee.email }}</td>
+                        <td>
+                           
+                            {% if app.user and app.user.isAdmin %}
+                                <a href="{{ path('app_employee_edit', {'id': employee.emp_no}) }}">edit</a>
+                            {% else %}
+                                <a href="{{ path('app_employee_show', {'id': employee.emp_no}) }}">show</a>
+                               
+                            {% endif %}
+                        </td>
+                    </tr>
+                {% endfor %}
+            {% else %}
+                <tr>
+                    <td colspan="9">no records found</td>
+                     <p>Veuillez <a href="{{ path('login_route') }}">vous connecter</a> ou <a href="{{ path('register_route') }}">créer un compte</a>.</p>
+                </tr>
+            {% endif %}
         </tbody>
     </table>
 
-{% if app.user.isAdmin %}
-    <a href="{{ path('app_employee_new') }}">Create new</a>
-{% endif %}
+    {% if app.user and app.user.isAdmin %}
+        <a href="{{ path('app_employee_new') }}">Create new</a>
+    {% endif %}
 {% endblock %}
