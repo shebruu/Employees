@@ -25,7 +25,7 @@ class Employee implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Id]
     #[ORM\GeneratedValue(strategy: "NONE")]
     #[ORM\Column(name: 'emp_no')]
-    private ?int $id = null;
+    private ?int $emp_no = null;
 
     #[ORM\Column(type: Types::DATE_MUTABLE)]
     private ?\DateTimeInterface $birthDate = null;
@@ -47,7 +47,7 @@ class Employee implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $photo = null;
 
-    #[ORM\Column(length: 255, unique: true, nullable: true)]
+    #[ORM\Column(length: 255, unique: true)]
     #[Assert\Email]
     private ?string $email = null;
 
@@ -68,9 +68,9 @@ class Employee implements UserInterface, PasswordAuthenticatedUserInterface
         $this->demands = new ArrayCollection();
     }
 
-    public function getId(): ?int
+    public function getemp_no(): ?int
     {
-        return $this->id;
+        return $this->emp_no;
     }
 
     public function getBirthDate(): ?\DateTimeInterface
@@ -162,6 +162,7 @@ class Employee implements UserInterface, PasswordAuthenticatedUserInterface
         return "{$this->firstName} {$this->lastName}";
     }
 
+
     /**
      * @return Collection<int, Demand>
      */
@@ -207,9 +208,8 @@ class Employee implements UserInterface, PasswordAuthenticatedUserInterface
      */
     public function getRoles(): array
     {
-        //var_dump($this);
         $roles = $this->roles;
-
+        // guarantee every user at least has ROLE_USER
         $roles[] = 'ROLE_USER';
 
         return array_unique($roles);

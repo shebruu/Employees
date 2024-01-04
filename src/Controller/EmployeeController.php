@@ -55,7 +55,6 @@ class EmployeeController extends AbstractController
     #[Route('/{id}/edit', name: 'app_employee_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Employee $employee, EntityManagerInterface $entityManager): Response
     {
-        //redirection si pas connecté
         $this->denyAccessUnlessGranted('ROLE_ADMIN');
 
         $form = $this->createForm(EmployeeType::class, $employee);
@@ -76,7 +75,7 @@ class EmployeeController extends AbstractController
     #[Route('/{id}', name: 'app_employee_delete', methods: ['POST'])]
     public function delete(Request $request, Employee $employee, EntityManagerInterface $entityManager): Response
     {
-        if ($this->isCsrfTokenValid('delete' . $employee->getId(), $request->request->get('_token'))) {
+        if ($this->isCsrfTokenValid('delete' . $employee->getemp_no(), $request->request->get('_token'))) {
             $entityManager->remove($employee);
             $entityManager->flush();
         }
