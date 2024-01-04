@@ -22,11 +22,10 @@ enum Gender: string
 #[ORM\Entity(repositoryClass: EmployeeRepository::class)]
 class Employee implements UserInterface, PasswordAuthenticatedUserInterface
 {
-
+    #[ORM\Id]
     #[ORM\GeneratedValue(strategy: "NONE")]
     #[ORM\Column(name: 'emp_no')]
     private ?int $emp_no = null;
-
 
     #[ORM\Column(type: Types::DATE_MUTABLE)]
     private ?\DateTimeInterface $birthDate = null;
