@@ -11,7 +11,8 @@ use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 
-enum Gender: string {
+enum Gender: string
+{
     case Homme = 'M';
     case Femme = 'F';
     case Non_Binary = 'X';
@@ -22,9 +23,9 @@ enum Gender: string {
 class Employee implements UserInterface, PasswordAuthenticatedUserInterface
 {
     #[ORM\Id]
-    #[ORM\GeneratedValue(strategy:"NONE")]
-    #[ORM\Column(name:'emp_no')]
-    private ?int $id = null;
+    #[ORM\GeneratedValue(strategy: "NONE")]
+    #[ORM\Column(name: 'emp_no')]
+    private ?int $emp_no = null;
 
     #[ORM\Column(type: Types::DATE_MUTABLE)]
     private ?\DateTimeInterface $birthDate = null;
@@ -67,9 +68,9 @@ class Employee implements UserInterface, PasswordAuthenticatedUserInterface
         $this->demands = new ArrayCollection();
     }
 
-    public function getId(): ?int
+    public function getemp_no(): ?int
     {
-        return $this->id;
+        return $this->emp_no;
     }
 
     public function getBirthDate(): ?\DateTimeInterface
@@ -156,9 +157,11 @@ class Employee implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    public function __toString(): string {
+    public function __toString(): string
+    {
         return "{$this->firstName} {$this->lastName}";
     }
+
 
     /**
      * @return Collection<int, Demand>
@@ -190,7 +193,7 @@ class Employee implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-        /**
+    /**
      * A visual identifier that represents this user.
      *
      * @see UserInterface
@@ -245,6 +248,6 @@ class Employee implements UserInterface, PasswordAuthenticatedUserInterface
 
     public function isAdmin(): bool
     {
-        return in_array('ROLE_ADMIN',$this->roles);
+        return in_array('ROLE_ADMIN', $this->roles);
     }
 }
