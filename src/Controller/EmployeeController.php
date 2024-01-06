@@ -45,8 +45,9 @@ class EmployeeController extends AbstractController
     }
 
     #[Route('/{id}', name: 'app_employee_show', methods: ['GET'])]
-    public function show(Employee $employee): Response
+    public function show(Employee $employee, EmployeeRepository $employeeRepository, EntityManagerInterface $entityManager): Response
     {
+
         return $this->render('employee/show.html.twig', [
             'employee' => $employee,
         ]);
@@ -75,7 +76,7 @@ class EmployeeController extends AbstractController
     #[Route('/{id}', name: 'app_employee_delete', methods: ['POST'])]
     public function delete(Request $request, Employee $employee, EntityManagerInterface $entityManager): Response
     {
-        if ($this->isCsrfTokenValid('delete' . $employee->getemp_no(), $request->request->get('_token'))) {
+        if ($this->isCsrfTokenValid('delete' . $employee->getId(), $request->request->get('_token'))) {
             $entityManager->remove($employee);
             $entityManager->flush();
         }
