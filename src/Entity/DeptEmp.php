@@ -12,13 +12,13 @@ class DeptEmp
 
     #[ORM\Id]
     #[ORM\ManyToOne(targetEntity: Employee::class)]
-    #[ORM\JoinColumn(name: "emp_no", referencedColumnName: "emp_no")]
-    private  $emp_no = null;
+    #[ORM\JoinColumn(name: "employee_id", referencedColumnName: "id")]
+    private  $employee_id = null;
 
     #[ORM\Id]
     #[ORM\ManyToOne(targetEntity: Departement::class)]
-    #[ORM\JoinColumn(name: "dept_no", referencedColumnName: "dept_no")]
-    private ?string $dept_no = null;
+    #[ORM\JoinColumn(name: "department_id", referencedColumnName: "id")]
+    private ?string $department_id = null;
 
     #[ORM\Column(type: Types::DATE_MUTABLE)]
     private ?\DateTimeInterface $from_date = null;
@@ -28,26 +28,28 @@ class DeptEmp
 
 
 
-    public function getEmpNo(): ?int
+
+
+    public function getEmpid(): ?int
     {
-        return $this->emp_no;
+        return $this->employee_id;
     }
 
-    public function setEmpNo(int $emp_no): static
+    public function setEmpid(int $employee_id): static
     {
-        $this->emp_no = $emp_no;
+        $this->employee_id = $employee_id;
 
         return $this;
     }
 
-    public function getDeptNo(): ?string
+    public function getDeptid(): ?string
     {
-        return $this->dept_no;
+        return $this->department_id;
     }
 
-    public function setDeptNo(string $dept_no): static
+    public function setDeptid(string $departement_id): static
     {
-        $this->dept_no = $dept_no;
+        $this->department_id = $departement_id;
 
         return $this;
     }

@@ -45,8 +45,9 @@ class EmployeeController extends AbstractController
     }
 
     #[Route('/{id}', name: 'app_employee_show', methods: ['GET'])]
-    public function show(Employee $employee): Response
+    public function show(Employee $employee, EmployeeRepository $employeeRepository, EntityManagerInterface $entityManager): Response
     {
+
         return $this->render('employee/show.html.twig', [
             'employee' => $employee,
         ]);

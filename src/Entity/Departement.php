@@ -10,10 +10,13 @@ use Symfony\Component\Validator\Constraints as Assert;
 class Departement
 {
 
-
     #[ORM\Id]
-    #[ORM\GeneratedValue(strategy: "NONE")]
-    #[ORM\Column(name: 'dept_no', length: 4)]
+    #[ORM\GeneratedValue]
+    #[ORM\Column]
+    private ?int $id = null;
+
+
+    #[ORM\Column(length: 4)]
     private ?string $dept_no = null;
 
     #[ORM\Column(length: 40)]
@@ -27,6 +30,12 @@ class Departement
 
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $roi_url = null;
+
+
+    public function getId(): ?int
+    {
+        return $this->id;
+    }
 
 
     public function getDeptNon(): ?string
