@@ -24,8 +24,8 @@ class Employee implements UserInterface, PasswordAuthenticatedUserInterface
 {
     #[ORM\Id]
     #[ORM\GeneratedValue(strategy: "NONE")]
-    #[ORM\Column(name: 'emp_no')]
-    private ?int $emp_no = null;
+    #[ORM\Column(name: 'id')]
+    private ?int $id = null;
 
     #[ORM\Column(type: Types::DATE_MUTABLE)]
     private ?\DateTimeInterface $birthDate = null;
@@ -54,6 +54,7 @@ class Employee implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(mappedBy: 'employe', targetEntity: Demand::class)]
     private Collection $demands;
 
+
     #[ORM\Column]
     private array $roles = [];
 
@@ -68,9 +69,11 @@ class Employee implements UserInterface, PasswordAuthenticatedUserInterface
         $this->demands = new ArrayCollection();
     }
 
-    public function getemp_no(): ?int
+
+
+    public function getId(): ?int
     {
-        return $this->emp_no;
+        return $this->id;
     }
 
     public function getBirthDate(): ?\DateTimeInterface
