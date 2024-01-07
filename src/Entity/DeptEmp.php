@@ -6,6 +6,7 @@ use App\Repository\DeptEmpRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
+#[ORM\Table('dept_emp')]
 #[ORM\Entity(repositoryClass: DeptEmpRepository::class)]
 class DeptEmp
 {

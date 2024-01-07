@@ -5,6 +5,7 @@ namespace App\Entity;
 use App\Repository\DemandRepository;
 use Doctrine\ORM\Mapping as ORM;
 
+#[ORM\Table('demand')]
 #[ORM\Entity(repositoryClass: DemandRepository::class)]
 class Demand
 {

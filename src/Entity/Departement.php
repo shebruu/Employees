@@ -9,6 +9,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 
+#[ORM\Table('departments')]
 #[ORM\Entity(repositoryClass: DepartementRepository::class)]
 class Departement
 {
@@ -16,20 +17,20 @@ class Departement
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    private ?int $id = null;
+    private ?string $id = null;
 
 
-    #[ORM\Column(length: 4)]
+    #[ORM\Column(length: 4, name: 'dept_no')]
     private ?string $dept_no = null;
 
-    #[ORM\Column(length: 40)]
+    #[ORM\Column(length: 40, name: 'dept_name')]
     private ?string $dept_name = null;
 
     #[ORM\Column(length: 255)]
     private ?string $description = null;
 
     #[ORM\Column(length: 255)]
-    private ?string $adress = null;
+    private ?string $address = null;
 
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $roi_url = null;
@@ -48,7 +49,7 @@ class Departement
         $this->employees = new ArrayCollection();
         $this->deptEmps = new ArrayCollection();
     }
-    public function getId(): ?int
+    public function getId(): ?string
     {
         return $this->id;
     }
@@ -66,10 +67,7 @@ class Departement
         return $this;
     }
 
-    public function getDeptName(): ?string
-    {
-        return $this->dept_name;
-    }
+
 
     public function setDeptName(string $dept_name): static
     {
@@ -92,12 +90,12 @@ class Departement
 
     public function getAdress(): ?string
     {
-        return $this->adress;
+        return $this->address;
     }
 
     public function setAdress(string $adress): static
     {
-        $this->adress = $adress;
+        $this->address = $adress;
 
         return $this;
     }

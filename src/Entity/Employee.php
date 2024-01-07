@@ -66,7 +66,7 @@ class Employee implements UserInterface, PasswordAuthenticatedUserInterface
     private Collection $departments;
 
     // Relation one-to-many avec l'entité de jointure DeptEmp
-    #[ORM\OneToMany(mappedBy: 'employee', targetEntity: DeptEmp::class)]
+    #[ORM\OneToMany(mappedBy: 'employee_id', targetEntity: DeptEmp::class)]
     private Collection $deptEmps;
 
 
@@ -204,6 +204,9 @@ class Employee implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
+
+
+
     public function removeDemand(Demand $demand): static
     {
         if ($this->demands->removeElement($demand)) {
@@ -216,6 +219,15 @@ class Employee implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
+    public function getDepartments(): Collection
+    {
+        return $this->departments;
+    }
+
+    public function getDeptEmps(): Collection
+    {
+        return $this->deptEmps;
+    }
     /**
      * A visual identifier that represents this user.
      *
