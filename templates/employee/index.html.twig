@@ -26,7 +26,7 @@
             {% if employees is not empty %}
                 {% for employee in employees %}
                     <tr>
-                        <td>{{ employee.emp_no }}</td>
+                        <td>{{ employee.id }}</td>
                         <td>{{ employee.birthDate ? employee.birthDate|date('Y-m-d') : '' }}</td>
                         <td>{{ employee.firstName }}</td>
                         <td>{{ employee.lastName }}</td>
@@ -37,9 +37,9 @@
                         <td>
                            
                             {% if app.user and app.user.isAdmin %}
-                                <a href="{{ path('app_employee_edit', {'id': employee.emp_no}) }}">edit</a>
+                                <a href="{{ path('app_employee_edit', {'id': employee.id}) }}">edit</a>
                             {% else %}
-                                <a href="{{ path('app_employee_show', {'id': employee.emp_no}) }}">show</a>
+                                <a href="{{ path('app_employee_show', {'id': employee.id}) }}">show</a>
                                
                             {% endif %}
                         </td>

@@ -55,8 +55,26 @@ class Employee implements UserInterface, PasswordAuthenticatedUserInterface
     private Collection $demands;
 
 
+
+    // Relation many-to-many directe avec Department
+    #[ORM\ManyToMany(targetEntity: Departement::class, inversedBy: 'employees')]
+    #[ORM\JoinTable(
+        name: "dept_emp",
+        joinColumns: [new ORM\JoinColumn(name: "employee_id", referencedColumnName: "id")],
+        inverseJoinColumns: [new ORM\JoinColumn(name: "department_id", referencedColumnName: "id")]
+    )]
+    private Collection $departments;
+
+    // Relation one-to-many avec l'entité de jointure DeptEmp
+    #[ORM\OneToMany(mappedBy: 'employee', targetEntity: DeptEmp::class)]
+    private Collection $deptEmps;
+
+
+
     #[ORM\Column]
     private array $roles = [];
+
+
 
     /**
      * @var string The hashed password
@@ -67,6 +85,8 @@ class Employee implements UserInterface, PasswordAuthenticatedUserInterface
     public function __construct()
     {
         $this->demands = new ArrayCollection();
+        $this->departments = new ArrayCollection();
+        $this->deptEmps = new ArrayCollection();
     }
 
 
