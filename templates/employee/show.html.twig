@@ -48,6 +48,15 @@
     <p> {{ dep.deptName }} </p>
     {% endfor %}
 
+<h4> liste des Département actuel ( filtre controller)</h4>
+
+{% if employee.ctrl_actualDept is defined and employee.ctrl_actualDept is not null %}
+    {{ employee.ctrl_actualDept.deptName }}
+{% else %}
+    ''
+{% endif %}
+
+
     <a href="{{ path('app_employee_index') }}">back to list</a>
 
     <a href="{{ path('app_employee_edit', {'id': employee.id}) }}">edit</a>

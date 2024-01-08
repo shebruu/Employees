@@ -41,6 +41,13 @@ class Employee implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(length: 1, enumType: Gender::class)]
     private ?Gender $gender = null;
 
+
+
+
+
+
+
+
     #[ORM\Column(type: Types::DATE_MUTABLE)]
     private ?\DateTimeInterface $hireDate = null;
 
@@ -73,6 +80,9 @@ class Employee implements UserInterface, PasswordAuthenticatedUserInterface
 
     #[ORM\Column]
     private array $roles = [];
+
+
+    public  $ctrl_actualDept;
 
 
 
@@ -284,5 +294,15 @@ class Employee implements UserInterface, PasswordAuthenticatedUserInterface
     public function isAdmin(): bool
     {
         return in_array('ROLE_ADMIN', $this->roles);
+    }
+
+    public function getCtrlActualDept()
+    {
+        return $this->ctrl_actualDept;
+    }
+
+    public function setCtrlActualDept($ctrl_actualDept)
+    {
+        $this->ctrl_actualDept = $ctrl_actualDept;
     }
 }

@@ -53,6 +53,25 @@ class EmployeeController extends AbstractController
         ]);
     }
 
+
+    #[Route('/controller/{id}', name: 'app_employee_show_controller', methods: ['GET'])]
+    public function showControl(Employee $employee, EmployeeRepository $employeeRepository, EntityManagerInterface $entityManager): Response
+
+    {
+
+        foreach ($employee->getDeptEmps() as $deptEmp) {
+
+            if ($deptEmp->getToDate()->format('Y-m-d') == '9999-01-01') {
+                $employee->ctrl_actualDept = $deptEmp->getDepartments();
+                break;
+            }
+        }
+
+        return $this->render('employee/show.html.twig', [
+            'employee' => $employee,
+        ]);
+    }
+
     #[Route('/{id}/edit', name: 'app_employee_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Employee $employee, EntityManagerInterface $entityManager): Response
     {
