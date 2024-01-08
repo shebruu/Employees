@@ -67,6 +67,13 @@ class Departement
         return $this;
     }
 
+    public function getDeptName(): ?string
+    {
+
+
+        return $this->dept_name;
+    }
+
 
 
     public function setDeptName(string $dept_name): static
