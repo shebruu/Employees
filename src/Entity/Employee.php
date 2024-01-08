@@ -84,7 +84,7 @@ class Employee implements UserInterface, PasswordAuthenticatedUserInterface
 
     public  $ctrl_actualDept;
 
-
+    public $repoqb_actualDept;
 
     /**
      * @var string The hashed password
@@ -304,5 +304,10 @@ class Employee implements UserInterface, PasswordAuthenticatedUserInterface
     public function setCtrlActualDept($ctrl_actualDept)
     {
         $this->ctrl_actualDept = $ctrl_actualDept;
+    }
+
+    public function repoqb_actualDept($repoqb_actualDept)
+    {
+        $this->repoqb_actualDept = $repoqb_actualDept;
     }
 }

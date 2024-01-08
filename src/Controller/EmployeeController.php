@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Employee;
+use App\Entity\Departement;
 use App\Form\EmployeeType;
 use App\Repository\EmployeeRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -71,6 +72,18 @@ class EmployeeController extends AbstractController
             'employee' => $employee,
         ]);
     }
+    #[Route('/repoquery/{id}', name: 'app_employee_show_repoquery', methods: ['GET'])]
+    public function showRepoquery(Employee $employee, EntityManagerInterface $entityManager): Response
+    {
+        $repository = $entityManager->getRepository(Departement::class);
+
+        $employee->repoqb_actualDept = $repository->findActualDepartment($employee);
+
+        return $this->render('employee/show.html.twig', [
+            'employee' => $employee,
+        ]);
+    }
+
 
     #[Route('/{id}/edit', name: 'app_employee_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Employee $employee, EntityManagerInterface $entityManager): Response
