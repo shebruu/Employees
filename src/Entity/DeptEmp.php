@@ -13,14 +13,14 @@ class DeptEmp
 
     #[ORM\Id]
     #[ORM\ManyToOne(inversedBy: 'deptEmps')]
-    #[ORM\JoinColumn(nullable: false)]
-    private ?Employee $employee_id = null;
+    #[ORM\JoinColumn(name: 'employee_id', nullable: false)]
+    private ?Employee $employee = null;
 
 
     #[ORM\Id]
     #[ORM\ManyToOne(inversedBy: 'deptEmps')]
-    #[ORM\JoinColumn(nullable: false)]
-    private ?Departement $department_id = null;
+    #[ORM\JoinColumn(name: 'department_id', nullable: false)]
+    private ?Departement $departement = null;
 
     #[ORM\Column(type: Types::DATE_MUTABLE)]
     private ?\DateTimeInterface $from_date = null;
@@ -32,26 +32,26 @@ class DeptEmp
 
 
 
-    public function getEmpid(): ?Employee
+    public function getEmployee(): ?Employee
     {
-        return $this->employee_id;
+        return $this->employee;
     }
 
-    public function setEmpid(Employee $employee_id): static
+    public function setEmployee(Employee $employee): static
     {
-        $this->employee_id = $employee_id;
+        $this->employee = $employee;
 
         return $this;
     }
 
-    public function getDeptid(): ?Departement
+    public function getDepartement(): ?Departement
     {
-        return $this->department_id;
+        return $this->departement;
     }
 
-    public function setDeptid(Departement $departement_id): static
+    public function setDepartement(Departement $departement): static
     {
-        $this->department_id = $departement_id;
+        $this->departement = $departement;
 
         return $this;
     }

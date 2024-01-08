@@ -73,7 +73,7 @@ class Employee implements UserInterface, PasswordAuthenticatedUserInterface
     private Collection $departments;
 
     // Relation one-to-many avec l'entité de jointure DeptEmp
-    #[ORM\OneToMany(mappedBy: 'employee_id', targetEntity: DeptEmp::class)]
+    #[ORM\OneToMany(mappedBy: 'employee', targetEntity: DeptEmp::class)]
     private Collection $deptEmps;
 
 

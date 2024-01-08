@@ -40,7 +40,7 @@ class Departement
     #[ORM\ManyToMany(targetEntity: Employee::class, mappedBy: 'departments')]
     private Collection $employees;
 
-    #[ORM\OneToMany(mappedBy: 'department_id', targetEntity: DeptEmp::class)]
+    #[ORM\OneToMany(mappedBy: 'departement', targetEntity: DeptEmp::class)]
     private Collection $deptEmps;
 
 

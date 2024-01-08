@@ -60,9 +60,9 @@ class EmployeeController extends AbstractController
     {
 
         foreach ($employee->getDeptEmps() as $deptEmp) {
-
+            //error_log("DeptEmp ToDate: " . $deptEmp->getToDate()->format('Y-m-d'));
             if ($deptEmp->getToDate()->format('Y-m-d') == '9999-01-01') {
-                $employee->ctrl_actualDept = $deptEmp->getDepartments();
+                $employee->ctrl_actualDept = $deptEmp->getDepartement();
                 break;
             }
         }
