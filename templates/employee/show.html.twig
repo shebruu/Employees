@@ -43,9 +43,17 @@
     </table>
 
 
-    <h4> Liste des départements </h4>
+    <h4> historique  des départements </h4>
+    <ul>
     {% for dep in employee.departments %}
-    <p> {{ dep.deptName }} </p>
+    <li> {{ dep.deptName }} </li>
+    {% endfor %}
+</ul>
+     <h4> Liste des départements  ( passage par table intermediaire (deptEmps) </h4>
+    {% for deptemp in employee.deptEmps %}
+     {% if deptemp.toDate| date('Y-m-d')=='9999-01-01' %}
+    <p> {{ deptemp.departement.deptName}} </p>
+    {% endif %}
     {% endfor %}
 
 <h4> liste des Département actuel ( filtre controller)</h4>
@@ -64,6 +72,12 @@
 {% else %}
     ''
 {% endif %}
+
+
+<h4> liste des Département actuel ( filtre repository, affichage a partir de show employee)</h4>
+
+    {{ employee.actualdep.deptName }}
+
 
 
 

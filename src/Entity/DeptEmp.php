@@ -13,13 +13,13 @@ class DeptEmp
 
     #[ORM\Id]
     #[ORM\ManyToOne(inversedBy: 'deptEmps')]
-    #[ORM\JoinColumn(name: 'employee_id', nullable: false)]
+    #[ORM\JoinColumn(name: 'employee_id', referencedColumnName: 'id', nullable: false)]
     private ?Employee $employee = null;
 
 
     #[ORM\Id]
     #[ORM\ManyToOne(inversedBy: 'deptEmps')]
-    #[ORM\JoinColumn(name: 'department_id', nullable: false)]
+    #[ORM\JoinColumn(name: 'department_id', referencedColumnName: 'id', nullable: false)]
     private ?Departement $departement = null;
 
     #[ORM\Column(type: Types::DATE_MUTABLE)]

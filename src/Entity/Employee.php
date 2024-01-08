@@ -86,6 +86,8 @@ class Employee implements UserInterface, PasswordAuthenticatedUserInterface
 
     public $repoqb_actualDept;
 
+    public $actualdep;
+
     /**
      * @var string The hashed password
      */

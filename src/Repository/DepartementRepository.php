@@ -3,6 +3,8 @@
 namespace App\Repository;
 
 use App\Entity\Departement;
+use App\Entity\DeptEmp;
+use App\Entity\Employee;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -24,8 +26,10 @@ class DepartementRepository extends ServiceEntityRepository
     /** 
      * @return Departement[] Returns an array of Departement objects
      */
+
     public function findActualDepartment($employee): ?Departement
     {
+        // dd('ok');
         return $this->createQueryBuilder('d')
             ->select('d')
             ->innerJoin('d.deptEmps', 'de')
@@ -34,6 +38,23 @@ class DepartementRepository extends ServiceEntityRepository
             ->andwhere('de.to_date =:toDate') //correction 
             ->setParameter('id', $employee->getId())
             ->setParameter('toDate', '9999-01-01')
+            ->getQuery()
+            ->getOneOrNullResult();
+    }
+
+    public  function findActualDepartmentemp($employee): ?Departement
+    {
+        return $this->createQueryBuilder('dept')
+            ->select('d')
+            ->from(Departement::class, 'd')
+            ->innerJoin('d.deptEmps', 'de')
+            ->innerJoin('de.employee', 'e')
+            ->where('e.id = :id')
+            ->andWhere('de.to_date = :toDate')
+            ->setParameters([
+                'id' => $employee->getId(),
+                'toDate' => '9999-01-01'
+            ])
             ->getQuery()
             ->getOneOrNullResult();
     }

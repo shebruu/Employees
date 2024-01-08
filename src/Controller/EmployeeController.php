@@ -5,7 +5,9 @@ namespace App\Controller;
 use App\Entity\Employee;
 use App\Entity\Departement;
 use App\Form\EmployeeType;
+
 use App\Repository\EmployeeRepository;
+use App\Repository\DepartementRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -46,17 +48,19 @@ class EmployeeController extends AbstractController
     }
 
     #[Route('/{id}', name: 'app_employee_show', methods: ['GET'])]
-    public function show(Employee $employee, EmployeeRepository $employeeRepository, EntityManagerInterface $entityManager): Response
+    public function show(Employee $employee, DepartementRepository $repos, EntityManagerInterface $entityManager): Response
     {
-
+        $actualdep = $repos->findActualDepartmentemp($employee);
+        $employee->actualdep = $actualdep;
         return $this->render('employee/show.html.twig', [
             'employee' => $employee,
+            // 'actualdep' => $actualdep
         ]);
     }
 
 
     #[Route('/controller/{id}', name: 'app_employee_show_controller', methods: ['GET'])]
-    public function showControl(Employee $employee, EmployeeRepository $employeeRepository, EntityManagerInterface $entityManager): Response
+    public function showControl(Employee $employee): Response
 
     {
 
