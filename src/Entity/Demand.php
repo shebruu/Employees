@@ -5,6 +5,7 @@ namespace App\Entity;
 use App\Repository\DemandRepository;
 use Doctrine\ORM\Mapping as ORM;
 
+#[ORM\Table('demands')]
 #[ORM\Entity(repositoryClass: DemandRepository::class)]
 class Demand
 {
@@ -23,7 +24,7 @@ class Demand
     private ?bool $status = null;
 
     #[ORM\ManyToOne(inversedBy: 'demands')]
-    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\JoinColumn(name:"emp_no", referencedColumnName:"emp_no",nullable: false)]
     private ?Employee $employee = null;
 
     public function getId(): ?int

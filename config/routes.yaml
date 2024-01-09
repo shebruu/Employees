@@ -3,3 +3,13 @@ controllers:
         path: ../src/Controller/
         namespace: App\Controller
     type: attribute
+
+home:
+    path: /home
+    controller: App\Controller\HomeController::index
+
+home_headquarters_location:
+    path: '/home/headquarters_location'
+    controller: 'App\Controller\HomeController::headquartersLocation'
+
+
