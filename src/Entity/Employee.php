@@ -78,6 +78,8 @@ class Employee implements UserInterface, PasswordAuthenticatedUserInterface
 
 
 
+    #[ORM\ManyToMany(targetEntity: Project::class)]
+    private Collection $projects;
     #[ORM\Column]
     private array $roles = [];
 
@@ -87,6 +89,8 @@ class Employee implements UserInterface, PasswordAuthenticatedUserInterface
     public $repoqb_actualDept;
 
     public $actualdep;
+
+
 
     /**
      * @var string The hashed password
@@ -99,6 +103,7 @@ class Employee implements UserInterface, PasswordAuthenticatedUserInterface
         $this->demands = new ArrayCollection();
         $this->departments = new ArrayCollection();
         $this->deptEmps = new ArrayCollection();
+        $this->projects = new ArrayCollection();
     }
 
 
@@ -239,6 +244,11 @@ class Employee implements UserInterface, PasswordAuthenticatedUserInterface
     public function getDeptEmps(): Collection
     {
         return $this->deptEmps;
+    }
+
+    public function getProjects(): Collection
+    {
+        return $this->projects;
     }
     /**
      * A visual identifier that represents this user.

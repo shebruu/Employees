@@ -1,0 +1,40 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello ProjectController!
+{% endblock %}
+
+{% block body %}
+
+<h1> projets  </h1>
+	<table class="table">
+		<thead>
+			<tr>
+				<th>
+					emp_no</th>
+				<th>
+					description</th>
+				<th>
+					date creation
+				</th>
+				<th>
+					modifié</th>
+			</tr>
+		</thead>
+		<tbody>
+			{% for project in projects %}
+				<tr>
+
+					<td>{{ project.empNo }}</td>
+
+					<td>{{ project.description }}</td>
+
+					<td>{{ project.creation ? project.creation | date ('Y-m-d H:i:s'): ''}}</td>
+
+
+					<td>{{ project.estmodifie }}</td>
+				</tr>
+			{% endfor %}
+		</tbody>
+		<tbody></tbody>
+	</table>
+{% endblock %}
