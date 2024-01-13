@@ -3,39 +3,24 @@
 {% block title %}Partner index{% endblock %}
 
 {% block body %}
-    <h1>Partner index</h1>
+    <h1>Nos partenaires </h1>
 
     <table class="table">
-        <thead>
-            <tr>
-                <th>Id</th>
-                <th>NomEntreprise</th>
-                <th>Adresse</th>
-                <th>Tel</th>
-                <th>Logo</th>
-                <th>actions</th>
-            </tr>
-        </thead>
-        <tbody>
-        {% for partner in partners %}
-            <tr>
-                <td>{{ partner.id }}</td>
+      <table class="table">
+    <tbody>
+        <tr>
+            {% for partner in partners %}
                 <td>{{ partner.nomEntreprise }}</td>
-                <td>{{ partner.adresse }}</td>
-                <td>{{ partner.tel }}</td>
-                <td>{{ partner.logo }}</td>
                 <td>
-                    <a href="{{ path('app_partner_show', {'id': partner.id}) }}">show</a>
-                    <a href="{{ path('app_partner_edit', {'id': partner.id}) }}">edit</a>
+                    <a href="{{ partner.websiteUrl }}">
+                        <img src="{{ asset('images/' ~ partner.logo) }}" alt="Logo de {{ partner.nomEntreprise }}" width="150" height="150">
+                    </a>
                 </td>
-            </tr>
-        {% else %}
-            <tr>
-                <td colspan="6">no records found</td>
-            </tr>
-        {% endfor %}
-        </tbody>
+            {% endfor %}
+        </tr>
+    </tbody>
+</table>
+
     </table>
 
-    <a href="{{ path('app_partner_new') }}">Create new</a>
 {% endblock %}

@@ -5,7 +5,7 @@ namespace App\Entity;
 use App\Repository\PartnerRepository;
 use Doctrine\ORM\Mapping as ORM;
 
-#[ORM\Table('employees')]
+#[ORM\Table('partners')]
 #[ORM\Entity(repositoryClass: PartnerRepository::class)]
 class Partner
 {
@@ -25,6 +25,9 @@ class Partner
 
     #[ORM\Column(length: 60)]
     private ?string $logo = null;
+
+    #[ORM\Column(length: 255, name: 'websiteurl')]
+    private ?string $websiteUrl = null;
 
     public function getId(): ?int
     {
@@ -75,6 +78,18 @@ class Partner
     public function setLogo(string $logo): static
     {
         $this->logo = $logo;
+
+        return $this;
+    }
+
+    public function getWebsiteUrl(): ?string
+    {
+        return $this->websiteUrl;
+    }
+
+    public function setWebsiteUrl(string $websiteUrl): static
+    {
+        $this->websiteUrl = $websiteUrl;
 
         return $this;
     }

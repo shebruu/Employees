@@ -22,28 +22,6 @@ class PartnerController extends AbstractController
         ]);
     }
 
-    #[Route('/partner/new', name: 'app_partner_new', methods: ['GET', 'POST'])]
-    public function new(Request $request, EntityManagerInterface $entityManager): Response
-    {
-        $partner = new Partner();
-        $form = $this->createForm(PartnerType::class, $partner);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-
-            $file = $form->get('logo')->getData();
-            $entityManager->persist($partner);
-            $entityManager->flush();
-
-            return $this->redirectToRoute('app_partner_index', [], Response::HTTP_SEE_OTHER);
-        }
-
-        return $this->render('partner/new.html.twig', [
-            'partner' => $partner,
-            'form' => $form,
-        ]);
-    }
-
     #[Route('/{id}', name: 'app_partner_show', methods: ['GET'])]
     public function show(Partner $partner): Response
     {
@@ -52,6 +30,7 @@ class PartnerController extends AbstractController
         ]);
     }
 
+    /*
     #[Route('/{id}/edit', name: 'app_partner_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Partner $partner, EntityManagerInterface $entityManager): Response
     {
@@ -70,6 +49,7 @@ class PartnerController extends AbstractController
         ]);
     }
 
+    */
     #[Route('/{id}', name: 'app_partner_delete', methods: ['POST'])]
     public function delete(Request $request, Partner $partner, EntityManagerInterface $entityManager): Response
     {
