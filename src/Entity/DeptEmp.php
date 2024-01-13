@@ -6,19 +6,21 @@ use App\Repository\DeptEmpRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
+#[ORM\Table('dept_emp')]
 #[ORM\Entity(repositoryClass: DeptEmpRepository::class)]
 class DeptEmp
 {
 
     #[ORM\Id]
-    #[ORM\ManyToOne(targetEntity: Employee::class)]
-    #[ORM\JoinColumn(name: "employee_id", referencedColumnName: "id")]
-    private  $employee_id = null;
+    #[ORM\ManyToOne(inversedBy: 'deptEmps')]
+    #[ORM\JoinColumn(name: 'employee_id', referencedColumnName: 'id', nullable: false)]
+    private ?Employee $employee = null;
+
 
     #[ORM\Id]
-    #[ORM\ManyToOne(targetEntity: Departement::class)]
-    #[ORM\JoinColumn(name: "department_id", referencedColumnName: "id")]
-    private ?string $department_id = null;
+    #[ORM\ManyToOne(inversedBy: 'deptEmps')]
+    #[ORM\JoinColumn(name: 'department_id', referencedColumnName: 'id', nullable: false)]
+    private ?Departement $departement = null;
 
     #[ORM\Column(type: Types::DATE_MUTABLE)]
     private ?\DateTimeInterface $from_date = null;
@@ -30,26 +32,26 @@ class DeptEmp
 
 
 
-    public function getEmpid(): ?int
+    public function getEmployee(): ?Employee
     {
-        return $this->employee_id;
+        return $this->employee;
     }
 
-    public function setEmpid(int $employee_id): static
+    public function setEmployee(Employee $employee): static
     {
-        $this->employee_id = $employee_id;
+        $this->employee = $employee;
 
         return $this;
     }
 
-    public function getDeptid(): ?string
+    public function getDepartement(): ?Departement
     {
-        return $this->department_id;
+        return $this->departement;
     }
 
-    public function setDeptid(string $departement_id): static
+    public function setDepartement(Departement $departement): static
     {
-        $this->department_id = $departement_id;
+        $this->departement = $departement;
 
         return $this;
     }

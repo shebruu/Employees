@@ -1,6 +1,15 @@
 {% extends 'base.html.twig' %}
 
 {% block title %} Departments record femme !{% endblock %}
+{% block stylesheets %}
+    {{ parent() }}
+    <style>
+        #chartContainer {
+            max-width: 50%;
+            margin: auto;
+        }
+    </style>
+{% endblock %}
 
 {% block body %}
 
@@ -8,7 +17,9 @@
 
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
-      <canvas id="myChart2" ></canvas>
+<div id="chartContainer">
+      <canvas id="myChart2"></canvas>
+      </div>
 <script>
              var ctx = document.getElementById('myChart2').getContext('2d');
         var mychart2 = new Chart(ctx, {
@@ -29,6 +40,10 @@
                     borderWidth: 1
                 }]
             },
+                options: {
+        responsive: true,
+        maintainAspectRatio: true
+    }
           
         });
     </script>

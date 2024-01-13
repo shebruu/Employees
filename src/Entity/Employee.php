@@ -41,6 +41,13 @@ class Employee implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(length: 1, enumType: Gender::class)]
     private ?Gender $gender = null;
 
+
+
+
+
+
+
+
     #[ORM\Column(type: Types::DATE_MUTABLE)]
     private ?\DateTimeInterface $hireDate = null;
 
@@ -55,8 +62,31 @@ class Employee implements UserInterface, PasswordAuthenticatedUserInterface
     private Collection $demands;
 
 
+
+    // Relation many-to-many directe avec Department
+    #[ORM\ManyToMany(targetEntity: Departement::class, inversedBy: 'employees')]
+    #[ORM\JoinTable(
+        name: "dept_emp",
+        joinColumns: [new ORM\JoinColumn(name: "employee_id", referencedColumnName: "id")],
+        inverseJoinColumns: [new ORM\JoinColumn(name: "department_id", referencedColumnName: "id")]
+    )]
+    private Collection $departments;
+
+    // Relation one-to-many avec l'entité de jointure DeptEmp
+    #[ORM\OneToMany(mappedBy: 'employee', targetEntity: DeptEmp::class)]
+    private Collection $deptEmps;
+
+
+
     #[ORM\Column]
     private array $roles = [];
+
+
+    public  $ctrl_actualDept;
+
+    public $repoqb_actualDept;
+
+    public $actualdep;
 
     /**
      * @var string The hashed password
@@ -67,6 +97,8 @@ class Employee implements UserInterface, PasswordAuthenticatedUserInterface
     public function __construct()
     {
         $this->demands = new ArrayCollection();
+        $this->departments = new ArrayCollection();
+        $this->deptEmps = new ArrayCollection();
     }
 
 
@@ -184,6 +216,9 @@ class Employee implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
+
+
+
     public function removeDemand(Demand $demand): static
     {
         if ($this->demands->removeElement($demand)) {
@@ -196,6 +231,15 @@ class Employee implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
+    public function getDepartments(): Collection
+    {
+        return $this->departments;
+    }
+
+    public function getDeptEmps(): Collection
+    {
+        return $this->deptEmps;
+    }
     /**
      * A visual identifier that represents this user.
      *
@@ -252,5 +296,20 @@ class Employee implements UserInterface, PasswordAuthenticatedUserInterface
     public function isAdmin(): bool
     {
         return in_array('ROLE_ADMIN', $this->roles);
+    }
+
+    public function getCtrlActualDept()
+    {
+        return $this->ctrl_actualDept;
+    }
+
+    public function setCtrlActualDept($ctrl_actualDept)
+    {
+        $this->ctrl_actualDept = $ctrl_actualDept;
+    }
+
+    public function repoqb_actualDept($repoqb_actualDept)
+    {
+        $this->repoqb_actualDept = $repoqb_actualDept;
     }
 }
