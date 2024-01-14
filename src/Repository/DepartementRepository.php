@@ -42,22 +42,6 @@ class DepartementRepository extends ServiceEntityRepository
             ->getOneOrNullResult();
     }
 
-    public  function findActualDepartmentemp($employee): ?Departement
-    {
-        return $this->createQueryBuilder('dept')
-            ->select('d')
-            ->from(Departement::class, 'd')
-            ->innerJoin('d.deptEmps', 'de')
-            ->innerJoin('de.employee', 'e')
-            ->where('e.id = :id')
-            ->andWhere('de.to_date = :toDate')
-            ->setParameters([
-                'id' => $employee->getId(),
-                'toDate' => '9999-01-01'
-            ])
-            ->getQuery()
-            ->getOneOrNullResult();
-    }
 
     //    /**
     //     * @return Departement[] Returns an array of Departement objects
