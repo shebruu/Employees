@@ -16,7 +16,7 @@ class ProjectController extends AbstractController
     public function index(ProjectRepository $projectrepository): Response
     {
         return $this->render('project/index.html.twig', [
-            'projects' => $projectrepository->findAll(),
+            'projects' => $projectrepository->findProjetsWithDetails(),
         ]);
     }
 }

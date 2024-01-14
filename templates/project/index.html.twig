@@ -5,36 +5,17 @@
 
 {% block body %}
 
-<h1> projets  </h1>
-	<table class="table">
-		<thead>
-			<tr>
-				<th>
-					emp_no</th>
-				<th>
-					description</th>
-				<th>
-					date creation
-				</th>
-				<th>
-					modifié</th>
-			</tr>
-		</thead>
-		<tbody>
-			{% for project in projects %}
-				<tr>
-
-					<td>{{ project.empNo }}</td>
-
-					<td>{{ project.description }}</td>
-
-					<td>{{ project.creation ? project.creation | date ('Y-m-d H:i:s'): ''}}</td>
-
-
-					<td>{{ project.estmodifie }}</td>
-				</tr>
-			{% endfor %}
-		</tbody>
-		<tbody></tbody>
-	</table>
+<h1> Liste des  projects  </h1>
+	<ul>
+    {% for projet in projects %}
+        <li>
+            {{ projet.description }} – {{ projet.chefDeProjet.firstName }} {{ projet.chefDeProjet.lastName }}
+            <ul>
+                {% for employee in projet.employees %}
+                    <li>{{ employee.firstName }} {{ employee.lastName }}</li>
+                {% endfor %}
+            </ul>
+        </li>
+    {% endfor %}
+</ul>
 {% endblock %}

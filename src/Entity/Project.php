@@ -11,6 +11,7 @@ use Doctrine\Common\Collections\Collection;
 use Symfony\Component\Validator\Constraints as Assert;
 
 use DateTime;
+use Symfony\Component\Config\Definition\Dumper\XmlReferenceDumper;
 
 #[ORM\Table('projets')]
 #[ORM\Entity(repositoryClass: ProjectRepository::class)]
@@ -21,8 +22,15 @@ class Project
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column]
-    private ?int $emp_no = null;
+
+
+    #[ORM\ManyToOne(targetEntity: Employee::class)]
+    #[ORM\JoinColumn(name: 'emp_no', referencedColumnName: 'id')]
+    private ?Employee $chefDeProjet = null;
+
+    #[ORM\ManyToMany(targetEntity: Employee::class, inversedBy: "projetsAssignes")]
+    #[ORM\JoinTable(name: "project_employee")]
+    private Collection $employees;
 
     #[ORM\Column(length: 255)]
     private ?string $description = null;
@@ -34,22 +42,47 @@ class Project
     private ?bool $estmodifie = null;
 
 
-    #[ORM\ManyToMany(targetEntity: Employee::class)]
-    private Collection $employees;
+
+
+    public function __construct()
+    {
+        $this->employees = new ArrayCollection();
+    }
+
 
     public function getId(): ?int
     {
         return $this->id;
     }
 
-    public function getEmpNo(): ?int
+    public function getEmployees(): Collection
     {
-        return $this->emp_no;
+        return $this->employees;
+    }
+    public function addEmployee(Employee $employee): self
+    {
+        if (!$this->employees->contains($employee)) {
+            $this->employees[] = $employee;
+            $employee->addProjetsAssignes($this);
+        }
+        return $this;
     }
 
-    public function setEmpNo(int $emp_no): static
+    public function removeEmployee(Employee $employee): self
     {
-        $this->emp_no = $emp_no;
+        if ($this->employees->removeElement($employee)) {
+            $employee->removeProjetsAssignes($this);
+        }
+        return $this;
+    }
+    public function getChefDeProjet(): ?Employee
+    {
+        return $this->chefDeProjet;
+    }
+
+    public function setEmpNo(?Employee $chefDeProjet): static
+    {
+        $this->chefDeProjet = $chefDeProjet;
 
         return $this;
     }

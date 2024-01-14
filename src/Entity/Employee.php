@@ -78,8 +78,16 @@ class Employee implements UserInterface, PasswordAuthenticatedUserInterface
 
 
 
-    #[ORM\ManyToMany(targetEntity: Project::class)]
-    private Collection $projects;
+
+
+    #[ORM\OneToMany(targetEntity: "Project", mappedBy: "chefDeProjet")]
+    private Collection $projetschef;
+
+
+    #[ORM\ManyToMany(targetEntity: Project::class, mappedBy: "employees")]
+    private Collection $projetsAssignes;
+
+
     #[ORM\Column]
     private array $roles = [];
 
@@ -103,9 +111,27 @@ class Employee implements UserInterface, PasswordAuthenticatedUserInterface
         $this->demands = new ArrayCollection();
         $this->departments = new ArrayCollection();
         $this->deptEmps = new ArrayCollection();
-        $this->projects = new ArrayCollection();
+
+        $this->projetsAssignes = new ArrayCollection();
+        $this->projetschef = new ArrayCollection();
     }
 
+    public function addProjetsAssignes(Project $projet): self
+    {
+        if (!$this->projetsAssignes->contains($projet)) {
+            $this->projetsAssignes[] = $projet;
+            $projet->addEmployee($this); // Assurez-vous que cette méthode existe également dans Project
+        }
+        return $this;
+    }
+
+    public function removeProjetsAssignes(Project $projet): self
+    {
+        if ($this->projetsAssignes->removeElement($projet)) {
+            $projet->removeEmployee($this); // Assurez-vous que cette méthode existe également dans Project
+        }
+        return $this;
+    }
 
 
     public function getId(): ?int
@@ -246,10 +272,7 @@ class Employee implements UserInterface, PasswordAuthenticatedUserInterface
         return $this->deptEmps;
     }
 
-    public function getProjects(): Collection
-    {
-        return $this->projects;
-    }
+
     /**
      * A visual identifier that represents this user.
      *
