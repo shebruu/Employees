@@ -3,33 +3,53 @@
 
 {% block title %}Accueil{% endblock %}
 
+{# {% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('css/style.css') }}" />
+{% endblock %} #}
+
+
 {% block body %}
-    <h1>Bienvenue sur la page d'accueil !</h1>
-    <p>Contenu de la page d'accueil...</p>
+    <div class="container">
+        <header>
+            <h1>Bienvenue sur la page d'accueil !</h1>
+        </header>
 
-    <h2>À propos de nous</h2>
-    <p><h3>Qui sommes-nous ?</h3>
-    <p>"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. 
-    Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. 
-    Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. 
-    Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.".</p>
-    
-    <h2>Communiqués de presse</h2>
-    <ul>
-        {% for link in link %}
-            <li>
-                ID: {{ link.id }} - <a href="{{ link.url }}" target="_blank">{{ link.url }}</a> 
-                <a href="{{path('download_pdf', {'linkId': link.id}) }} target="_blank"> Telecharger en PDF</a>
-            </li>
-        {% endfor %}
-    </ul>
+        <section>
+            <h2>À propos de nous</h2>
+            <p><strong>Qui sommes-nous ?</strong></p>
+            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. 
+            Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. 
+            Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. 
+            Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+        </section>
 
-    <h2>Documents</h2>
+        <section>
+            <h2>Communiqués de presse</h2>
+            <ul>
+                {% for link in link %}
+                    <li>
+                        ID: {{ link.id }} - <a href="{{ link.url }}" target="_blank">{{ link.url }}</a> 
+                        <a href="{{ path('download_pdf', {'linkId': link.id}) }}" target="_blank">Télécharger en PDF</a>
+                    </li>
+                {% endfor %}
+            </ul>
+        </section>
 
-    <h2>Localisation du siège de la société sur une carte</h2>
-    <p><a href="{{ path('headquarters_location') }}">Localisation</a></p>
+        <section>
+            <h2>Documents</h2>
+        </section>
 
-    <h2>Téléchargement de l’application via QR Code</h2>
-    {# Afficher directement l'image du QR Code #}
-    <img src="{{ path('qr_code') }}" alt="QR Code">
+        <section>
+            <h2>Localisation du siège de la société sur une carte</h2>
+            <p><a href="{{ path('headquarters_location') }}">Localisation</a></p>
+        </section>
+
+        <section>
+            <h2>Téléchargement de l’application via QR Code</h2>
+            {# Afficher l'image du QR Code en utilisant le chemin 'qr_code' #}
+            {# <img src="{{ path('qr_code') }}" alt="QR Code"> #}
+
+        </section>
+    </div>
 {% endblock %}

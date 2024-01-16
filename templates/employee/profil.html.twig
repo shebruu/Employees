@@ -1,0 +1,22 @@
+{# templates/employee/profil.html.twig #}
+{% extends 'base.html.twig' %}
+
+{% block title %}Mon Profil{% endblock %}
+
+{% block body %}
+    <div class="container">
+        <h1>Mon Profil</h1>
+        
+        <div>
+            <p><strong>Prénom :</strong> {{ employee.firstName }}</p>
+            <p><strong>Nom :</strong> {{ employee.lastName }}</p>
+            <p><strong>Date de naissance :</strong> {{ employee.birthDate|date('Y-m-d') }}</p>
+            <p><strong>Photo de profil :</strong> <img src="{{ asset('uploads/employee_photos/' ~ employee.photo()) }}" alt="Photo de profil" width='100'></p>
+        </div>
+
+        {{ form_start(form) }}
+        {{ form_widget(form) }}
+        <button type="submit">Mettre à jour le profil</button>
+        {{ form_end(form) }}
+    </div>
+{% endblock %}

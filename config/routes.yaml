@@ -12,4 +12,11 @@ home_headquarters_location:
     path: '/home/headquarters_location'
     controller: 'App\Controller\HomeController::headquartersLocation'
 
+home_qr_code:
+    path: /home/qr-code
+    controller: App\Controller\HomeController::qrCode
+
+employee_profil:
+    path: '/profil'
+    controller: 'App\Controller\EmployeeController::profil'
 

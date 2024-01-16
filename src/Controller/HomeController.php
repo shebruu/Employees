@@ -76,18 +76,20 @@ class HomeController extends AbstractController
     }
 
     //Code QR
-    #[Route('/qr-code', name: 'qr_code')]
-    public function qrCode(): Response
-    {
-        $qrCode = new QrCode('http://localhost:8888/home');
-        $qrCode->setSize(300);
-
+   // #[Route('/qr-code', name: 'qr_code')]
+   // public function qrCode(): Response
+   /// {
+       // $qrCode = new QrCode('http://localhost:8888/home');
+       //  $qrCode->setSize(300);
+    
         // Obtenez le contenu du QR Code sous forme de chaîne
-        $qrCodeContent = $qrCode->writeDataUri();
-
+       //  $qrCodeContent = $qrCode->writeString();
+    
         // Envoi du contenu en tant que réponse
-        $response = new Response($qrCodeContent, Response::HTTP_OK, ['Content-Type' => $qrCode->getContentType()]);
+       //  $response = new Response($qrCodeContent, Response::HTTP_OK, ['Content-Type' => $qrCode->getContentType()]);
+    
+        // return $response;
+   //  }
 
-        return $response;
-    }
+   
 }
