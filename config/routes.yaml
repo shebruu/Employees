@@ -20,3 +20,9 @@ employee_profil:
     path: '/profil'
     controller: 'App\Controller\EmployeeController::profil'
 
+# config/routes.yaml
+department:
+    path: /department
+    controller: App\Controller\DepartmentController::index
+    methods: ['GET']
+
