@@ -4,6 +4,15 @@ controllers:
         namespace: App\Controller
     type: attribute
 
+login:
+    path: /login
+    controller: App\Controller\LoginController::index
+
+logout:
+    path: /app_logout
+    
+
+
 home:
     path: /home
     controller: App\Controller\HomeController::index
@@ -22,7 +31,11 @@ employee_profil:
 
 # config/routes.yaml
 department:
-    path: /department
+    path: /departmentt
     controller: App\Controller\DepartmentController::index
     methods: ['GET']
+
+
+
+            
 

@@ -1,0 +1,47 @@
+ <h2>Localisation du siège de la société</h2>
+        <div id="maCarte"></div>
+        <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+                integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+                crossorigin=""></script>
+        <script src="https://unpkg.com/leaflet.markercluster@1.4.1/dist/leaflet.markercluster.js"></script>
+        <script>
+            var villes = {
+                "Paris": {"lat":48.852969,"lon":2.349903},
+                "Brest": {"lat":48.383,"lon":-4.500},
+                "Quimper": {"lat":48.000,"lon":-4.100},
+                "Bayonne": {"lat":43.500,"lon":-1.467},
+            };
+
+            var tableauMarqueurs = [];
+
+            // On initialise la carte
+            var carte = L.map('maCarte').setView([48.852969, 2.349903], 13);
+
+            // On charge les tuiles
+            L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                minZoom: 1,
+                maxZoom: 20,
+                attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+            }).addTo(carte);
+
+            var marqueurs = L.markerClusterGroup();
+
+            // On parcourt les différentes villes
+            for(ville in villes){
+                // On crée le marker et on lui attribue une popup
+                var marqueur = L.marker([villes[ville].lat, villes[ville].lon]);
+                marqueur.bindPopup("<p>"+ville+"</p>");
+                marqueurs.addLayer(marqueur);
+          
+                // On ajoute le marqueur au tableau
+                tableauMarqueurs.push(marqueur);
+            }
+
+            // On regroupe les marqueurs dans un groupe leaflet
+            var groupe = new L.featureGroup(tableauMarqueurs);
+
+            // On adapte le zoom au groupe 
+            carte.fitBounds(groupe.getBounds());
+
+            carte.addLayer(marqueurs);
+        </script>
