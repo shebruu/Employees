@@ -17,6 +17,12 @@ class MissionController extends AbstractController
     #[Route('/', name: 'app_mission_index', methods: ['GET'])]
     public function index(MissionRepository $missionRepository): Response
     {
+        /* récupération des mission de seulement de l utilisateur connecté
+        $user = $this->getUser();
+
+        if ($user) {
+            $missions = $missionRepository->findByUser($user);
+            */
         return $this->render('mission/index.html.twig', [
             'missions' => $missionRepository->findAll(),
         ]);
@@ -71,7 +77,7 @@ class MissionController extends AbstractController
     #[Route('/{id}', name: 'app_mission_delete', methods: ['POST'])]
     public function delete(Request $request, Mission $mission, EntityManagerInterface $entityManager): Response
     {
-        if ($this->isCsrfTokenValid('delete'.$mission->getId(), $request->request->get('_token'))) {
+        if ($this->isCsrfTokenValid('delete' . $mission->getId(), $request->request->get('_token'))) {
             $entityManager->remove($mission);
             $entityManager->flush();
         }

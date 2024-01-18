@@ -8,8 +8,18 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
+
+enum Status: string
+{
+    case Enattente = 'en attente';
+    case ENcours = 'en cours';
+    case Termine = 'termine';
+}
+
+
 #[ORM\Table('missions')]
 #[ORM\Entity(repositoryClass: MissionRepository::class)]
+
 class Mission
 {
     #[ORM\Id]
@@ -23,8 +33,9 @@ class Mission
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private ?\DateTimeInterface $due_date = null;
 
-    #[ORM\Column(length: 255)]
-    private ?string $status = null;
+    #[ORM\Column(length: 255, enumType: Status::class)]
+    private ?Status $status = null;
+
 
     #[ORM\ManyToMany(targetEntity: Employee::class, mappedBy: 'missions')]
     private Collection $employees;
@@ -66,12 +77,12 @@ class Mission
         return $this;
     }
 
-    public function getStatus(): ?string
+    public function getStatus(): ?status
     {
         return $this->status;
     }
 
-    public function setStatus(string $status): static
+    public function setStatus(status $status): static
     {
         $this->status = $status;
 

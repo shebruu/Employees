@@ -106,7 +106,7 @@ class Employee implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column]
     private ?string $password = null;
 
-    #[ORM\ManyToMany(targetEntity: mission::class, inversedBy: 'employees')]
+    #[ORM\ManyToMany(targetEntity: Mission::class, inversedBy: 'employees')]
     private Collection $missions;
 
     public function __construct()

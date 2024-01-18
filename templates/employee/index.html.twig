@@ -3,6 +3,7 @@
 {% block title %}Employee index{% endblock %}
 
 {% block body %}
+ {% if app.user %}
     <h1>Employee index</h1>
 
     <table class="table">
@@ -20,9 +21,9 @@
             </tr>
         </thead>
         <tbody>
-           {% if app.user %}
-        <h3> </h3>
-    {% endif %}
+          
+      
+    
             {% if employees is not empty %}
                 {% for employee in employees %}
                     <tr>
@@ -35,11 +36,12 @@
                         <td>{{ employee.photo }}</td>
                         <td>{{ employee.email }}</td>
                         <td>
+
                            
                             {% if app.user and app.user.isAdmin %}
                                 <a href="{{ path('app_employee_edit', {'id': employee.id}) }}">edit</a>
-                            {% else %}
-                                <a href="{{ path('app_employee_show', {'id': employee.id}) }}">show</a>
+                           
+                           <a href="{{ path('app_employee_show', {'id': employee.id}) }}">show</a>
                                
                             {% endif %}
                         </td>
@@ -56,5 +58,7 @@
 
     {% if app.user and app.user.isAdmin %}
         <a href="{{ path('app_employee_new') }}">Create new</a>
+    {% endif %}
+
     {% endif %}
 {% endblock %}

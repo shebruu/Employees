@@ -3,37 +3,24 @@
 {% block title %}Mission index{% endblock %}
 
 {% block body %}
-    <h1>Mission index</h1>
+    
 
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Id</th>
-                <th>Description</th>
-                <th>Due_date</th>
-                <th>Status</th>
-                <th>actions</th>
-            </tr>
-        </thead>
-        <tbody>
-        {% for mission in missions %}
-            <tr>
-                <td>{{ mission.id }}</td>
-                <td>{{ mission.description }}</td>
-                <td>{{ mission.dueDate ? mission.dueDate|date('Y-m-d H:i:s') : '' }}</td>
-                <td>{{ mission.status }}</td>
-                <td>
-                    <a href="{{ path('app_mission_show', {'id': mission.id}) }}">show</a>
-                    <a href="{{ path('app_mission_edit', {'id': mission.id}) }}">edit</a>
-                </td>
-            </tr>
+
+    {% if app.user %}
+        <h1> Liste des missions</h1>
+        <ul>
+        {% for mission in app.user.missions %}
+        {% if mission.status.value != constant('App\\Entity\\Status::Termine') %}
+           
+                <li>{{ mission.description }}</li>
+              
+         
         {% else %}
-            <tr>
-                <td colspan="5">no records found</td>
-            </tr>
+           <p> No records </p>
+            {% endif %}
         {% endfor %}
-        </tbody>
-    </table>
+        {%  endif %}
+        </ul>
+     
 
-    <a href="{{ path('app_mission_new') }}">Create new</a>
 {% endblock %}
