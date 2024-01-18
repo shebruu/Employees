@@ -106,6 +106,9 @@ class Employee implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column]
     private ?string $password = null;
 
+    #[ORM\ManyToMany(targetEntity: mission::class, inversedBy: 'employees')]
+    private Collection $missions;
+
     public function __construct()
     {
         $this->demands = new ArrayCollection();
@@ -114,6 +117,7 @@ class Employee implements UserInterface, PasswordAuthenticatedUserInterface
 
         $this->projetsAssignes = new ArrayCollection();
         $this->projetschef = new ArrayCollection();
+        $this->missions = new ArrayCollection();
     }
 
     public function addProjetsAssignes(Project $projet): self
@@ -344,5 +348,29 @@ class Employee implements UserInterface, PasswordAuthenticatedUserInterface
     public function repoqb_actualDept($repoqb_actualDept)
     {
         $this->repoqb_actualDept = $repoqb_actualDept;
+    }
+
+    /**
+     * @return Collection<int, mission>
+     */
+    public function getMissions(): Collection
+    {
+        return $this->missions;
+    }
+
+    public function addMission(mission $mission): static
+    {
+        if (!$this->missions->contains($mission)) {
+            $this->missions->add($mission);
+        }
+
+        return $this;
+    }
+
+    public function removeMission(mission $mission): static
+    {
+        $this->missions->removeElement($mission);
+
+        return $this;
     }
 }
