@@ -4,7 +4,13 @@
 
 {% block body %}
     <h1>Employee</h1>
+   {% if app.user %}
+<a href="{{ path ('app_intern_messtagiaires',  {'id': employee.id})}}"> Mes stagiaires </a>
+<br>
+<a href="{{ path ('app_mission_mesmissions',  {'id': employee.id})}}"> Mes Missions </a>
 
+    
+    {% endif %}
     <table class="table">
         <tbody>
             <tr>

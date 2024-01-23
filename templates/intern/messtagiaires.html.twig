@@ -1,0 +1,33 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Mes stagiaires
+{% endblock %}
+
+{% block body %}
+	<h2>stagiaires</h2>
+
+
+	<ul>
+		{% for i in messtagiaires %}
+
+
+			<li>{{ i.fullname }}</li>
+
+
+		{% endfor %}
+
+	</ul>
+
+
+	<ul>
+		{% for i in sanssuperviseurs %}
+
+
+			<li>{{ i.fullname }}</li>
+			<a href="{{ path('app_mission_superviser', {'id': intern.id}) }}">Superviser</a>
+
+		{% endfor %}
+
+	</ul>
+
+</div>{% endblock %}

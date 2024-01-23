@@ -18,7 +18,7 @@ enum Gender: string
     case Non_Binary = 'X';
 }
 
-#[ORM\Table('employees')]
+#[ORM\Table('collaborators')]
 #[ORM\Entity(repositoryClass: EmployeeRepository::class)]
 class Employee implements UserInterface, PasswordAuthenticatedUserInterface
 {
@@ -30,11 +30,11 @@ class Employee implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(type: Types::DATE_MUTABLE)]
     private ?\DateTimeInterface $birthDate = null;
 
-    #[ORM\Column(length: 14)]
+    #[ORM\Column(length: 14, name: 'firstname')]
     #[Assert\Length(min: 3, max: 14)]
     private ?string $firstName = null;
 
-    #[ORM\Column(length: 16)]
+    #[ORM\Column(length: 16, name: 'lastname')]
     #[Assert\Length(min: 3, max: 16)]
     private ?string $lastName = null;
 
@@ -107,7 +107,18 @@ class Employee implements UserInterface, PasswordAuthenticatedUserInterface
     private ?string $password = null;
 
     #[ORM\ManyToMany(targetEntity: Mission::class, inversedBy: 'employees')]
+    #[ORM\JoinTable(
+        name: "employee_mission",
+        joinColumns: [new ORM\JoinColumn(name: "employee_id", referencedColumnName: "id")],
+        inverseJoinColumns: [new ORM\JoinColumn(name: "mission_id", referencedColumnName: "id")]
+    )]
     private Collection $missions;
+
+
+
+
+    #[ORM\OneToMany(mappedBy: 'empNo', targetEntity: Intern::class)]
+    private Collection $interns;
 
     public function __construct()
     {
@@ -118,7 +129,11 @@ class Employee implements UserInterface, PasswordAuthenticatedUserInterface
         $this->projetsAssignes = new ArrayCollection();
         $this->projetschef = new ArrayCollection();
         $this->missions = new ArrayCollection();
+
+        $this->interns = new ArrayCollection();
     }
+
+
 
     public function addProjetsAssignes(Project $projet): self
     {
@@ -370,6 +385,36 @@ class Employee implements UserInterface, PasswordAuthenticatedUserInterface
     public function removeMission(mission $mission): static
     {
         $this->missions->removeElement($mission);
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Intern>
+     */
+    public function getInterns(): Collection
+    {
+        return $this->interns;
+    }
+
+    public function addIntern(Intern $intern): static
+    {
+        if (!$this->interns->contains($intern)) {
+            $this->interns->add($intern);
+            $intern->setEmpNo($this);
+        }
+
+        return $this;
+    }
+
+    public function removeIntern(Intern $intern): static
+    {
+        if ($this->interns->removeElement($intern)) {
+            // set the owning side to null (unless already changed)
+            if ($intern->getEmpNo() === $this) {
+                $intern->setEmpNo(null);
+            }
+        }
 
         return $this;
     }

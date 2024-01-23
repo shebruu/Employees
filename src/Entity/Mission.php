@@ -8,12 +8,15 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
+use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
+use Symfony\Component\Validator\Constraints as Assert;
 
 enum Status: string
 {
     case Enattente = 'en attente';
-    case ENcours = 'en cours';
-    case Termine = 'termine';
+    case Encours = 'en cours';
+    case Termine = 'terminé';
 }
 
 
@@ -39,6 +42,8 @@ class Mission
 
     #[ORM\ManyToMany(targetEntity: Employee::class, mappedBy: 'missions')]
     private Collection $employees;
+
+
 
     public function __construct()
     {

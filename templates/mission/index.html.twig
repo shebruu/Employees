@@ -6,20 +6,17 @@
     
 
 
-    {% if app.user %}
+    
         <h1> Liste des missions</h1>
         <ul>
-        {% for mission in app.user.missions %}
-        {% if mission.status.value != constant('App\\Entity\\Status::Termine') %}
+        {% for mission in missions %}
+     
            
                 <li>{{ mission.description }}</li>
-              
-         
-        {% else %}
-           <p> No records </p>
-            {% endif %}
+
+          
         {% endfor %}
-        {%  endif %}
+    
         </ul>
      
 

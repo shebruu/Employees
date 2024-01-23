@@ -43,11 +43,15 @@ class Departement
     #[ORM\OneToMany(mappedBy: 'departement', targetEntity: DeptEmp::class)]
     private Collection $deptEmps;
 
+    #[ORM\OneToMany(mappedBy: 'deptNo', targetEntity: Intern::class)]
+    private Collection $interns;
+
 
     public function __construct()
     {
         $this->employees = new ArrayCollection();
         $this->deptEmps = new ArrayCollection();
+        $this->interns = new ArrayCollection();
     }
     public function getId(): ?string
     {
@@ -123,5 +127,35 @@ class Departement
     public function __toString()
     {
         return $this->dept_name;
+    }
+
+    /**
+     * @return Collection<int, Intern>
+     */
+    public function getInterns(): Collection
+    {
+        return $this->interns;
+    }
+
+    public function addIntern(Intern $intern): static
+    {
+        if (!$this->interns->contains($intern)) {
+            $this->interns->add($intern);
+            $intern->setDeptNo($this);
+        }
+
+        return $this;
+    }
+
+    public function removeIntern(Intern $intern): static
+    {
+        if ($this->interns->removeElement($intern)) {
+            // set the owning side to null (unless already changed)
+            if ($intern->getDeptNo() === $this) {
+                $intern->setDeptNo(null);
+            }
+        }
+
+        return $this;
     }
 }
