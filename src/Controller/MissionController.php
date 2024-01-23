@@ -150,10 +150,9 @@ class MissionController extends AbstractController
  
 
     #[Route('/{missionId}/terminer', name: 'app_mission_terminer', methods: ['GET'])]
-    public function terminerMission(int $missionId, MissionRepository $missionRepository, EntityManagerInterface $entityManager): Response
+    public function terminerMission(Employee $employee, int $missionId, MissionRepository $missionRepository, EntityManagerInterface $entityManager): Response
     {
-        $user = $this->getUser();
-        $userId = $user->getId();
+      
         $mission = $missionRepository->find($missionId);
 
 

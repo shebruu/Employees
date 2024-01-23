@@ -1,33 +1,57 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Mes stagiaires
-{% endblock %}
+{% block title %}Mes stagiaires{% endblock %}
 
 {% block body %}
-	<h2>stagiaires</h2>
 
+    <h2>Liste des stagiaires</h2>
 
-	<ul>
-		{% for i in messtagiaires %}
+    <ul class="list-group">
+        <div class="mes-st">
+            {% for i in messtagiaires %}
+                <li class="list-group-item list-group-item-secondary d-flex justify-content-between align-items-center">
+                    {{ i.fullname }}
+                </li>
+            {% endfor %}
+        </div>
+        <div class="personnes-st">
+            {% for i in sanssuperviseurs %}
+                <li class="list-group-item list-group-item-primary d-flex justify-content-between align-items-center">
+                    {{ i.fullname }}
+                    <!-- Button to supervise -->
+                    <button type="button" class="btn btn-success superviser-btn" data-stagiaire-id="{{ i.id }}">Superviser</button>
+                </li>
+            {% endfor %}
+        </div>
+    </ul>
 
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            document.querySelectorAll('.superviser-btn').forEach(function(button) {
+                button.addEventListener('click', function() {
+                    var stagiaireId = this.getAttribute('data-stagiaire-id');
+                    superviserStagiaire(stagiaireId);
+                });
+            });
+        });
 
-			<li>{{ i.fullname }}</li>
+        function superviserStagiaire(stagiaireId) {
+            fetch('/supervise-stagiaire', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ id: stagiaireId })
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log(data); // Pour débogage
+                // Gérer la réponse ici, par exemple, mettre à jour l'UI
+            })
+            .catch(error => {
+                console.error('Erreur:', error);
+            });
+        }
+    </script>
 
-
-		{% endfor %}
-
-	</ul>
-
-
-	<ul>
-		{% for i in sanssuperviseurs %}
-
-
-			<li>{{ i.fullname }}</li>
-			<a href="{{ path('app_mission_superviser', {'id': intern.id}) }}">Superviser</a>
-
-		{% endfor %}
-
-	</ul>
-
-</div>{% endblock %}
+	{% endblock %}

@@ -14,6 +14,8 @@ use Symfony\Component\Routing\Annotation\Route;
 use App\Controller\EmployeeController;
 use App\Entity\Employee;
 
+use Symfony\Component\HttpFoundation\JsonResponse;
+
 
 #[Route('/intern')]
 class InternController extends AbstractController
@@ -99,22 +101,22 @@ class InternController extends AbstractController
 
 
 
-    /*
-    #[Route('/{id}/supervision', name: 'app_mission_superviser', methods: ['POST'])]
-    public function SupervIseintern(Employee $employee, InternRepository $repo): Response
+
+    #[Route('/{id}/supervise-stagiaire', name: 'supervise_stagiaire', methods: ['POST'])]
+    public function SupervIseintern(Request $request, Employee $employee, InternRepository $repo,  EntityManagerInterface $em): Response
     {
 
-        $stag->setIntern();
+        $data = json_decode($request->getContent(), true);
+        $internId = $data['id'];
 
-        // TODO
+        $intern = $repo->find($internId);
 
 
 
-        $mission->setStatus(Status::Encours);
-        $entityManager->persist($mission);
-        $entityManager->flush();
+        $employee->addIntern($intern);
+        $em->persist($employee);
+        $em->flush();
 
-        return $this->redirectToRoute('app_intern_messtagiaires');
+        return new JsonResponse(['status' => 'success']);
     }
-    */
 }
