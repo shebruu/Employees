@@ -18,9 +18,9 @@
             {% for i in sanssuperviseurs %}
                 <li class="list-group-item list-group-item-primary d-flex justify-content-between align-items-center">
                     {{ i.fullname }}
-                    <!-- Button to supervise -->
-                    <button type="button" class="btn btn-success superviser-btn" data-stagiaire-id="{{ i.id }}">Superviser</button>
-                </li>
+              
+                    <button type="button" class="btn btn-success superviser-btn" data-stagiaire-id="{{ i.id }}" onclick="superviserStagiaire({{ employee.id }}, {{ i.id }})">Superviser</button>
+</li>
             {% endfor %}
         </div>
     </ul>
@@ -35,22 +35,27 @@
             });
         });
 
-        function superviserStagiaire(stagiaireId) {
-            fetch('/supervise-stagiaire', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ id: stagiaireId })
-            })
+       function superviserStagiaire(employeeId, stagiaireId) {
+    fetch('/intern/' + employeeId + '/supervise-stagiaire', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ id: stagiaireId })
+    })
             .then(response => response.json())
-            .then(data => {
-                console.log(data); // Pour débogage
-                // Gérer la réponse ici, par exemple, mettre à jour l'UI
-            })
-            .catch(error => {
-                console.error('Erreur:', error);
-            });
+        .then(data => {
+        console.log(data); // Pour débogage
+        if (data.status === 'success') {
+         
+
+            // afficher un message de succès ou mettre à jour l'interface utilisateur
+            alert('Stagiaire supervisé avec succès!');
+        }
+    }).catch(error => {
+    console.error('Erreur:', error);
+});
+           
         }
     </script>
 

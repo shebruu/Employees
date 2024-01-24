@@ -95,6 +95,7 @@ class InternController extends AbstractController
         return $this->render('intern/messtagiaires.html.twig', [
             'messtagiaires' => $messtagiaires,
             'sanssuperviseurs' => $sanssuperviseurs,
+            'employee' => $employee
 
         ]);
     }
@@ -102,14 +103,11 @@ class InternController extends AbstractController
 
 
 
-    #[Route('/{id}/supervise-stagiaire', name: 'supervise_stagiaire', methods: ['POST'])]
-    public function SupervIseintern(Request $request, Employee $employee, InternRepository $repo,  EntityManagerInterface $em): Response
+    #[Route('/{employeeId}/supervise-stagiaire/{stagiaireId}', name: 'supervise_stagiaire', methods: ['POST', 'GET'])]
+    public function SupervIseintern(Request $request, Employee $employee, InternRepository $repo, EntityManagerInterface $em, int $stagiaireId): Response
     {
 
-        $data = json_decode($request->getContent(), true);
-        $internId = $data['id'];
-
-        $intern = $repo->find($internId);
+        $intern = $repo->find($stagiaireId);
 
 
 
