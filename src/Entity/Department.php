@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\DepartmentRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Table('departments')]
@@ -27,6 +29,14 @@ class Department
 
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $roi_url = null;
+
+    #[ORM\OneToMany(mappedBy: 'department', targetEntity: Intern::class)]
+    private Collection $interns;
+
+    public function __construct()
+    {
+        $this->interns = new ArrayCollection();
+    }
 
     
 
@@ -87,6 +97,36 @@ class Department
 
     public function __toString(): string {
         return "{$this->deptName}";
+    }
+
+    /**
+     * @return Collection<int, Intern>
+     */
+    public function getInterns(): Collection
+    {
+        return $this->interns;
+    }
+
+    public function addIntern(Intern $intern): static
+    {
+        if (!$this->interns->contains($intern)) {
+            $this->interns->add($intern);
+            $intern->setDepartment($this);
+        }
+
+        return $this;
+    }
+
+    public function removeIntern(Intern $intern): static
+    {
+        if ($this->interns->removeElement($intern)) {
+            // set the owning side to null (unless already changed)
+            if ($intern->getDepartment() === $this) {
+                $intern->setDepartment(null);
+            }
+        }
+
+        return $this;
     }
 
     

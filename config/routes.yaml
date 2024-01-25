@@ -29,6 +29,10 @@ employee_profil:
     path: '/profil'
     controller: 'App\Controller\EmployeeController::profil'
 
+intern:
+    path: '/intern'
+    controller: 'App\Controller\EmployeeController::intern'
+
 # config/routes.yaml
 department:
     path: /departmentt

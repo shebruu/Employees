@@ -17,7 +17,7 @@ enum Gender: string {
     case Non_Binary = 'X';
 }
 
-#[ORM\Table('employees')]
+#[ORM\Table('collaborators')]
 #[ORM\Entity(repositoryClass: EmployeeRepository::class)]
 class Employee implements UserInterface, PasswordAuthenticatedUserInterface
 {
@@ -62,9 +62,13 @@ class Employee implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column]
     private ?string $password = "";
 
+    #[ORM\OneToMany(mappedBy: 'superviseur', targetEntity: Intern::class)]
+    private Collection $interns;
+
     public function __construct()
     {
         $this->demands = new ArrayCollection();
+        $this->interns = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -247,5 +251,35 @@ class Employee implements UserInterface, PasswordAuthenticatedUserInterface
     public function isAdmin(): bool
     {
         return in_array('ROLE_ADMIN', $this->roles);
+    }
+
+    /**
+     * @return Collection<int, Intern>
+     */
+    public function getInterns(): Collection
+    {
+        return $this->interns;
+    }
+
+    public function addIntern(Intern $intern): static
+    {
+        if (!$this->interns->contains($intern)) {
+            $this->interns->add($intern);
+            $intern->setSuperviseur($this);
+        }
+
+        return $this;
+    }
+
+    public function removeIntern(Intern $intern): static
+    {
+        if ($this->interns->removeElement($intern)) {
+            // set the owning side to null (unless already changed)
+            if ($intern->getSuperviseur() === $this) {
+                $intern->setSuperviseur(null);
+            }
+        }
+
+        return $this;
     }
 }
