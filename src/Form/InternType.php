@@ -18,15 +18,9 @@ class InternType extends AbstractType
             ->add('fullname')
             ->add('startDate')
             ->add('endDate')
-            ->add('deptNo', EntityType::class, [
-                'class' => Departement::class,
-'choice_label' => 'id',
-            ])
-            ->add('empNo', EntityType::class, [
-                'class' => Employee::class,
-'choice_label' => 'id',
-            ])
-        ;
+            ->add('departement')
+
+            ->add('superviseur');
     }
 
     public function configureOptions(OptionsResolver $resolver): void

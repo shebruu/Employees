@@ -1,40 +1,61 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Intern index{% endblock %}
+{% block title %}Liste des stagiaires{% endblock %}
 
 {% block body %}
-    <h1>Intern index</h1>
+    <h1>Liste des stagiaires</h1>
 
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Id</th>
-                <th>Fullname</th>
-                <th>StartDate</th>
-                <th>EndDate</th>
-                <th>actions</th>
-            </tr>
-        </thead>
-        <tbody>
-        {% for intern in interns %}
-            <tr>
-                <td>{{ intern.id }}</td>
-                <td>{{ intern.fullname }}</td>
-                <td>{{ intern.startDate ? intern.startDate|date('Y-m-d') : '' }}</td>
-                <td>{{ intern.endDate ? intern.endDate|date('Y-m-d') : '' }}</td>
-                
-                <td>
-                    <a href="{{ path('app_intern_show', {'id': intern.id}) }}">show</a>
-                    <a href="{{ path('app_intern_edit', {'id': intern.id}) }}">edit</a>
-                </td>
-            </tr>
-        {% else %}
-            <tr>
-                <td colspan="5">no records found</td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
+    <form action="{{ path('app_intern_manage') }}" method="post">
+        <div>
+            <label for="superviseur">Superviseur :</label>
+            <select name="superviseur" id="superviseur">
+            {% for employee in freeEmployees %}
+                <option value="{{ employee.id }}">{{ employee.firstname }} {{ employee.lastname }}</option>
+            {% endfor %}
+            </select>
+        </div>
 
-    <a href="{{ path('app_intern_new') }}">Create new</a>
+        <table class="table">
+            <tbody>
+            {% for department in groupInterns %}
+                <tr>
+                    <td>
+                        <h2>{{ department.deptName }}</h2>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Nom complet</th>
+                                    <th>Date de début</th>
+                                    <th>Date de fin</th>
+                                    <th>Superviseur</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            {% for intern in department.interns %}
+                                <tr>
+                                    <td>{{ intern.fullname }}</td>
+                                    <td>{{ intern.startDate ? intern.startDate|date('Y-m-d') : '' }}</td>
+                                    <td>{{ intern.endDate ? intern.endDate|date('Y-m-d') : '' }}</td>
+                                    <td>{{ intern.superviseur ? intern.superviseur.id ~ ' ' ~ intern.superviseur : '' }}</td>
+                                    <td>
+                                    {% if intern.superviseur is null %}
+                                        <button name="btSupervise" value="{{ intern.id }}">Superviser</button>
+                                    {% else %}
+                                        <button name="btUnsupervise" value="{{ intern.id }}">Ne plus superviser</button>
+                                    {% endif %}
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </table>
+                    </td>
+                </tr> 
+            {% else %}
+                <tr>
+                    <td colspan="5">no records found</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </form>
+
 {% endblock %}

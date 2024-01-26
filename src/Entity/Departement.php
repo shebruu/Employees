@@ -38,12 +38,14 @@ class Departement
 
     // Relation many-to-many inverse avec Employee
     #[ORM\ManyToMany(targetEntity: Employee::class, mappedBy: 'departments')]
+    #[ORM\JoinColumn(name: 'employee_id', referencedColumnName: 'id')]
     private Collection $employees;
 
     #[ORM\OneToMany(mappedBy: 'departement', targetEntity: DeptEmp::class)]
+    #[ORM\JoinColumn(name: 'department_id', referencedColumnName: 'id')]
     private Collection $deptEmps;
 
-    #[ORM\OneToMany(mappedBy: 'deptNo', targetEntity: Intern::class)]
+    #[ORM\OneToMany(mappedBy: 'departement', targetEntity: Intern::class)]
     private Collection $interns;
 
 
@@ -123,12 +125,6 @@ class Departement
         return $this;
     }
 
-
-    public function __toString()
-    {
-        return $this->dept_name;
-    }
-
     /**
      * @return Collection<int, Intern>
      */
@@ -141,7 +137,7 @@ class Departement
     {
         if (!$this->interns->contains($intern)) {
             $this->interns->add($intern);
-            $intern->setDeptNo($this);
+            $intern->setDepartement($this);
         }
 
         return $this;
@@ -151,11 +147,18 @@ class Departement
     {
         if ($this->interns->removeElement($intern)) {
             // set the owning side to null (unless already changed)
-            if ($intern->getDeptNo() === $this) {
-                $intern->setDeptNo(null);
+            if ($intern->getDepartement() === $this) {
+                $intern->setDepartement(null);
             }
         }
 
         return $this;
+    }
+
+
+
+    public function __toString()
+    {
+        return $this->dept_name;
     }
 }

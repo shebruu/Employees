@@ -6,16 +6,5 @@
 {% block body %}
 
 <h1> Liste des  projects  </h1>
-	<ul>
-    {% for projet in projects %}
-        <li>
-            {{ projet.description }} – {{ projet.chefDeProjet.firstName }} {{ projet.chefDeProjet.lastName }}
-            <ul>
-                {% for employee in projet.employees %}
-                    <li>{{ employee.firstName }} {{ employee.lastName }}</li>
-                {% endfor %}
-            </ul>
-        </li>
-    {% endfor %}
-</ul>
+
 {% endblock %}

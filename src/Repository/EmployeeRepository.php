@@ -21,6 +21,48 @@ class EmployeeRepository extends ServiceEntityRepository
         parent::__construct($registry, Employee::class);
     }
 
+    /**
+     * Persiste l'entité Employee dans la base de données.
+     *
+     * @param Employee $entity L'entité Employee à persister.
+     * @param bool $flush Si vrai, effectue un flush immédiatement après la persistance.
+     */
+    public function save(Employee $entity, bool $flush = false): void
+    {
+        $this->getEntityManager()->persist($entity);
+
+        if ($flush) {
+            $this->getEntityManager()->flush();
+        }
+    }
+
+    /**
+     * Supprime l'entité Employee de la base de données.
+     *
+     * @param Employee $entity L'entité Employee à supprimer.
+     * @param bool $flush Si vrai, effectue un flush immédiatement après la suppression.
+     */
+    public function remove(Employee $entity, bool $flush = false): void
+    {
+        $this->getEntityManager()->remove($entity);
+
+        if ($flush) {
+            $this->getEntityManager()->flush();
+        }
+    }
+    /**
+     * Récupère un tableau d'objets Employee qui n'ont pas de stagiaires associés.
+     *
+     * @return Employee[] Un tableau d'objets Employee sans stagiaires associés.
+     */
+    public function findEmployeesWithNoIntern(): array
+    {
+        return $this->createQueryBuilder('e')
+            ->where('e.interns is empty')
+            ->orderBy('e.id', 'ASC')
+            ->getQuery()
+            ->getResult();
+    }
 
 
     /*

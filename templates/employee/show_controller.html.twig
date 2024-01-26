@@ -1,0 +1,42 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Employee
+{% endblock %}
+
+{% block body %}
+
+{# Affiche le département actuel de l'employé, s'il est défini 
+{% if employee.ctrl_actualDept is defined %}
+    <p>Ton Département actuel est <br>{{ employee.ctrl_actualDept.deptName }} <br>{{ employee.ctrl_actualDept.deptNo }}</p>
+{% else %}
+    <p>Aucun département actuel n'est défini pour cet employé.</p>
+{% endif %}
+#}
+{#  variable est un tableau,  Affiche une liste des départements actuels de l'employé 
+
+{% if currentDepartments is not empty %}
+    <p>ta liste de départements :</p>
+    <ul>
+        {% for dept in currentDepartments %}
+            <li>{{ dept.deptName }} ({{ dept.deptNo }})</li>
+        {% endfor %}
+    </ul>
+{% else %}
+    <p>Aucun département actuel n'est défini pour cet employé.</p>
+{% endif %}
+
+#}
+
+{# Affiche les départements associés à l'employé #}
+{% if departments is not empty %}
+    <h2>Départements courants</h2>
+    <ul>
+        {% for dept in departments %}
+            <li>{{ dept.deptName }} ({{ dept.deptNo }})</li> {# Remplacez 'name' et 'id' par les propriétés appropriées #}
+        {% endfor %}
+    </ul>
+{% else %}
+    <p>Aucun département n'est actuellement associé à cet employé.</p>
+{% endif %}
+
+{% endblock %}

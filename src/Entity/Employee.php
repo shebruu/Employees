@@ -8,6 +8,7 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 
@@ -18,36 +19,57 @@ enum Gender: string
     case Non_Binary = 'X';
 }
 
+
+
+/**
+ * Représente un employé dans le système.
+ *
+ */
 #[ORM\Table('collaborators')]
 #[ORM\Entity(repositoryClass: EmployeeRepository::class)]
 class Employee implements UserInterface, PasswordAuthenticatedUserInterface
 {
+
+    /**
+     * Identiiant unique de l'employé.
+     */
     #[ORM\Id]
     #[ORM\GeneratedValue(strategy: "NONE")]
     #[ORM\Column(name: 'id')]
     private ?int $id = null;
 
+    /**
+     *
+     * Date de naissance de l'employé.
+     */
     #[ORM\Column(type: Types::DATE_MUTABLE)]
     private ?\DateTimeInterface $birthDate = null;
 
+    /**
+     * Prénom de l'employé.
+     */
     #[ORM\Column(length: 14, name: 'firstname')]
     #[Assert\Length(min: 3, max: 14)]
     private ?string $firstName = null;
 
+    /**
+     * Nom de famille de l'employé.
+     */
     #[ORM\Column(length: 16, name: 'lastname')]
     #[Assert\Length(min: 3, max: 16)]
     private ?string $lastName = null;
 
+    /**
+     * Genre de l'employé, représenté par un enum (Homme, Femme, Non-Binaire).
+     */
     #[ORM\Column(length: 1, enumType: Gender::class)]
     private ?Gender $gender = null;
 
 
 
-
-
-
-
-
+    /**
+     * Date d'embauche de l'employé.
+     */
     #[ORM\Column(type: Types::DATE_MUTABLE)]
     private ?\DateTimeInterface $hireDate = null;
 
@@ -58,12 +80,17 @@ class Employee implements UserInterface, PasswordAuthenticatedUserInterface
     #[Assert\Email]
     private ?string $email = null;
 
+    /**
+     * Demandes associées à l'employé.
+     */
     #[ORM\OneToMany(mappedBy: 'employe', targetEntity: Demand::class)]
     private Collection $demands;
 
 
 
-    // Relation many-to-many directe avec Department
+    /** 
+     * Départements associés à l'employé.
+     */
     #[ORM\ManyToMany(targetEntity: Departement::class, inversedBy: 'employees')]
     #[ORM\JoinTable(
         name: "dept_emp",
@@ -72,40 +99,61 @@ class Employee implements UserInterface, PasswordAuthenticatedUserInterface
     )]
     private Collection $departments;
 
-    // Relation one-to-many avec l'entité de jointure DeptEmp
+    /**
+     *Relations de l'employé avec les départements (via l'entité de jointure DeptEmp).
+     */
     #[ORM\OneToMany(mappedBy: 'employee', targetEntity: DeptEmp::class)]
     private Collection $deptEmps;
 
 
 
 
-
+    /**
+     * Projets dont cet employé est le chef de projet.
+     */
     #[ORM\OneToMany(targetEntity: "Project", mappedBy: "chefDeProjet")]
     private Collection $projetschef;
 
 
+    /** 
+     * Projets auxquels cet employé est assigné.
+     */
     #[ORM\ManyToMany(targetEntity: Project::class, mappedBy: "employees")]
     private Collection $projetsAssignes;
 
-
+    /** 
+     * Rôles de l'employé dans l'application.
+     */
     #[ORM\Column]
     private array $roles = [];
 
 
+    #[ORM\Column]
+    private ?bool $isVerified = null;
+    /**
+     * @var string|null Département actuel de l'employé (contrôle).
+     */
     public  $ctrl_actualDept;
 
+    /**
+     * @var string|null Département actuel de l'employé (requête).
+     */
     public $repoqb_actualDept;
 
+    /**
+     * @var string|null Département actuel de l'employé.
+     */
     public $actualdep;
 
-
-
     /**
-     * @var string The hashed password
+     * @var string Mot de passe hashé de l'employé.
      */
     #[ORM\Column]
     private ?string $password = null;
 
+    /**
+     * Missions auxquelles l'employé est associé.
+     */
     #[ORM\ManyToMany(targetEntity: Mission::class, inversedBy: 'employees')]
     #[ORM\JoinTable(
         name: "employee_mission",
@@ -117,7 +165,7 @@ class Employee implements UserInterface, PasswordAuthenticatedUserInterface
 
 
 
-    #[ORM\OneToMany(mappedBy: 'empNo', targetEntity: Intern::class)]
+    #[ORM\OneToMany(mappedBy: 'superviseur', targetEntity: Intern::class)]
     private Collection $interns;
 
     public function __construct()
@@ -134,25 +182,41 @@ class Employee implements UserInterface, PasswordAuthenticatedUserInterface
     }
 
 
-
+    /**
+     * Ajoute un projet à la liste des projets assignés à cet employé.
+     * Si le projet n'est pas déjà dans la liste, il est ajouté et l'employé est associé au projet.
+     *
+     * @param Project $projet Le projet à ajouter.
+     * @return self Retourne l'instance de l'employé pour permettre le chaînage des méthodes.
+     */
     public function addProjetsAssignes(Project $projet): self
     {
         if (!$this->projetsAssignes->contains($projet)) {
             $this->projetsAssignes[] = $projet;
-            $projet->addEmployee($this); // Assurez-vous que cette méthode existe également dans Project
+            $projet->addEmployee($this); //doit exister ds les 2 entités ( project aussi)
         }
         return $this;
     }
 
+    /**
+     * Supprime un projet de la liste des projets assignés à cet employé.
+     * Si le projet est dans la liste, il est retiré et l'association entre l'employé et le projet est supprimée.
+     *
+     * @param Project $projet Le projet à retirer.
+     * @return self Retourne l'instance de l'employé pour permettre le chaînage des méthodes.
+     */
     public function removeProjetsAssignes(Project $projet): self
     {
         if ($this->projetsAssignes->removeElement($projet)) {
-            $projet->removeEmployee($this); // Assurez-vous que cette méthode existe également dans Project
+            $projet->removeEmployee($this);
         }
         return $this;
     }
 
 
+    /**
+     * Récupère l'identifiant de l'employé.
+     */
     public function getId(): ?int
     {
         return $this->id;
@@ -242,20 +306,25 @@ class Employee implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    public function __toString(): string
-    {
-        return "{$this->firstName} {$this->lastName}";
-    }
-
 
     /**
-     * @return Collection<int, Demand>
+     * Récupère la collection des demandes associées à cet employé.
+     * 
+     * @return Collection<int, Demand> La collection des demandes.
      */
     public function getDemands(): Collection
     {
         return $this->demands;
     }
 
+
+    /**
+     * Ajoute une demande à la collection des demandes de cet employé.
+     * Si la demande n'est pas déjà présente, elle est ajoutée à la collection.
+     *
+     * @param Demand $demand La demande à ajouter.
+     * @return self Retourne l'instance de l'employé pour permettre le chaînage des méthodes.
+     */
     public function addDemand(Demand $demand): static
     {
         if (!$this->demands->contains($demand)) {
@@ -268,11 +337,17 @@ class Employee implements UserInterface, PasswordAuthenticatedUserInterface
 
 
 
-
+    /**
+     * Supprime une demande de la collection des demandes de cet employé.
+     * Si la demande est présente dans la collection, elle est retirée.
+     *
+     * @param Demand $demand La demande à retirer.
+     * @return self Retourne l'instance de l'employé pour permettre le chaînage des méthodes.
+     */
     public function removeDemand(Demand $demand): static
     {
         if ($this->demands->removeElement($demand)) {
-            // set the owning side to null (unless already changed)
+
             if ($demand->getEmploye() === $this) {
                 $demand->setEmploye(null);
             }
@@ -281,21 +356,30 @@ class Employee implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
+    /**
+     * Récupère la collection des départements associés à cet employé.
+     * 
+     * @return Collection La collection des départements.
+     */
     public function getDepartments(): Collection
     {
         return $this->departments;
     }
 
+    /**
+     * Récupère la collection des relations DeptEmp associées à cet employé.
+     * 
+     * @return Collection La collection des relations DeptEmp.
+     */
     public function getDeptEmps(): Collection
     {
         return $this->deptEmps;
     }
 
-
     /**
-     * A visual identifier that represents this user.
-     *
      * @see UserInterface
+     *
+     * Retourne l'identifiant de l'utilisateur ( l'email).
      */
     public function getUserIdentifier(): string
     {
@@ -304,6 +388,8 @@ class Employee implements UserInterface, PasswordAuthenticatedUserInterface
 
     /**
      * @see UserInterface
+     *
+     * Retourne les rôles de l'utilisateur.
      */
     public function getRoles(): array
     {
@@ -389,6 +475,21 @@ class Employee implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
+
+
+
+    public function isVerified(): bool
+    {
+        return $this->isVerified;
+    }
+
+    public function setIsVerified(bool $isVerified): self
+    {
+        $this->isVerified = $isVerified;
+
+        return $this;
+    }
+
     /**
      * @return Collection<int, Intern>
      */
@@ -401,7 +502,7 @@ class Employee implements UserInterface, PasswordAuthenticatedUserInterface
     {
         if (!$this->interns->contains($intern)) {
             $this->interns->add($intern);
-            $intern->setEmpNo($this);
+            $intern->setsuperviseur($this);
         }
 
         return $this;
@@ -411,11 +512,37 @@ class Employee implements UserInterface, PasswordAuthenticatedUserInterface
     {
         if ($this->interns->removeElement($intern)) {
             // set the owning side to null (unless already changed)
-            if ($intern->getEmpNo() === $this) {
-                $intern->setEmpNo(null);
+            if ($intern->getSuperviseur() === $this) {
+                $intern->setsuperviseur(null);
             }
         }
 
         return $this;
+    }
+
+    /**
+     * Récupère la liste de tous les projets assignés à cet employé.
+     *
+     * @return Collection<Project> La collection des projets assignés.
+     */
+    public function getAllAssignedProjects(): Collection
+    {
+        $allAssignedProjects = new ArrayCollection();
+
+        foreach ($this->projetsAssignes as $project) {
+            $allAssignedProjects[] = $project;
+        }
+
+        return $allAssignedProjects;
+    }
+
+    /**
+     * Représentation en chaîne de caractères de l'employé ( pour l affichage) .
+     * 
+     * @return string Une chaîne de caractères représentant l'employé (prénom et nom).
+     */
+    public function __toString(): string
+    {
+        return "{$this->firstName} {$this->lastName}";
     }
 }

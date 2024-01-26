@@ -25,7 +25,7 @@ class Project
 
 
     #[ORM\ManyToOne(targetEntity: Employee::class)]
-    #[ORM\JoinColumn(name: 'emp_no', referencedColumnName: 'id')]
+    #[ORM\JoinColumn(name: 'chef_projet', referencedColumnName: 'id')]
     private ?Employee $chefDeProjet = null;
 
     #[ORM\ManyToMany(targetEntity: Employee::class, inversedBy: "projetsAssignes")]
@@ -38,7 +38,7 @@ class Project
     #[ORM\Column(type: 'datetime', name: 'date_creation')]
     private ?\DateTime $creation = null;
 
-    #[ORM\Column(nullable: true, name: 'modifié')]
+    #[ORM\Column(nullable: true, name: 'modified')]
     private ?bool $estmodifie = null;
 
 

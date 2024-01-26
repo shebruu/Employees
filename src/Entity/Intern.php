@@ -29,11 +29,11 @@ class Intern
 
     #[ORM\ManyToOne(inversedBy: 'interns')]
     #[ORM\JoinColumn(name: 'dept_no', referencedColumnName: 'id', nullable: false)]
-    private ?Departement $deptNo = null;
+    private ?Departement $departement = null;
 
     #[ORM\ManyToOne(inversedBy: 'interns')]
     #[ORM\JoinColumn(name: 'emp_no', referencedColumnName: 'id', nullable: true)]
-    private ?Employee $empNo = null;
+    private ?Employee $superviseur = null;
 
     public function getId(): ?int
     {
@@ -78,26 +78,26 @@ class Intern
         return $this;
     }
 
-    public function getDeptNo(): ?Departement
+    public function getDepartement(): ?Departement
     {
-        return $this->deptNo;
+        return $this->departement;
     }
 
-    public function setDeptNo(?Departement $deptNo): static
+    public function setDepartement(?Departement $departement): static
     {
-        $this->deptNo = $deptNo;
+        $this->departement = $departement;
 
         return $this;
     }
 
-    public function getEmpNo(): ?Employee
+    public function getSuperviseur(): ?Employee
     {
-        return $this->empNo;
+        return $this->superviseur;
     }
 
-    public function setEmpNo(?Employee $empNo): static
+    public function setSuperviseur(?Employee $superviseur): static
     {
-        $this->empNo = $empNo;
+        $this->superviseur = $superviseur;
 
         return $this;
     }

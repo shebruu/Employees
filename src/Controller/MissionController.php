@@ -20,7 +20,12 @@ class MissionController extends AbstractController
 {
 
 
-
+    /**
+     * Affiche toutes les missions.
+     * 
+     * @param MissionRepository $missionRepository
+     * @return Response
+     */
     #[Route('/', name: 'app_mission_index', methods: ['GET'])]
     public function index(MissionRepository $missionRepository): Response
     {
@@ -38,6 +43,13 @@ class MissionController extends AbstractController
         ]);
     }
 
+    /**
+     * Crée une nouvelle mission.
+     * 
+     * @param Request $request
+     * @param EntityManagerInterface $entityManager
+     * @return Response
+     */
     #[Route('/new', name: 'app_mission_new', methods: ['GET', 'POST'])]
     public function new(Request $request, EntityManagerInterface $entityManager): Response
     {
@@ -58,6 +70,13 @@ class MissionController extends AbstractController
         ]);
     }
 
+    /**
+     * Affiche les détails d'une mission spécifique.
+     * 
+     * @param int $id
+     * @param Mission $mission
+     * @return Response
+     */
     #[Route('/{id}', name: 'app_mission_show', methods: ['GET'])]
     public function show(int $id, Mission $mission): Response
     {
@@ -70,6 +89,14 @@ class MissionController extends AbstractController
         }
     }
 
+    /**
+     * Modifie une mission existante.
+     * 
+     * @param Request $request
+     * @param Mission $mission
+     * @param EntityManagerInterface $entityManager
+     * @return Response
+     */
     #[Route('/{id}/edit', name: 'app_mission_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Mission $mission, EntityManagerInterface $entityManager): Response
     {
@@ -88,6 +115,14 @@ class MissionController extends AbstractController
         ]);
     }
 
+    /**
+     * Supprime une mission.
+     * 
+     * @param Request $request
+     * @param Mission $mission
+     * @param EntityManagerInterface $entityManager
+     * @return Response
+     */
     #[Route('/{id}', name: 'app_mission_delete', methods: ['POST'])]
     public function delete(Request $request, Mission $mission, EntityManagerInterface $entityManager): Response
     {
@@ -100,7 +135,13 @@ class MissionController extends AbstractController
     }
 
 
-
+    /**
+     * Affiche les missions attribuées ou non attribuées à un employé.
+     * 
+     * @param Employee $employee
+     * @param MissionRepository $repo
+     * @return Response
+     */
     #[Route('/mesmissions/{id}', name: 'app_mission_mesmissions', methods: ['GET'])]
     public function mes_missions(Employee $employee, MissionRepository $repo): Response
     {
@@ -115,7 +156,15 @@ class MissionController extends AbstractController
     }
 
 
-
+    /**
+     * Met à jour le statut d'une mission pour un employé.
+     * 
+     * @param string $missionId
+     * @param string $action
+     * @param Employee $employee
+     * @param EntityManagerInterface $entityManager
+     * @return Response
+     */
     #[Route('/mesmissions/{id}/update/{missionId}', name: 'mission_update', methods: ['POST'])]
     public function updateMission($missionId, $action, Employee $employee, EntityManagerInterface $entityManager): Response
     {

@@ -22,26 +22,43 @@ class MissionRepository extends ServiceEntityRepository
         parent::__construct($registry, Mission::class);
     }
 
-    //récupérer les missions actif ( statut pas terminé ) de l' employé (qui lui sont assigné )
+    /**
+     * Trouve les missions actives assignées à un employé spécifique.
+     * 
+     * Cette méthode récupère les missions qui sont actuellement actives (statut différent de 'terminé')
+     * et assignées à l'employé passé en paramètre. Utilise une jointure pour lier les missions aux employés.
+     *
+     * @param Employee $employee Employé pour lequel trouver les missions actives.
+     * @return array Mission[] Liste des missions actives assignées à cet employé.
+     */
     public function findMissionsActifByEmployee(Employee $employee): array
     {
         return $this->createQueryBuilder('miss')
-            ->join('miss.employees', 'emp') // preferer a select pr relationner manytomany ( collection employees ds Missions.php)
-            ->where('emp.id= :employeeId') // :employee (variable de  holderplace)  pour setparameter
-            ->andWhere('miss.status != :done')
+            ->join('miss.employees', 'emp') // Jointure avec les employés assignés aux missions
+            ->where('emp.id= :employeeId') // Filtrage par ID de l'employé
+            ->andWhere('miss.status != :done') // Filtrage pour exclure les missions terminées
             ->setParameter('employeeId', $employee)
             ->setParameter('done', 'terminé')
-            ->orderBy('miss.id', 'ASC')
+            ->orderBy('miss.id', 'ASC') //// Tri par ID de mission
             ->getQuery()
             ->getResult();
     }
 
+
+    /**
+     * Trouve les missions actives non assignées à un employé spécifique.
+     * 
+     * Cette méthode récupère les missions actives qui ne sont pas assignées à l'employé passé en paramètre.
+     *
+     * @param Employee $employee Employé à exclure des missions assignées.
+     * @return array Mission[] Liste des missions actives non assignées à cet employé.
+     */
     public function findMissionsNonAssigneesEtActives(Employee $employee): array
     {
         return $this->createQueryBuilder('miss')
             ->leftJoin('miss.employees', 'emp')
             ->where('miss.status != :done')
-            ->andWhere(':employeeId NOT MEMBER OF miss.employees') // S'assurer que l'employé n est pas assigné a la mission
+            ->andWhere(':employeeId NOT MEMBER OF miss.employees') // Exclusion des missions où l'employé est assigné
             ->setParameter('employeeId', $employee)
             ->setParameter('done', 'terminé')
             ->orderBy('miss.id', 'ASC') // Trier par id

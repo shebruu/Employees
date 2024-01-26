@@ -1,0 +1,36 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Mes projets{% endblock %}
+
+{% block body %}
+
+    <h2>Liste des projets</h2>
+
+<table class="table table-hover">
+    <tbody>
+        {% for project in projectsWithemp %}
+       <tr>
+                <td colspan="3"><strong>Nom du projet :</strong> {{ project.description }} 
+           <br>
+                <strong>Chef :</strong> {{ project.chefDeProjet.firstName }} {{ project.chefDeProjet.lastName }}</td>
+            </tr>
+            <tr>
+                <td colspan="3"><strong>Employés associés :</strong></td>
+            </tr>
+            {% for employee in project.employees %}
+                <tr>
+				
+                    <td>{{ employee.firstName }} {{ employee.lastName }}</td>
+                    <td>
+        
+					<form action="{{ path('app_projet_supprimer', {'id':employee.id}) }}" method="post">
+								<button type="submit" class="btn btn-danger disabled"> Retirer</button>
+							</form>
+							</td>
+                </tr>
+            {% endfor %}
+        {% endfor %}
+    </tbody>
+</table>
+
+{% endblock %}

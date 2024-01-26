@@ -22,16 +22,34 @@ class ProjectRepository extends ServiceEntityRepository
     }
 
 
-    public function findProjetsWithDetails()
+    public function findAllProjectsWithEmployees()
     {
         return $this->createQueryBuilder('p')
-            ->leftJoin('p.chefDeProjet', 'chef')
-            ->addSelect('chef')
             ->leftJoin('p.employees', 'e')
             ->addSelect('e')
             ->getQuery()
             ->getResult();
     }
+
+
+    /**
+     * Récupère les projets avec des détails sur le chef de projet et les employés associés.
+     * 
+     *
+     * @return array Liste des projets avec les détails des chefs de projet et des employés associés.
+     */
+    /*
+    public function findProjetsWithDetails()
+    {
+        return $this->createQueryBuilder('p')
+            ->leftJoin('p.chefDeProjet', 'chef') 
+            ->addSelect('chef')
+            ->leftJoin('p.employees', 'e')
+            ->addSelect('e')
+            ->getQuery()
+            ->getResult();
+    } TODO
+    */
 
 
     //    /**
