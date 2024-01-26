@@ -17,11 +17,22 @@ class PartnerController extends AbstractController
     #[Route('/', name: 'app_partner_index', methods: ['GET'])]
     public function index(PartnerRepository $partnerRepository): Response
     {
+
+        $partners = $partnerRepository->findAll();
         return $this->render('partner/index.html.twig', [
-            'partners' => $partnerRepository->findAll(),
+            'partners' => $partners,
+
         ]);
     }
 
+    public function somePageAction(PartnerRepository $partnerRepository): Response
+    {
+        $partners = $partnerRepository->findAll();
+
+        return $this->render('partials/_footer.html.twig', [
+            'partners' => $partners,
+        ]);
+    }
     #[Route('/{id}', name: 'app_partner_show', methods: ['GET'])]
     public function show(Partner $partner): Response
     {

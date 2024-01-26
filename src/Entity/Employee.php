@@ -30,12 +30,16 @@ class Employee implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(type: Types::DATE_MUTABLE)]
     private ?\DateTimeInterface $birthDate = null;
 
-    #[ORM\Column(length: 14)]
+
+    /**
+     * Prénom de l'employé.
+     * documment
+     */
+    #[ORM\Column(length: 14, name: 'firstname')]
     #[Assert\Length(min: 3, max: 14)]
-    #[ORM\Column(name: 'firstname')]
     private ?string $firstName = null;
 
-    #[ORM\Column(length: 16)]
+    #[ORM\Column(length: 16, name: 'lastname')]
     #[Assert\Length(min: 3, max: 16)]
     private ?string $lastName = null;
 

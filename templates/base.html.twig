@@ -43,6 +43,11 @@
 			</div>
 		{% endif %}
 
-		{% block body %}{% endblock %}
+		{% block body %}
+		
+    {% include 'partials/_footer.html.twig' %}
+		{% endblock %}
+
 	</body>
+	
 </html>
