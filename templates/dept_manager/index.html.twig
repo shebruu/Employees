@@ -1,0 +1,43 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}DeptManager index{% endblock %}
+
+{% block body %}
+    <h1>Liste des Managers</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+              
+        
+<th>DeptName</th>
+        <th>FromDate</th>
+        <th>ToDate</th>
+         <th>Manager Name</th> 
+           
+            </tr>
+        </thead>
+        <tbody>
+        {% for dept_manager in dept_managers %}
+            <tr>
+                <td>{{ dept_manager.departement.deptName }}</td>
+                <td>{{ dept_manager.fromDate ? dept_manager.fromDate|date('Y-m-d') : '' }}</td>
+                <td>{{ dept_manager.toDate ? dept_manager.toDate|date('Y-m-d') : '' }}</td>
+                {#
+                <td>
+                    <a href="{{ path('app_dept_manager_show', {'id': dept_manager.id}) }}">show</a>
+                    <a href="{{ path('app_dept_manager_edit', {'id': dept_manager.id}) }}">edit</a>
+                </td>
+                #}
+             <td>
+               
+               {{ dept_manager.employee.firstName }}  {{ dept_manager.employee.lastName }}
+            </td>
+            </tr>
+
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_dept_manager_new') }}">Create new</a>
+{% endblock %}

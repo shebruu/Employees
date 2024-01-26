@@ -48,12 +48,16 @@ class Departement
     #[ORM\OneToMany(mappedBy: 'departement', targetEntity: Intern::class)]
     private Collection $interns;
 
+    #[ORM\OneToMany(mappedBy: 'departement', targetEntity: DeptManager::class)]
+    private Collection $deptManagers;
+
 
     public function __construct()
     {
         $this->employees = new ArrayCollection();
         $this->deptEmps = new ArrayCollection();
         $this->interns = new ArrayCollection();
+        $this->deptManagers = new ArrayCollection();
     }
     public function getId(): ?string
     {
@@ -101,7 +105,7 @@ class Departement
         return $this;
     }
 
-    public function getAdress(): ?string
+    public function getAddress(): ?string
     {
         return $this->address;
     }
@@ -160,5 +164,35 @@ class Departement
     public function __toString()
     {
         return $this->dept_name;
+    }
+
+    /**
+     * @return Collection<int, DeptManager>
+     */
+    public function getDeptManagers(): Collection
+    {
+        return $this->deptManagers;
+    }
+
+    public function addDeptManager(DeptManager $deptManager): static
+    {
+        if (!$this->deptManagers->contains($deptManager)) {
+            $this->deptManagers->add($deptManager);
+            $deptManager->setDepartement($this);
+        }
+
+        return $this;
+    }
+
+    public function removeDeptManager(DeptManager $deptManager): static
+    {
+        if ($this->deptManagers->removeElement($deptManager)) {
+            // set the owning side to null (unless already changed)
+            if ($deptManager->getDepartement() === $this) {
+                $deptManager->setDepartement(null);
+            }
+        }
+
+        return $this;
     }
 }

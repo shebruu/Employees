@@ -1,0 +1,29 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Departement index{% endblock %}
+
+{% block body %}
+    <div class="container mt-4">
+        <h1>Departement index</h1>
+        <div class="row">
+            {% for departement in departements %}
+                <div class="col-md-4 mb-3">
+                    <div class="card">
+                        <div class="card-header">
+                            {{ departement.deptName }}
+                        </div>
+                        <div class="card-body">
+                            <h5 class="card-title">{{ departement.deptNo }}</h5>
+                            <p class="card-text">{{ departement.address }}</p>
+                            <a href="{{ path('app_departement_show', {'id': departement.id}) }}" class="btn btn-primary">Show</a>
+                            <a href="{{ path('app_departement_edit', {'id': departement.id}) }}" class="btn btn-secondary">Edit</a>
+                        </div>
+                    </div>
+                </div>
+            {% else %}
+                <div>No records found</div>
+            {% endfor %}
+        </div>
+        <a href="{{ path('app_departement_new') }}" class="btn btn-success">Create new</a>
+    </div>
+{% endblock %}

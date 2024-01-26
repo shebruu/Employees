@@ -169,6 +169,9 @@ class Employee implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(mappedBy: 'superviseur', targetEntity: Intern::class)]
     private Collection $interns;
 
+    #[ORM\OneToMany(mappedBy: 'employee', targetEntity: DeptManager::class)]
+    private Collection $deptManagers;
+
     public function __construct()
     {
         $this->demands = new ArrayCollection();
@@ -180,6 +183,7 @@ class Employee implements UserInterface, PasswordAuthenticatedUserInterface
         $this->missions = new ArrayCollection();
 
         $this->interns = new ArrayCollection();
+        $this->deptManagers = new ArrayCollection();
     }
 
 
@@ -545,5 +549,35 @@ class Employee implements UserInterface, PasswordAuthenticatedUserInterface
     public function __toString(): string
     {
         return "{$this->firstName} {$this->lastName}";
+    }
+
+    /**
+     * @return Collection<int, DeptManager>
+     */
+    public function getDeptManagers(): Collection
+    {
+        return $this->deptManagers;
+    }
+
+    public function addDeptManager(DeptManager $deptManager): static
+    {
+        if (!$this->deptManagers->contains($deptManager)) {
+            $this->deptManagers->add($deptManager);
+            $deptManager->setEmployee($this);
+        }
+
+        return $this;
+    }
+
+    public function removeDeptManager(DeptManager $deptManager): static
+    {
+        if ($this->deptManagers->removeElement($deptManager)) {
+            // set the owning side to null (unless already changed)
+            if ($deptManager->getEmployee() === $this) {
+                $deptManager->setEmployee(null);
+            }
+        }
+
+        return $this;
     }
 }
