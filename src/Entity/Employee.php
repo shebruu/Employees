@@ -18,7 +18,7 @@ enum Gender: string
     case Non_Binary = 'X';
 }
 
-#[ORM\Table('employees')]
+#[ORM\Table('collaborators')]
 #[ORM\Entity(repositoryClass: EmployeeRepository::class)]
 class Employee implements UserInterface, PasswordAuthenticatedUserInterface
 {
@@ -32,6 +32,7 @@ class Employee implements UserInterface, PasswordAuthenticatedUserInterface
 
     #[ORM\Column(length: 14)]
     #[Assert\Length(min: 3, max: 14)]
+    #[ORM\Column(name: 'firstname')]
     private ?string $firstName = null;
 
     #[ORM\Column(length: 16)]
