@@ -1,0 +1,11 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}New DeptManager{% endblock %}
+
+{% block body %}
+    <h1>Create new DeptManager</h1>
+
+    {{ include('dept_manager/_form.html.twig') }}
+
+    <a href="{{ path('app_dept_manager_index') }}">back to list</a>
+{% endblock %}

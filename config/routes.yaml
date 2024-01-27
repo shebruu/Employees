@@ -1,0 +1,45 @@
+controllers:
+    resource:
+        path: ../src/Controller/
+        namespace: App\Controller
+    type: attribute
+
+login:
+    path: /login
+    controller: App\Controller\LoginController::index
+
+logout:
+    path: /app_logout
+    
+
+
+home:
+    path: /home
+    controller: App\Controller\HomeController::index
+
+home_headquarters_location:
+    path: '/home/headquarters_location'
+    controller: 'App\Controller\HomeController::headquartersLocation'
+
+home_qr_code:
+    path: /home/qr-code
+    controller: App\Controller\HomeController::qrCode
+
+employee_profil:
+    path: '/profil'
+    controller: 'App\Controller\EmployeeController::profil'
+
+intern:
+    path: '/intern'
+    controller: 'App\Controller\EmployeeController::intern'
+
+# config/routes.yaml
+department:
+    path: /departmentt
+    controller: App\Controller\DepartmentController::index
+    methods: ['GET']
+
+
+
+            
+
