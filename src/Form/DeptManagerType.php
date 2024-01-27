@@ -2,10 +2,12 @@
 
 namespace App\Form;
 
+
 use App\Entity\Departement;
 use App\Entity\DeptManager;
 use App\Entity\Employee;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
+
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -15,18 +17,18 @@ class DeptManagerType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
+
             ->add('deptName')
             ->add('fromDate')
             ->add('toDate')
             ->add('departement', EntityType::class, [
                 'class' => Departement::class,
-'choice_label' => 'id',
+                'choice_label' => 'id',
             ])
             ->add('employee', EntityType::class, [
                 'class' => Employee::class,
-'choice_label' => 'id',
-            ])
-        ;
+                'choice_label' => 'id',
+            ]);
     }
 
     public function configureOptions(OptionsResolver $resolver): void

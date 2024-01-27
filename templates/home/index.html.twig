@@ -1,0 +1,59 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Accueil{% endblock %}
+
+{% block body %}
+    <div class="container ">
+
+
+        <div class="header">
+            <h1>Bienvenue sur la page d'accueil !</h1>
+        </div>
+
+        <div class="about-us">
+            <section>
+                <h2>À propos de nous</h2>
+                <p><strong>Qui sommes-nous ?</strong></p>
+                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et
+                    dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut
+                    a</p>
+            </section>
+        </div>
+
+        <div class="press-releases">
+            <section>
+                <h2>Communiqués de presse</h2>
+                <ul>
+                    {% for link in link %}
+                    <li>
+                        ID: {{ link.id }} - <a href="{{ link.url }}" target="_blank">{{ link.url }}</a> <a
+                            href="{{ path('download_pdf', {'linkId': link.id}) }}" target="_blank">Télécharger en
+                            PDF</a>
+                    </li>
+                    {% endfor %}
+                </ul>
+            </section>
+        </div>
+
+        <div class="documents">
+            <section>
+                <h2>Documents</h2>
+            </section>
+        </div>
+
+        <div class="headquarters-location">
+            <section>
+                       {% include "/partials/_map.html.twig" %}
+            </section>
+        </div>
+
+        <div class="app-download">
+            <section>
+                <h2>Téléchargement de l’application via QR Code</h2>
+                {# Afficher l'image du QR Code en utilisant le chemin 'qr_code' #}
+                {# <img src="{{ path('qr_code') }}" alt="QR Code"> #}
+            </section>
+        </div>
+
+    </div>
+{% endblock %}

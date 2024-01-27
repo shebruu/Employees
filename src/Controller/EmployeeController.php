@@ -9,15 +9,20 @@ use App\Form\EmployeeType;
 
 use App\Entity\Project;
 
+use App\Form\EmployeeProfilType;
 use App\Repository\EmployeeRepository;
 use App\Repository\DepartementRepository;
 use App\Repository\InternRepository;
 use App\Repository\ProjectRepository;
+
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+
+use Symfony\Component\HttpFoundation\File\Exception\FileException;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 #[Route('/employee')]
 class EmployeeController extends AbstractController
@@ -30,10 +35,12 @@ class EmployeeController extends AbstractController
      * @param EmployeeRepository $employeeRepository
      * @return Response
      */
+
     #[Route('/', name: 'app_employee_index', methods: ['GET'])]
     public function index(EmployeeRepository $employeeRepository): Response
     {
         return $this->render('employee/index.html.twig', [
+
             'employees' => $employeeRepository->findAll(),
         ]);
     }
@@ -49,6 +56,7 @@ class EmployeeController extends AbstractController
     public function new(Request $request, EntityManagerInterface $entityManager): Response
     {
         $this->denyAccessUnlessGranted('ROLE_ADMIN');
+
 
         $employee = new Employee();
         $form = $this->createForm(EmployeeType::class, $employee);
@@ -137,6 +145,7 @@ class EmployeeController extends AbstractController
     {
         $this->denyAccessUnlessGranted('ROLE_ADMIN');
 
+
         $form = $this->createForm(EmployeeType::class, $employee);
         $form->handleRequest($request);
 
@@ -164,6 +173,7 @@ class EmployeeController extends AbstractController
     public function delete(Request $request, Employee $employee, EntityManagerInterface $entityManager): Response
     {
         if ($this->isCsrfTokenValid('delete' . $employee->getId(), $request->request->get('_token'))) {
+
             $entityManager->remove($employee);
             $entityManager->flush();
         }
@@ -213,6 +223,55 @@ class EmployeeController extends AbstractController
         //dump($projectsWithEmployees);
         return $this->render('employee/mesprojets.html.twig', [
             'projectsWithemp' => $projectsWithEmployees,
+        ]);
+    }
+
+    //Page Profil   
+    #[Route('/{id}/profil', name: 'employee_profil')]
+    public function profil(Employee $employee, Request $request, EntityManagerInterface $entityManager,): Response
+    {
+        /*
+
+        $employee = $this->getUser(); // L'employé connect
+
+        */
+        //dd($employee);
+        $form = $this->createForm(EmployeeProfilType::class, $employee);
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            // Gérer la soumission du formulaire
+            $photo = $form->get('photo')->getData();
+
+            if ($photo) {
+                // Gérer l'upload du fichier
+                $originalFilename = pathinfo($photo->getClientOriginalName(), PATHINFO_FILENAME);
+                $newFilename = $originalFilename . '-' . uniqid() . '.' . $photo->guessExtension();
+
+                try {
+                    $photo->move(
+                        $this->getParameter('employee_photos_directory'),
+                        $newFilename
+                    );
+                } catch (FileException $e) {
+                    // Gérer les erreurs d'upload
+                    $this->addFlash('error', 'Une erreur s\'est produite lors de l\'upload de la photo.');
+                }
+
+                // Mettre à jour le chemin de la photo dans l'entité Employee
+                $employee->setPhoto('photo');
+            }
+
+
+            $entityManager->flush();
+
+            $this->addFlash('success', 'Profil mis à jour avec succès.');
+
+            return $this->redirectToRoute('employee_profil');
+        }
+
+        return $this->render('employee/profil.html.twig', [
+            'form' => $form->createView(),
+            'employee' => $employee, // Ajouter les informations actuelles de l'employé
         ]);
     }
 }

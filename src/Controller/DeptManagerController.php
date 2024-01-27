@@ -9,8 +9,10 @@ use App\Repository\DepartementRepository;
 
 use App\Entity\DeptManager;
 use App\Entity\Employee;
+
 use App\Form\DeptManagerType;
 use App\Repository\DeptManagerRepository;
+
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -36,6 +38,7 @@ class DeptManagerController extends AbstractController
         return $this->render('dept_manager/index.html.twig', [
             'dept_managers' => $deptManagers,
             //'names' => $managerNamesandDep
+
         ]);
     }
 
@@ -58,6 +61,7 @@ class DeptManagerController extends AbstractController
             'form' => $form,
         ]);
     }
+
     #[Route('/delete', name: 'app_dept_manager_delete', methods: ['POST'])]
     public function delete(Request $request, EntityManagerInterface $entityManager): Response
     {
@@ -82,6 +86,7 @@ class DeptManagerController extends AbstractController
             // Pass any necessary data to the template
         ]);
     }
+
 
     #[Route('/{id}', name: 'app_dept_manager_show', methods: ['GET'])]
     public function show(DeptManager $deptManager): Response
@@ -108,4 +113,17 @@ class DeptManagerController extends AbstractController
             'form' => $form,
         ]);
     }
+
+    /*
+    #[Route('/{id}', name: 'app_dept_manager_delete', methods: ['POST'])]
+    public function delete(Request $request, DeptManager $deptManager, EntityManagerInterface $entityManager): Response
+    {
+        if ($this->isCsrfTokenValid('delete'.$deptManager->getId(), $request->request->get('_token'))) {
+            $entityManager->remove($deptManager);
+            $entityManager->flush();
+        }
+
+        return $this->redirectToRoute('app_dept_manager_index', [], Response::HTTP_SEE_OTHER);
+    }
+    */
 }

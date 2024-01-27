@@ -25,6 +25,7 @@ class LoginController extends AbstractController
         // Récupère l'erreur d'authentification, s'il y en a une.
         $error = $authenticationUtils->getLastAuthenticationError();
         // Récupère le dernier nom d'utilisateur saisi pour le pré-remplir dans le formulaire.
+
         $lastUsername = $authenticationUtils->getLastUsername();
 
         return $this->render('login/index.html.twig', [

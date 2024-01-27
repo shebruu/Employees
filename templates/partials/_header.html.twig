@@ -23,8 +23,8 @@
 					</div>
 				</li>
 				<li class="nav-item">
-							<a class="nav-link" href="{{ path('app_departement_index') }}">Departements</a>
-						</li>
+					<a class="nav-link" href="{{ path('app_departement_index') }}">Departements</a>
+				</li>
 
 				{% if app.user %}
 					{% if is_granted('ROLE_ADMIN') %}
@@ -52,35 +52,17 @@
 					{% endif %}
 
 
-					{% if is_granted('ROLE_USER') %}
-
-						<li class="nav-item">
-							<a class="nav-link" href="{{ path ('app_employee_affichermesprojets', { 'id' : app.user.id })}}">
-								Mes  projects
-							</a>
-
-						</li>
-
-						{#
-																		        <li>
-																		                  <a class="nav-link" href="{{ path ('app_mission_index')}}"> Missions </a>
-																		        </li>
-																		        
-																		#}
-
-						<li class="nav-item">
-							<a class="nav-link" href="{{ path ('app_employee_affichemesstagiaires', { 'id' : app.user.id })}}">
-								Mes stagiaires
-							</a>
-
-						</li>
-						<li class="nav-item">
-							<a class="nav-link" href="{{ path ('app_mission_mesmissions', {'id': app.user.id})}}">
-								Mes Missions
-							</a>
-						</li>
-
-					{% endif %}
+			{% if is_granted('ROLE_USER') %}
+ <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Mon espace</a>
+        <div class="dropdown-menu">
+            <a class="dropdown-item" href="{{ path('employee_profil', {'id': app.user.id}) }}">Profil</a>
+            <a class="dropdown-item" href="{{ path('app_employee_affichermesprojets', {'id': app.user.id}) }}">Mes projets</a>
+            <a class="dropdown-item" href="{{ path('app_employee_affichemesstagiaires', {'id': app.user.id}) }}">Mes stagiaires</a>
+            <a class="dropdown-item" href="{{ path('app_mission_mesmissions', {'id': app.user.id}) }}">Mes missions</a>
+        </div>
+    </li>
+{% endif %}
 				{% endif %}
 
 

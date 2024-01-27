@@ -8,9 +8,11 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
+
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
+
 
 enum Gender: string
 {
@@ -21,14 +23,17 @@ enum Gender: string
 
 
 
+
 /**
  * Représente un employé dans le système.
  *
  */
+
 #[ORM\Table('collaborators')]
 #[ORM\Entity(repositoryClass: EmployeeRepository::class)]
 class Employee implements UserInterface, PasswordAuthenticatedUserInterface
 {
+
 
     /**
      * Identiiant unique de l'employé.
@@ -71,6 +76,7 @@ class Employee implements UserInterface, PasswordAuthenticatedUserInterface
     /**
      * Date d'embauche de l'employé.
      */
+
     #[ORM\Column(type: Types::DATE_MUTABLE)]
     private ?\DateTimeInterface $hireDate = null;
 
@@ -80,6 +86,7 @@ class Employee implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(length: 255, unique: true)]
     #[Assert\Email]
     private ?string $email = null;
+
 
     /**
      * Demandes associées à l'employé.
@@ -166,8 +173,10 @@ class Employee implements UserInterface, PasswordAuthenticatedUserInterface
 
 
 
+
     #[ORM\OneToMany(mappedBy: 'superviseur', targetEntity: Intern::class)]
     private Collection $interns;
+
 
     #[ORM\OneToMany(mappedBy: 'employee', targetEntity: DeptManager::class)]
     private Collection $deptManagers;
@@ -222,6 +231,7 @@ class Employee implements UserInterface, PasswordAuthenticatedUserInterface
     /**
      * Récupère l'identifiant de l'employé.
      */
+
     public function getId(): ?int
     {
         return $this->id;
@@ -292,7 +302,9 @@ class Employee implements UserInterface, PasswordAuthenticatedUserInterface
         return $this->photo;
     }
 
+
     public function setPhoto(string $photo): static
+
     {
         $this->photo = $photo;
 
@@ -312,10 +324,12 @@ class Employee implements UserInterface, PasswordAuthenticatedUserInterface
     }
 
 
+
     /**
      * Récupère la collection des demandes associées à cet employé.
      * 
      * @return Collection<int, Demand> La collection des demandes.
+
      */
     public function getDemands(): Collection
     {
@@ -330,10 +344,12 @@ class Employee implements UserInterface, PasswordAuthenticatedUserInterface
      * @param Demand $demand La demande à ajouter.
      * @return self Retourne l'instance de l'employé pour permettre le chaînage des méthodes.
      */
+
     public function addDemand(Demand $demand): static
     {
         if (!$this->demands->contains($demand)) {
             $this->demands->add($demand);
+
             $demand->setEmploye($this);
         }
 
@@ -362,6 +378,7 @@ class Employee implements UserInterface, PasswordAuthenticatedUserInterface
     }
 
     /**
+
      * Récupère la collection des départements associés à cet employé.
      * 
      * @return Collection La collection des départements.
@@ -395,6 +412,7 @@ class Employee implements UserInterface, PasswordAuthenticatedUserInterface
      * @see UserInterface
      *
      * Retourne les rôles de l'utilisateur.
+
      */
     public function getRoles(): array
     {
@@ -440,6 +458,7 @@ class Employee implements UserInterface, PasswordAuthenticatedUserInterface
     {
         return in_array('ROLE_ADMIN', $this->roles);
     }
+
 
     public function getCtrlActualDept()
     {
@@ -495,6 +514,7 @@ class Employee implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
+
     /**
      * @return Collection<int, Intern>
      */
@@ -507,6 +527,7 @@ class Employee implements UserInterface, PasswordAuthenticatedUserInterface
     {
         if (!$this->interns->contains($intern)) {
             $this->interns->add($intern);
+
             $intern->setsuperviseur($this);
         }
 
@@ -518,6 +539,7 @@ class Employee implements UserInterface, PasswordAuthenticatedUserInterface
         if ($this->interns->removeElement($intern)) {
             // set the owning side to null (unless already changed)
             if ($intern->getSuperviseur() === $this) {
+
                 $intern->setsuperviseur(null);
             }
         }

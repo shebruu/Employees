@@ -11,6 +11,7 @@ use Doctrine\ORM\Mapping as ORM;
 class DeptEmp
 {
 
+
     #[ORM\Id]
     #[ORM\ManyToOne(inversedBy: 'deptEmps')]
     #[ORM\JoinColumn(name: 'employee_id', referencedColumnName: 'id', nullable: false)]
@@ -53,11 +54,13 @@ class DeptEmp
     {
         $this->departement = $departement;
 
+
         return $this;
     }
 
     public function getFromDate(): ?\DateTimeInterface
     {
+
         return $this->from_date;
     }
 
@@ -65,11 +68,13 @@ class DeptEmp
     {
         $this->from_date = $from_date;
 
+
         return $this;
     }
 
     public function getToDate(): ?\DateTimeInterface
     {
+
         return $this->to_date;
     }
 
@@ -78,5 +83,10 @@ class DeptEmp
         $this->to_date = $to_date;
 
         return $this;
+    }
+
+    public function __toString(): string
+    {
+        return "{$this->from_date} {$this->to_date}";
     }
 }

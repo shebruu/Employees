@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Intern;
 use App\Form\InternType;
+
 use App\Entity\Employee;
 
 use App\Repository\InternRepository;
@@ -11,12 +12,11 @@ use App\Repository\DepartementRepository;
 use App\Repository\EmployeeRepository;
 use Doctrine\ORM\EntityManagerInterface;
 
+
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-
-
 
 #[Route('/intern')]
 class InternController extends AbstractController
@@ -29,6 +29,7 @@ class InternController extends AbstractController
         return $this->render('intern/index.html.twig', [
             'groupInterns' => $groupInterns,
             'freeEmployees' => $freeEmployees,
+
         ]);
     }
 
@@ -81,7 +82,9 @@ class InternController extends AbstractController
     #[Route('/{id}', name: 'app_intern_delete', methods: ['POST'])]
     public function delete(Request $request, Intern $intern, EntityManagerInterface $entityManager): Response
     {
+
         if ($this->isCsrfTokenValid('delete' . $intern->getId(), $request->request->get('_token'))) {
+
             $entityManager->remove($intern);
             $entityManager->flush();
         }

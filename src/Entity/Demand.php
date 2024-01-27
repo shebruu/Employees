@@ -5,6 +5,9 @@ namespace App\Entity;
 use App\Repository\DemandRepository;
 use Doctrine\ORM\Mapping as ORM;
 
+
+#[ORM\Table('demand')]
+
 #[ORM\Entity(repositoryClass: DemandRepository::class)]
 class Demand
 {
@@ -22,6 +25,7 @@ class Demand
     private ?string $type = null;
 
     #[ORM\Column(length: 30)]
+
     private ?string $about = null;
 
     #[ORM\Column(nullable: true)]
@@ -31,6 +35,7 @@ class Demand
     {
         return $this->id;
     }
+
 
     public function getEmploye(): ?Employee
     {
@@ -43,6 +48,7 @@ class Demand
 
         return $this;
     }
+
 
     public function getType(): ?string
     {
