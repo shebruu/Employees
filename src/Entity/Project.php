@@ -59,10 +59,15 @@ class Project
     {
         return $this->employees;
     }
+    /**
+     * ajoute un employé a la collection( liste) d employés travaillant sur ce projet 
+     */
     public function addEmployee(Employee $employee): self
     {
         if (!$this->employees->contains($employee)) {
             $this->employees[] = $employee;
+            //
+            // Met à jour la relation inverse ( ajoute ce projet a la liste des projets assigné de l employé)
             $employee->addProjetsAssignes($this);
         }
         return $this;
@@ -80,7 +85,8 @@ class Project
         return $this->chefDeProjet;
     }
 
-    public function setEmpNo(?Employee $chefDeProjet): static
+
+    public function setChefDeProjet(?Employee $chefDeProjet): static
     {
         $this->chefDeProjet = $chefDeProjet;
 

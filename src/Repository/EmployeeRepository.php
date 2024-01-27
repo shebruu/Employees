@@ -65,6 +65,18 @@ class EmployeeRepository extends ServiceEntityRepository
     }
 
 
+
+    public function findDemands($employee, $status, $about): array
+    {
+        return $this->createQueryBuilder('e')
+            ->select('d')
+            ->leftjoin('e')
+            ->leftjoin('e.id', 'ASC')
+            ->getQuery()
+            ->getResult();
+    }
+
+
     /*
     public function getEmployeeCountByDepartment()
     {

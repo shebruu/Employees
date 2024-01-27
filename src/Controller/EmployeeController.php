@@ -227,14 +227,14 @@ class EmployeeController extends AbstractController
     }
 
     //Page Profil   
-    #[Route('/{id}/profil', name: 'employee_profil')]
+    #[Route('/profille', name: 'app_employee_profil')]
     public function profil(Employee $employee, Request $request, EntityManagerInterface $entityManager,): Response
     {
-        /*
+
 
         $employee = $this->getUser(); // L'employé connect
 
-        */
+
         //dd($employee);
         $form = $this->createForm(EmployeeProfilType::class, $employee);
         $form->handleRequest($request);
@@ -258,7 +258,7 @@ class EmployeeController extends AbstractController
                 }
 
                 // Mettre à jour le chemin de la photo dans l'entité Employee
-                $employee->setPhoto('photo');
+                //    $employee->setPhoto('photo');
             }
 
 

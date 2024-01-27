@@ -18,7 +18,6 @@ class Demand
 
     #[ORM\ManyToOne(targetEntity: Employee::class, inversedBy: 'demands')]
     #[ORM\JoinColumn(name: "employee_id", referencedColumnName: 'id', nullable: false)]
-
     private ?Employee $employe = null;
 
     #[ORM\Column(length: 60)]

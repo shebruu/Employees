@@ -229,6 +229,50 @@ class Employee implements UserInterface, PasswordAuthenticatedUserInterface
 
 
     /**
+     * Ajoute un projet à la collection de projets dont l employe  est le chef.
+     * mise à jour de la relation inverse entre l'employé et le projet.
+     *
+     * @param Project $projet L'instance de projet à ajouter.
+     * @return self Retourne l'instance actuelle pour permettre le chaînage des méthodes.
+     */
+    public function addProjetchef(Project $projet): self
+    {
+        if (!$this->projetschef->contains($projet)) {
+            $this->projetschef[] = $projet;
+            $projet->setChefDeProjet($this);
+        }
+
+        return $this;
+    }
+    /*
+    $employee = new Employee();
+$project = new Project();   
+
+// Ajout du projet à l'employé
+$employee->addProjetchef($project);
+    */
+
+
+
+    /**
+     * Supprime un projet de la collection de projets dont cet employé est le chef.
+     *
+     * @param Project $projet L'instance de projet à supprimer.
+     * @return self Retourne l'instance actuelle pour permettre le chaînage des méthodes.
+     */
+    public function removeProjetchef(Project $projet): self
+    {
+        if ($this->projetschef->removeElement($projet)) {
+
+            if ($projet->getChefDeProjet() === $this) {
+                $projet->setChefDeProjet(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
      * Récupère l'identifiant de l'employé.
      */
 
