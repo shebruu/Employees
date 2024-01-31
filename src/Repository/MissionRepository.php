@@ -33,13 +33,13 @@ class MissionRepository extends ServiceEntityRepository
      */
     public function findMissionsActifByEmployee(Employee $employee): array
     {
-        return $this->createQueryBuilder('miss')
-            ->join('miss.employees', 'emp') // Jointure avec les employés assignés aux missions
-            ->where('emp.id= :employeeId') // Filtrage par ID de l'employé
-            ->andWhere('miss.status != :done') // Filtrage pour exclure les missions terminées
+        return $this->createQueryBuilder('m')
+            ->join('m.employees', 'e') // Jointure avec les employés assignés aux missions
+            ->where('e.id= :employeeId') // Filtrage par ID de l'employé
+            ->andWhere('m.status != :done') // Filtrage pour exclure les missions terminées
             ->setParameter('employeeId', $employee)
             ->setParameter('done', 'terminé')
-            ->orderBy('miss.id', 'ASC') //// Tri par ID de mission
+            ->orderBy('m.id', 'ASC') //// Tri par ID de mission
             ->getQuery()
             ->getResult();
     }

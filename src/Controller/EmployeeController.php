@@ -78,15 +78,17 @@ class EmployeeController extends AbstractController
     #[Route('/{id}', name: 'app_employee_show', methods: ['GET'])]
     public function show(Employee $employee, DepartementRepository $repos, EntityManagerInterface $entityManager): Response
     {
+
         $actualdep = $repos->findActualDepartment($employee);
+
+        //dd($actualdep);
         $employee->actualdep = $actualdep;
+        //dd($employee);
         return $this->render('employee/show.html.twig', [
             'employee' => $employee,
             // 'actualdep' => $actualdep
         ]);
     }
-
-
 
     /**
      *
@@ -114,7 +116,6 @@ class EmployeeController extends AbstractController
         //récupere tous les départements de l' employé
         $employee->repoqb_actualDept = $repos->findAllDepartmentsForEmployee($employee);
 
-
         return $this->render('employee/show_controller.html.twig', [
             'employee' => $employee,
             /*  'currentDepartments' => $currentDepartments,*/
@@ -136,7 +137,6 @@ class EmployeeController extends AbstractController
     public function edit(Request $request, Employee $employee, EntityManagerInterface $entityManager): Response
     {
         $this->denyAccessUnlessGranted('ROLE_ADMIN');
-
         $form = $this->createForm(EmployeeType::class, $employee);
         $form->handleRequest($request);
 
@@ -178,31 +178,28 @@ class EmployeeController extends AbstractController
      * @Route('/{id}/interns', name='app_intern_messtagiaires', methods=['GET'])
      * @param Employee $employee L'employé pour lequel la liste des stagiaires est affichée.
      * @param InternRepository $repo Le référentiel utilisé pour récupérer les informations sur les stagiaires.
-     * @return Response La réponse qui affiche la liste des stagiaires et des stagiaires sans superviseur.
+     * @return Response La réponse qui affiche la liste d objet stagiaires de l employé et sans superviseur.
      */
     // concerne les employee et de leur interraction avec stagiaires
     #[Route('/{id}/interns', name: 'app_employee_affichemesstagiaires', methods: ['GET'])]
-    public function Affichermesstagiaires(Employee $employee, InternRepository $repo): Response
+    public function Affichermesstagiaires(Employee $employee, InternRepository $repointern): Response
     {
         // Vérification de l'authentification de l'utilisateur
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
 
         // Récupération des stagiaires (interns) ( et de leurs données) associés à l'employé
-        $interns = $repo->findMyActiveInternsOrWithoutSupervisor($employee);
+        $interns = $repointern->findMyActiveInternsOrWithoutSupervisor($employee);
 
-        // dd($interns);
+
+
+        //dd($interns);
 
         return $this->render('employee/messtagiaires.html.twig', [
 
             'interns' => $interns,
 
-
         ]);
     }
-
-
-
-
     #[Route('/{id}/projects', name: 'app_employee_affichermesprojets', methods: ['GET'])]
     public function Affichermesprojets(Employee $employee, ProjectRepository $repo): Response
     {
@@ -210,7 +207,7 @@ class EmployeeController extends AbstractController
         // $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
         $projectsWithEmployees = $repo->findAllProjectsWithEmployees();
 
-        //dump($projectsWithEmployees);
+        // dd($projectsWithEmployees);
         return $this->render('employee/mesprojets.html.twig', [
             'projectsWithemp' => $projectsWithEmployees,
         ]);

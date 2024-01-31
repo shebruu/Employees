@@ -80,7 +80,7 @@ class Project
         return $this->chefDeProjet;
     }
 
-    public function setEmpNo(?Employee $chefDeProjet): static
+    public function setChefDeProjet(?Employee $chefDeProjet): static
     {
         $this->chefDeProjet = $chefDeProjet;
 

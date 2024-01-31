@@ -54,7 +54,7 @@ class DepartementRepository extends ServiceEntityRepository
     public function findDepartementsByGender($gender, $order = 'DESC', $limit = 3)
     {
         $qb = $this->createQueryBuilder('d')
-            ->select('d.dept_name as departmentName, COUNT(e.id) as count')
+            ->select('d.dept_name, COUNT(e.id) as count')
             ->innerJoin('d.deptEmps', 'de')
             ->innerJoin('de.employee', 'e')
             ->where('e.gender = :gender')
@@ -63,6 +63,7 @@ class DepartementRepository extends ServiceEntityRepository
             ->orderBy('count', $order)
             ->setMaxResults($limit);
 
+        // dump($qb->getQuery()->getResult());
         return $qb->getQuery()->getResult();
     }
 

@@ -61,12 +61,6 @@
 
 						</li>
 
-						{#
-																		        <li>
-																		                  <a class="nav-link" href="{{ path ('app_mission_index')}}"> Missions </a>
-																		        </li>
-																		        
-																		#}
 
 						<li class="nav-item">
 							<a class="nav-link" href="{{ path ('app_employee_affichemesstagiaires', { 'id' : app.user.id })}}">
@@ -75,7 +69,7 @@
 
 						</li>
 						<li class="nav-item">
-							<a class="nav-link" href="{{ path ('app_mission_mesmissions', {'id': app.user.id})}}">
+							<a class="nav-link" href="{{ path ('app_mission_mesmissions',{'id': app.user.id})}}">
 								Mes Missions
 							</a>
 						</li>

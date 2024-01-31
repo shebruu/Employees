@@ -21,6 +21,14 @@ use Symfony\Component\Routing\Annotation\Route;
 #[Route('/intern')]
 class InternController extends AbstractController
 {
+    /**
+     * Affiche la liste des stagiaires.
+     *
+     * @param InternRepository $internRepository Repository pour accéder aux données des stagiaires.
+     * @param EmployeeRepository $employeeRepo Repository pour accéder aux données des employés.
+     * @param DepartementRepository $deptRepo Repository pour accéder aux données des départements.
+     * @return Response Rendu de la vue avec les données des stagiaires.
+     */
     #[Route('/', name: 'app_intern_index', methods: ['GET'])]
     public function index(InternRepository $internRepository, EmployeeRepository $employeeRepo, DepartementRepository $deptRepo): Response
     {
@@ -52,6 +60,12 @@ class InternController extends AbstractController
         ]);
     }
 
+    /**
+     * Affiche les détails d'un stagiaire.
+     *
+     * @param Intern $intern L'entité stagiaire à afficher.
+     * @return Response Une réponse HTTP.
+     */
     #[Route('/{id}', name: 'app_intern_show', methods: ['GET'])]
     public function show(Intern $intern): Response
     {
@@ -60,6 +74,15 @@ class InternController extends AbstractController
         ]);
     }
 
+    /**
+     * Modifie un stagiaire existant.
+     * Affiche un formulaire pour éditer un stagiaire et le traite une fois soumis.
+     *
+     * @param Request $request La requête HTTP.
+     * @param Intern $intern L'entité stagiaire à éditer.
+     * @param EntityManagerInterface $entityManager Le gestionnaire d'entités pour la persistance.
+     * @return Response Une réponse HTTP.
+     */
     #[Route('/{id}/edit', name: 'app_intern_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Intern $intern, EntityManagerInterface $entityManager): Response
     {
@@ -77,6 +100,15 @@ class InternController extends AbstractController
             'form' => $form,
         ]);
     }
+
+    /**
+     * Supprime un stagiaire.
+     *
+     * @param Request $request La requête HTTP.
+     * @param Intern $intern L'entité stagiaire à supprimer.
+     * @param EntityManagerInterface $entityManager Le gestionnaire d'entités pour la persistance.
+     * @return Response Une réponse HTTP de redirection.
+     */
 
     #[Route('/{id}', name: 'app_intern_delete', methods: ['POST'])]
     public function delete(Request $request, Intern $intern, EntityManagerInterface $entityManager): Response
@@ -101,31 +133,33 @@ class InternController extends AbstractController
      * @param EntityManagerInterface $em Le gestionnaire d'entités pour la persistance.
      * @return Response Une réponse HTTP de redirection vers la page d'affichage des stagiaires.
      */
-    #[Route('/{id}/superviser', name: 'app_intern_supervise', methods: ['POST'])]
-    public function SupervIseintern(Employee $employee, Request $request, InternRepository $repo, Intern $intern, EntityManagerInterface $em): Response
+    #[Route('/{id}/superviser', name: 'app_intern_supervise', methods: ['GET', 'POST'])]
+    public function SupervIseintern(Intern $intern, EntityManagerInterface $em): Response
     {
-        // vérifie que l'utilisateur est entièrement authentifié.
-        $this->denyAccessUnlessGranted('IS_FULLY_AUTHENTICATED');
 
-        //récupère l'utilisateur actuel 
+        /*
+        dump($intern);
+        die();
+        */
+        // vérifie que l'utilisateur est entièrement authentifié.
+        // $this->denyAccessUnlessGranted('IS_FULLY_AUTHENTICATED');
+        $this->denyAccessUnlessGranted('ROLE_ADMIN');
+
+        //récupère le superviseur  actuel, renvoie l employee connecté
         $user = $this->getUser();
 
-        //affecter l emp user  comme superviseur au stagiaire 
         $intern->setSuperviseur($user);
 
-        //persiste les changements dans la base de données
+        //execute les changements dans la base de données
         $em->flush();
 
-        if ($intern->getSuperviseur()) {
-            $this->addFlash('notice', 'Succès');
-        } else {
-            $this->addFlash('notice', 'Erreur');
-        }
-
-
+        $this->addFlash('notice', $intern->getSuperviseur() ? 'Succès' : 'Erreur');
         // redirige l'utilisateur vers la page d'affichage des stagiaires. (employee/id/intern)
         return $this->redirectToRoute('app_employee_affichemesstagiaires', ['id' => $user], Response::HTTP_SEE_OTHER);
     }
+
+
+
 
 
     /**
@@ -140,7 +174,6 @@ class InternController extends AbstractController
     #[Route('/manage', name: 'app_intern_manage', methods: ['POST'])]
     public function manageIntern(Request $request, EmployeeRepository $employeeRepo, InternRepository $internRepo, EntityManagerInterface $entityManager): Response
     {
-        // Vérifie que l'utilisateur est authentifié en tant qu'administrateur.
         $this->denyAccessUnlessGranted('ROLE_ADMIN');
 
         // Vérifie quelle action a été déclenchée dans la requête POST.
@@ -168,7 +201,6 @@ class InternController extends AbstractController
             $intern->setSuperviseur($superviseur);
 
             $entityManager->flush();
-
 
             // Vérifie si l'action a réussi et ajoute un message flash approprié.
             if ($intern->getSuperviseur() == $superviseur) {

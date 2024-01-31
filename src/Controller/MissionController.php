@@ -165,81 +165,34 @@ class MissionController extends AbstractController
      * @param EntityManagerInterface $entityManager
      * @return Response
      */
-    #[Route('/mesmissions/{id}/update/{missionId}', name: 'mission_update', methods: ['POST'])]
-    public function updateMission($missionId, $action, Employee $employee, EntityManagerInterface $entityManager): Response
+    #[Route('/mesmissions/{id}/update', name: 'app_mission_update', methods: ['POST'])]
+    public function updateMission(Request $request,  Employee $employee, EntityManagerInterface $entityManager): Response
     {
+        $missionId = $request->request->get('missionId');
+        $action = $request->request->get('action');
+        $user = $this->getUser();
         $mission = $entityManager->getRepository(Mission::class)->find($missionId);
+        $employee = $entityManager->getRepository(Employee::class)->find($user);
 
 
 
         switch ($action) {
             case 'accepter':
-
+                // Logique pour accepter
+                break;
             case 'rejoindre':
                 $employee->addMission($mission);
                 $mission->setStatus(Status::Encours);
-
                 break;
             case 'terminer':
-
                 $mission->setStatus(Status::Termine);
                 break;
             default:
                 throw new \Exception('Action non reconnue');
         }
-        dd($missionId, $action);
 
         $entityManager->flush();
 
         return new Response('Action effectuée avec succès');
     }
-
-    /*
-
- 
-
-    #[Route('/{missionId}/terminer', name: 'app_mission_terminer', methods: ['GET'])]
-    public function terminerMission(Employee $employee, int $missionId, MissionRepository $missionRepository, EntityManagerInterface $entityManager): Response
-    {
-      
-        $mission = $missionRepository->find($missionId);
-
-
-
-        // Mettre à jour le statut de la mission
-
-        $mission->setStatus(Status::Termine);
-        $entityManager->persist($mission);
-        $entityManager->flush();
-
-        return $this->redirectToRoute('app_mission_mesmissions', ['id' => $this->getUser()->getId()]);
-    }
-
-    #[Route('/{missionId}/rejoindre', name: 'app_mission_rejoindre', methods: ['GET'])]
-    public function rejoindreMission(int $missionId, MissionRepository $missionRepository, EntityManagerInterface $entityManager): Response
-    {
-        $mission = $missionRepository->find($missionId);
-
-
-        $mission->setStatus(Status::Encours);
-        $entityManager->persist($mission);
-        $entityManager->flush();
-
-        return $this->redirectToRoute('app_mission_mesmissions', ['id' => $this->getUser()->getId()]);
-    }
-
-    #[Route('/{missionId}/accepter', name: 'app_mission_accepter', methods: ['GET'])]
-    public function accepterMission(int $missionId, MissionRepository $missionRepository, EntityManagerInterface $entityManager): Response
-    {
-
-        $mission = $missionRepository->find($missionId);
-
-
-        $mission->setStatus(Status::Encours);
-        $entityManager->persist($mission);
-        $entityManager->flush();
-
-        return $this->redirectToRoute('app_mission_mesmissions', ['id' => $this->getUser()->getId()]);
-    }
-    */
 }

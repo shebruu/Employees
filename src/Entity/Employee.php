@@ -189,7 +189,6 @@ class Employee implements UserInterface, PasswordAuthenticatedUserInterface
 
     /**
      * Ajoute un projet à la liste des projets assignés à cet employé.
-     * Si le projet n'est pas déjà dans la liste, il est ajouté et l'employé est associé au projet.
      *
      * @param Project $projet Le projet à ajouter.
      * @return self Retourne l'instance de l'employé pour permettre le chaînage des méthodes.
@@ -325,7 +324,6 @@ class Employee implements UserInterface, PasswordAuthenticatedUserInterface
 
     /**
      * Ajoute une demande à la collection des demandes de cet employé.
-     * Si la demande n'est pas déjà présente, elle est ajoutée à la collection.
      *
      * @param Demand $demand La demande à ajouter.
      * @return self Retourne l'instance de l'employé pour permettre le chaînage des méthodes.
