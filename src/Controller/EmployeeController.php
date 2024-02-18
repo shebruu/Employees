@@ -90,6 +90,8 @@ class EmployeeController extends AbstractController
         ]);
     }
 
+
+
     /**
      *
      * Affiche les départements actuels d'un employé spécifique.
