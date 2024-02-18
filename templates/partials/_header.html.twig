@@ -54,25 +54,11 @@
 
 					{% if is_granted('ROLE_USER') %}
 
-						<li class="nav-item">
-							<a class="nav-link" href="{{ path ('app_employee_affichermesprojets', { 'id' : app.user.id })}}">
-								Mes  projects
-							</a>
-
-						</li>
+	
 
 
-						<li class="nav-item">
-							<a class="nav-link" href="{{ path ('app_employee_affichemesstagiaires', { 'id' : app.user.id })}}">
-								Mes stagiaires
-							</a>
-
-						</li>
-						<li class="nav-item">
-							<a class="nav-link" href="{{ path ('app_mission_mesmissions',{'id': app.user.id})}}">
-								Mes Missions
-							</a>
-						</li>
+		
+						
 
 						   <li class="nav-item"><a href="{{ path('app_employee_show', {'id': app.user.id}) }}">Mon profil</a></li>
          
