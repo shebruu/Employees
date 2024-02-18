@@ -9,10 +9,10 @@ use App\Form\EmployeeType;
 
 use App\Entity\Project;
 
+use App\Repository\GroupRepository;
 use App\Repository\EmployeeRepository;
 use App\Repository\DepartementRepository;
-use App\Repository\InternRepository;
-use App\Repository\ProjectRepository;
+
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -67,26 +67,39 @@ class EmployeeController extends AbstractController
         ]);
     }
 
-    /**
-     *
-     * Affiche les détails d'un employé spécifique.
-     * @param Employee $employee
-     * @param DepartementRepository $repos
-     * @param EntityManagerInterface $entityManager
-     * @return Response
-     */
+
+
+
     #[Route('/{id}', name: 'app_employee_show', methods: ['GET'])]
-    public function show(Employee $employee, DepartementRepository $repos, EntityManagerInterface $entityManager): Response
+    public function show(Employee $employee, GroupRepository $groupRepo): Response
     {
 
-        $actualdep = $repos->findActualDepartment($employee);
+        // $user = $this->getUser();
+        $userId = $employee->getId();
+        //Empêcher l'accès aux utilisateurs non connectés
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
 
-        //dd($actualdep);
-        $employee->actualdep = $actualdep;
-        //dd($employee);
+        //N'afficher que la fiche de l'utilisateur connecté
+        if ($this->getUser() != $employee) {
+            $this->addFlash('notice', 'Vous ne pouvez afficher que votre propre profil.');
+
+            return $this->redirectToRoute('app_employee_show', ['id' => $userId], Response::HTTP_SEE_OTHER);
+        }
+
+        //Récupérer la liste des groupes non remplis
+        $availableGroups = $groupRepo->findAvailableGroups();
+
         return $this->render('employee/show.html.twig', [
             'employee' => $employee,
-            // 'actualdep' => $actualdep
+            'availableGroups' => $availableGroups,
+        ]);
+    }
+
+    #[Route('/{id}', name: 'app_montrer', methods: ['GET'])]
+    public function shows(Employee $employee): Response
+    {
+        return $this->render('employee/montrer.html.twig', [
+            'employee' => $employee,
         ]);
     }
 
@@ -172,44 +185,45 @@ class EmployeeController extends AbstractController
     }
 
 
-    /**
-     * Affiche la liste des stagiaires associés à un employé, ainsi que les stagiaires sans superviseur.
-     *
-     * @Route('/{id}/interns', name='app_intern_messtagiaires', methods=['GET'])
-     * @param Employee $employee L'employé pour lequel la liste des stagiaires est affichée.
-     * @param InternRepository $repo Le référentiel utilisé pour récupérer les informations sur les stagiaires.
-     * @return Response La réponse qui affiche la liste d objet stagiaires de l employé et sans superviseur.
-     */
-    // concerne les employee et de leur interraction avec stagiaires
-    #[Route('/{id}/interns', name: 'app_employee_affichemesstagiaires', methods: ['GET'])]
-    public function Affichermesstagiaires(Employee $employee, InternRepository $repointern): Response
+    #[Route('/{id}/join', name: 'app_employee_group_join', methods: ['POST'])]
+    public function joinGroup(Request $request, Employee $employee, EntityManagerInterface $entityManager, GroupRepository $groupRepo): Response
     {
-        // Vérification de l'authentification de l'utilisateur
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
 
-        // Récupération des stagiaires (interns) ( et de leurs données) associés à l'employé
-        $interns = $repointern->findMyActiveInternsOrWithoutSupervisor($employee);
+        //Récupérer le groupe sélectionné dans le formulaire
+        $groupCode = $request->get('groupCode');
 
+        //Trouver le groupe
+        $group = $groupRepo->find($groupCode);
 
+        if ($group) {
+            //S'inscrire au groupe sélectionné
+            $employee->setGroup($group);
 
-        //dd($interns);
+            //Persister dans la base de données
+            $entityManager->flush();
 
-        return $this->render('employee/messtagiaires.html.twig', [
+            $this->addFlash('notice', 'Inscription effectuée.');
+        } else {
+            $this->addFlash('notice', 'Groupe introuvable. Inscription non effectuée!');
+        }
 
-            'interns' => $interns,
-
-        ]);
+        return $this->redirectToRoute('app_employee_show', ['id' => $employee->getId()], Response::HTTP_SEE_OTHER);
     }
-    #[Route('/{id}/projects', name: 'app_employee_affichermesprojets', methods: ['GET'])]
-    public function Affichermesprojets(Employee $employee, ProjectRepository $repo): Response
-    {
-        // Vérification de l'authentification de l'utilisateur
-        // $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
-        $projectsWithEmployees = $repo->findAllProjectsWithEmployees();
 
-        // dd($projectsWithEmployees);
-        return $this->render('employee/mesprojets.html.twig', [
-            'projectsWithemp' => $projectsWithEmployees,
-        ]);
+    #[Route('/{id}/leave', name: 'app_employee_group_leave', methods: ['POST'])]
+    public function leaveGroup(Request $request, Employee $employee, EntityManagerInterface $entityManager): Response
+    {
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+
+        //Désinscrire du groupe
+        $employee->setGroup(null);
+
+        //Persister dans la base de données
+        $entityManager->flush();
+
+        $this->addFlash('notice', 'Désinscription effectuée.');
+
+        return $this->redirectToRoute('app_employee_show', ['id' => $employee->getId()], Response::HTTP_SEE_OTHER);
     }
 }

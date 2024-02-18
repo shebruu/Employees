@@ -45,8 +45,6 @@ class Departement
     #[ORM\JoinColumn(name: 'department_id', referencedColumnName: 'id')]
     private Collection $deptEmps;
 
-    #[ORM\OneToMany(mappedBy: 'departement', targetEntity: Intern::class)]
-    private Collection $interns;
 
     #[ORM\OneToMany(mappedBy: 'departement', targetEntity: DeptManager::class)]
     private Collection $deptManagers;
@@ -56,7 +54,7 @@ class Departement
     {
         $this->employees = new ArrayCollection();
         $this->deptEmps = new ArrayCollection();
-        $this->interns = new ArrayCollection();
+
         $this->deptManagers = new ArrayCollection();
     }
     public function getId(): ?string
@@ -129,35 +127,7 @@ class Departement
         return $this;
     }
 
-    /**
-     * @return Collection<int, Intern>
-     */
-    public function getInterns(): Collection
-    {
-        return $this->interns;
-    }
 
-    public function addIntern(Intern $intern): static
-    {
-        if (!$this->interns->contains($intern)) {
-            $this->interns->add($intern);
-            $intern->setDepartement($this);
-        }
-
-        return $this;
-    }
-
-    public function removeIntern(Intern $intern): static
-    {
-        if ($this->interns->removeElement($intern)) {
-            // set the owning side to null (unless already changed)
-            if ($intern->getDepartement() === $this) {
-                $intern->setDepartement(null);
-            }
-        }
-
-        return $this;
-    }
 
 
 

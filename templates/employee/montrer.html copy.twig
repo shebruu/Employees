@@ -4,30 +4,9 @@
 
 {% block body %}
     <h1>Employee</h1>
-    {% set actionPath = employee.group is null ? 'app_employee_group_join':'app_employee_group_leave' %}
-
-    <form action="{{ path(actionPath, {'id':employee.id}) }}" method="post">
-        <div>
-            <label>Groupes:</label>
-            <select name="groupCode">
-            {% for group in availableGroups %}
-                <option value="{{ group.code }}">{{ group.code }} - {{ group.name }}</option>
-            {% endfor %}
-            </select>
-        {% if employee.group is null %}
-            <button style="background-color:lightgreen;border:3px solid green">Rejoindre</button>
-        {% else %}
-            <button style="background-color:silver;border:3px solid gray">Quitter</button>
-        {% endif %}
-        </div>
-    </form>
 
     <table class="table">
         <tbody>
-            <tr>
-                <th>Groupe</th>
-                <td>{{ employee.group ? employee.group.code : '<em>Aucun groupe</em>' }}</td>
-            </tr>
             <tr>
                 <th>Id</th>
                 <td>{{ employee.id }}</td>
@@ -46,11 +25,7 @@
             </tr>
             <tr>
                 <th>Gender</th>
-                <td>{{ employee.gender.value }}</td>
-            </tr>
-            <tr>
-                <th>HireDate</th>
-                <td>{{ employee.hireDate ? employee.hireDate|date('Y-m-d') : '' }}</td>
+                <td>{{ employee.gender }}</td>
             </tr>
             <tr>
                 <th>Photo</th>
@@ -59,6 +34,22 @@
             <tr>
                 <th>Email</th>
                 <td>{{ employee.email }}</td>
+            </tr>
+            <tr>
+                <th>HireDate</th>
+                <td>{{ employee.hireDate ? employee.hireDate|date('Y-m-d') : '' }}</td>
+            </tr>
+            <tr>
+                <th>Password</th>
+                <td>{{ employee.password }}</td>
+            </tr>
+            <tr>
+                <th>Roles</th>
+                <td>{{ employee.roles ? employee.roles|json_encode : '' }}</td>
+            </tr>
+            <tr>
+                <th>IsVerified</th>
+                <td>{{ employee.isVerified ? 'Yes' : 'No' }}</td>
             </tr>
         </tbody>
     </table>

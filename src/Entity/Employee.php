@@ -109,18 +109,10 @@ class Employee implements UserInterface, PasswordAuthenticatedUserInterface
 
 
 
-    /**
-     * Projets dont cet employé est le chef de projet.
-     */
-    #[ORM\OneToMany(targetEntity: "Project", mappedBy: "chefDeProjet")]
-    private Collection $projetschef;
 
 
-    /** 
-     * Projets auxquels cet employé est assigné.
-     */
-    #[ORM\ManyToMany(targetEntity: Project::class, mappedBy: "employees")]
-    private Collection $projetsAssignes;
+
+
 
     /** 
      * Rôles de l'employé dans l'application.
@@ -152,25 +144,17 @@ class Employee implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column]
     private ?string $password = null;
 
-    /**
-     * Missions auxquelles l'employé est associé.
-     */
-    #[ORM\ManyToMany(targetEntity: Mission::class, inversedBy: 'employees')]
-    #[ORM\JoinTable(
-        name: "employee_mission",
-        joinColumns: [new ORM\JoinColumn(name: "employee_id", referencedColumnName: "id")],
-        inverseJoinColumns: [new ORM\JoinColumn(name: "mission_id", referencedColumnName: "id")]
-    )]
-    private Collection $missions;
 
 
 
-
-    #[ORM\OneToMany(mappedBy: 'superviseur', targetEntity: Intern::class)]
-    private Collection $interns;
 
     #[ORM\OneToMany(mappedBy: 'employee', targetEntity: DeptManager::class)]
     private Collection $deptManagers;
+
+
+    #[ORM\ManyToOne(inversedBy: 'employees')]
+    #[ORM\JoinColumn(name: 'group_code', referencedColumnName: 'code')]
+    private ?Group $_group = null;
 
     public function __construct()
     {
@@ -178,44 +162,11 @@ class Employee implements UserInterface, PasswordAuthenticatedUserInterface
         $this->departments = new ArrayCollection();
         $this->deptEmps = new ArrayCollection();
 
-        $this->projetsAssignes = new ArrayCollection();
-        $this->projetschef = new ArrayCollection();
-        $this->missions = new ArrayCollection();
 
-        $this->interns = new ArrayCollection();
+
         $this->deptManagers = new ArrayCollection();
     }
 
-
-    /**
-     * Ajoute un projet à la liste des projets assignés à cet employé.
-     *
-     * @param Project $projet Le projet à ajouter.
-     * @return self Retourne l'instance de l'employé pour permettre le chaînage des méthodes.
-     */
-    public function addProjetsAssignes(Project $projet): self
-    {
-        if (!$this->projetsAssignes->contains($projet)) {
-            $this->projetsAssignes[] = $projet;
-            $projet->addEmployee($this); //doit exister ds les 2 entités ( project aussi)
-        }
-        return $this;
-    }
-
-    /**
-     * Supprime un projet de la liste des projets assignés à cet employé.
-     * Si le projet est dans la liste, il est retiré et l'association entre l'employé et le projet est supprimée.
-     *
-     * @param Project $projet Le projet à retirer.
-     * @return self Retourne l'instance de l'employé pour permettre le chaînage des méthodes.
-     */
-    public function removeProjetsAssignes(Project $projet): self
-    {
-        if ($this->projetsAssignes->removeElement($projet)) {
-            $projet->removeEmployee($this);
-        }
-        return $this;
-    }
 
 
     /**
@@ -454,30 +405,6 @@ class Employee implements UserInterface, PasswordAuthenticatedUserInterface
         $this->repoqb_actualDept = $repoqb_actualDept;
     }
 
-    /**
-     * @return Collection<int, mission>
-     */
-    public function getMissions(): Collection
-    {
-        return $this->missions;
-    }
-
-    public function addMission(mission $mission): static
-    {
-        if (!$this->missions->contains($mission)) {
-            $this->missions->add($mission);
-        }
-
-        return $this;
-    }
-
-    public function removeMission(mission $mission): static
-    {
-        $this->missions->removeElement($mission);
-
-        return $this;
-    }
-
 
 
 
@@ -493,51 +420,8 @@ class Employee implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    /**
-     * @return Collection<int, Intern>
-     */
-    public function getInterns(): Collection
-    {
-        return $this->interns;
-    }
 
-    public function addIntern(Intern $intern): static
-    {
-        if (!$this->interns->contains($intern)) {
-            $this->interns->add($intern);
-            $intern->setsuperviseur($this);
-        }
 
-        return $this;
-    }
-
-    public function removeIntern(Intern $intern): static
-    {
-        if ($this->interns->removeElement($intern)) {
-            // set the owning side to null (unless already changed)
-            if ($intern->getSuperviseur() === $this) {
-                $intern->setsuperviseur(null);
-            }
-        }
-
-        return $this;
-    }
-
-    /**
-     * Récupère la liste de tous les projets assignés à cet employé.
-     *
-     * @return Collection<Project> La collection des projets assignés.
-     */
-    public function getAllAssignedProjects(): Collection
-    {
-        $allAssignedProjects = new ArrayCollection();
-
-        foreach ($this->projetsAssignes as $project) {
-            $allAssignedProjects[] = $project;
-        }
-
-        return $allAssignedProjects;
-    }
 
     /**
      * Représentation en chaîne de caractères de l'employé ( pour l affichage) .
@@ -575,6 +459,18 @@ class Employee implements UserInterface, PasswordAuthenticatedUserInterface
                 $deptManager->setEmployee(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getGroup(): ?Group
+    {
+        return $this->_group;
+    }
+
+    public function setGroup(?Group $_group): static
+    {
+        $this->_group = $_group;
 
         return $this;
     }
