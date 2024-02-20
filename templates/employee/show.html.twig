@@ -1,27 +1,51 @@
 {% extends 'base.html.twig' %}
+{#montrer un employé en particulier#}
 
 {% block title %}Employee
 {% endblock %}
 
+
 {% block body %}
-	<h1>Employee</h1>
-	{% if app.user %}
-		{# si  l id de l utiilsateur connecte correspond  a l id de l employee #}
-		{% if employee is defined and app.user.id == employee.id %}
-			
-			<br>
-			<a href="{{ path ('app_mission_mesmissions', {'id': employee.id})}}">
-				Mes Missions
-			</a>
-			<br>
+	<div class="container">
+		<h1 class="mt-5">Employee</h1>
+		
+		{% if is_granted('ROLE_USER') %}
+		{% if app.user %}
+			<div class="row mt-5">
+				<div class="col-md-4">
+					<div class="profile">
+						<img src="/Employees/images/me.jpg" class="img-fluid rounded-circle" alt="Photo de profil">
+					</div>
+				</div>
+				<div class="col-md-8">
+					<div class="menu">
+						<ul class="list-group">
+							<li class="list-group-item">
+								<a href="{{ path('app_mission_mesmissions', {'id': employee.id}) }}">Mes Missions</a>
+							</li>
+							<li class="list-group-item">
+								<a href="{{ path('app_employee_show_controller', {'id': employee.id}) }}">Mes départements</a>
+							</li>
+							<li class="list-group-item">
+								<a href="{{ path ('app_employee_affichermesprojets', { 'id' : app.user.id })}}">
+									Mes  projects</a>
+							</li>
 
-			<a href="{{ path ('app_employee_show_controller', {'id': employee.id})}}">
-				Mes departements
-			</a>
-			
+							<li class="list-group-item">
+								<a href="{{ path ('app_employee_affichemesstagiaires', { 'id' : app.user.id })}}">
+									Mes stagiaires
+								</a>
 
+							</li>
+							
+
+						</ul>
+					</div>
+				</div>
+			</div>
+			{% endif %}
 		{% endif %}
-	{% endif %}
+	</div>
 	<table class="table">
 		<tbody>
 			<tr>
@@ -55,6 +79,10 @@
 			<tr>
 				<th>Email</th>
 				<td>{{ employee.email }}</td>
+			</tr>
+			<tr>
+				<th>nomdep</th>
+				<td>{{ employee.actualdep.deptName }}</td>
 			</tr>
 		</tbody>
 	</table>

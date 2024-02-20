@@ -16,7 +16,7 @@ var ctx = document.getElementById('myChart').getContext('2d');
    var myChart = new Chart(ctx, {
           type: 'bar',
     data: {
-        labels: {{ (topFemaleDepartments|map(department => department.departmentName) | merge(bottomFemaleDepartments|map(department => department.departmentName)))|json_encode|raw }},
+        labels: {{ (topFemaleDepartments|map(department => department.dept_name) | merge(bottomFemaleDepartments|map(department => department.dept_name)))|json_encode|raw }},
         datasets: [{
             label: 'Nombre d\'employées dans les départements les plus représentés',
             data: {{ topFemaleDepartments|map(department => department.count)|json_encode|raw }},

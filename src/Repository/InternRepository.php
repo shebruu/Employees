@@ -33,7 +33,7 @@ class InternRepository extends ServiceEntityRepository
         return $this->createQueryBuilder('m')
 
             ->join('m.superviseur', 'e')
-            //(nom de propriete ds intern )Filtre pour correspondre à l'employé spécifié
+            //( )Filtre pour correspondre à l'employé spécifié
             ->where('e = :employee')
             // Filtre pour critere de date date
             ->andWhere('m.endDate > :today')

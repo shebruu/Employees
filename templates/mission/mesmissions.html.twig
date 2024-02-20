@@ -7,28 +7,18 @@
 	<h2>Mes Missions Actives ( pas terminé )
 	</h2>
 
-	{#
-	  <ul>
-	        {% for mission in missions %}
-	     
-	           
-	                <li>{{ mission.description }}</li>
-	
-	          
-	        {% endfor %}
-	    
-	        </ul>
-	
-	        #}
 
+    <form action="{{ path('app_mission_update',{'id': app.user.id}) }}" method="post">
 
 	{% for mission in missionsActives %}
 		<div>
 			<p>Mission:
 				{{ mission.description }}
 				({{ mission.status.value }})</p>
-			<button type="button" class="btn btn-success" data-mission-id="{{ mission.id }}" data-action="terminer">Terminer</button>
-
+				              <input type="hidden" name="missionId" value="{{ mission.id }}">
+                <input type="hidden" name="action" value="terminer">
+			<button  name= "btterminer" type="button" class="btn btn-success" value="{{ mission.id }}" >Terminer</button>
+			
 
 		</div>
 	{% endfor %}
@@ -40,37 +30,18 @@
 				{{ mission.description }}
 				({{ mission.status.value }})</p>
 
-
+ <input type="hidden" name="missionId" value="{{ mission.id }}">
 			{% if mission.status.value == 'en attente' %}
-				<button type="button" class="btn btn-primary" data-mission-id="{{ mission.id }}" data-action="accepter">Accepter</button>
+			 <input type="hidden" name="action" value="accepter">
+				<button name="btaccepter" type="button" class="btn btn-primary" value="{{ mission.id }}" >Accepter</button>
 			{% elseif mission.status.value == 'en cours' %}
-				<button type="button" class="btn btn-warning" data-mission-id="{{ mission.id }}" data-action="rejoindre">Rejoindre</button>
+			      <input type="hidden" name="action" value="rejoindre">
+				<button  name="btrejoindre" type="button" class="btn btn-warning" value="{{ mission.id }}" >Rejoindre</button>
 
 			{% endif %}
 		</div>
 	{% endfor %}
 
-
-	<script>
-    
-		document.querySelectorAll('.update-mission').forEach(function (button) {
-button.addEventListener('click', function () {
-var missionId = this.getAttribute('data-mission-id');
-var action = this.getAttribute('data-action');
-
-// Construire l'URL basée sur les attributs data-*
-var url = `/mission/update/${missionId}/${action}`;
-
-// Effectuer une requête AJAX
-fetch(url).then(response => response.text())
-.then(data => {
-console.log(data);
-// mise a jour de ux
-}).catch(error => {
-console.error('Erreur:', error);
-});
-});
-});
-	</script>
+</form>
 
 {% endblock %}
