@@ -74,7 +74,7 @@ class EmployeeController extends AbstractController
     public function show(Employee $employee, GroupRepository $groupRepo): Response
     {
 
-        // $user = $this->getUser();
+        //$user = $this->getUser();
         $userId = $employee->getId();
         //Empêcher l'accès aux utilisateurs non connectés
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
