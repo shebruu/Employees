@@ -36,7 +36,7 @@ class InternRepository extends ServiceEntityRepository
             //( )Filtre pour correspondre à l'employé spécifié
             ->where('e = :employee')
             // Filtre pour critere de date date
-            ->andWhere('m.endDate > :today')
+            ->andWhere('m.endDate > :today') //active
             // Définition du paramètre 'employee' 
             ->setParameter('employee', $employee)
 
@@ -68,9 +68,9 @@ class InternRepository extends ServiceEntityRepository
     public function findMyActiveInternsOrWithoutSupervisor($employee): array
     {
         return $this->createQueryBuilder('i')
-            ->where('i.endDate < :today')
-            ->andWhere('i.superviseur = :superviseur')
-            ->orWhere('i.superviseur IS NULL')
+            ->where('i.endDate > :today') //expiré 
+            ->andWhere('i.superviseur = :superviseur') //et dnc 1 dt e vrai
+            ->orWhere('i.superviseur IS NULL') //ou
             ->setParameters([
                 'today' => new \DateTime(),
                 'superviseur' => $employee->getId()

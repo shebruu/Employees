@@ -22,9 +22,10 @@
 
 					</div>
 				</li>
+				{#non connecte#}
 				<li class="nav-item">
-							<a class="nav-link" href="{{ path('app_departement_index') }}">Departements</a>
-						</li>
+					<a class="nav-link" href="{{ path('app_departement_index') }}">Departements</a>
+				</li>
 
 				{% if app.user %}
 					{% if is_granted('ROLE_ADMIN') %}
@@ -44,24 +45,27 @@
 							<a class="nav-link" href="{{ path ('app_dept_manager_index')}}">Managers</a>
 						</li>
 
-						<li>
-							<a class="nav-link" href="{{ path ('app_mission_index')}}">
-								Missions
-							</a>
-						</li>
+						
 					{% endif %}
 
 
 					{% if is_granted('ROLE_USER') %}
 
-	
 
+						<li class="nav-link">
+							<a href="{{ path('app_employee_show', {'id': app.user.id}) }}">Mon profil</a>
+						</li>
+						<li>
+							<a class="nav-link" href="{{ path ('app_mission_index')}}">
+								Missions
+							</a>
+						</li>
 
-		
-						
-
-						   <li class="nav-item"><a href="{{ path('app_employee_show', {'id': app.user.id}) }}">Mon profil</a></li>
-         
+						<li>
+							<a class="nav-link" href="{{ path ('app_project_index')}}">
+								projetc
+							</a>
+						</li>
 
 					{% endif %}
 				{% endif %}

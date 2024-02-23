@@ -8,41 +8,41 @@
 {% block body %}
 	<div class="container">
 		<h1 class="mt-5">Employee</h1>
-		
+
 		{% if is_granted('ROLE_USER') %}
-		{% if app.user %}
-			<div class="row mt-5">
-				<div class="col-md-4">
-					<div class="profile">
-						<img src="/Employees/images/me.jpg" class="img-fluid rounded-circle" alt="Photo de profil">
+			{% if app.user %}
+				<div class="row mt-5">
+					<div class="col-md-4">
+						<div class="profile">
+							<img src="/Employees/images/me.jpg" class="img-fluid rounded-circle" alt="Photo de profil">
+						</div>
+					</div>
+					<div class="col-md-8">
+						<div class="menu">
+							<ul class="list-group">
+								<li class="list-group-item">
+									<a href="{{ path('app_mission_mesmissions', {'id': employee.id}) }}">Mes Missions</a>
+								</li>
+								<li class="list-group-item">
+									<a href="{{ path('app_employee_show_controller', {'id': employee.id}) }}">Mes départements</a>
+								</li>
+								<li class="list-group-item">
+									<a href="{{ path ('app_employee_affichermesprojets', { 'id' : app.user.id })}}">
+										Mes  projects</a>
+								</li>
+
+								<li class="list-group-item">
+									<a href="{{ path ('app_employee_affichemesstagiaires', { 'id' : app.user.id })}}">
+										Mes stagiaires
+									</a>
+
+								</li>
+
+
+							</ul>
+						</div>
 					</div>
 				</div>
-				<div class="col-md-8">
-					<div class="menu">
-						<ul class="list-group">
-							<li class="list-group-item">
-								<a href="{{ path('app_mission_mesmissions', {'id': employee.id}) }}">Mes Missions</a>
-							</li>
-							<li class="list-group-item">
-								<a href="{{ path('app_employee_show_controller', {'id': employee.id}) }}">Mes départements</a>
-							</li>
-							<li class="list-group-item">
-								<a href="{{ path ('app_employee_affichermesprojets', { 'id' : app.user.id })}}">
-									Mes  projects</a>
-							</li>
-
-							<li class="list-group-item">
-								<a href="{{ path ('app_employee_affichemesstagiaires', { 'id' : app.user.id })}}">
-									Mes stagiaires
-								</a>
-
-							</li>
-							
-
-						</ul>
-					</div>
-				</div>
-			</div>
 			{% endif %}
 		{% endif %}
 	</div>
@@ -81,8 +81,25 @@
 				<td>{{ employee.email }}</td>
 			</tr>
 			<tr>
-				<th>nomdep</th>
+				<th>departement actuelle</th>
 				<td>{{ employee.actualdep.deptName }}</td>
+			</tr>
+			<tr>
+				{% if departments is not empty %}
+					<th>departements</th>
+					<td>
+						
+							<ul>
+							{% for dep in departments %}
+								<li>
+									{{ dep.deptName }}
+								</li>
+								{% endfor %}
+							</ul>
+						
+					</td>
+
+				{% endif %}
 			</tr>
 		</tbody>
 	</table>

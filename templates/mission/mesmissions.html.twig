@@ -15,9 +15,9 @@
 			<p>Mission:
 				{{ mission.description }}
 				({{ mission.status.value }})</p>
-				              <input type="hidden" name="missionId" value="{{ mission.id }}">
+			   <input type="hidden" name="missionId" value="{{ mission.id }}">
                 <input type="hidden" name="action" value="terminer">
-			<button  name= "btterminer" type="button" class="btn btn-success" value="{{ mission.id }}" >Terminer</button>
+			<button  name= "btterminer" type="submit" class="btn btn-success" value="{{ mission.id }}" >Terminer</button>
 			
 
 		</div>
@@ -33,10 +33,10 @@
  <input type="hidden" name="missionId" value="{{ mission.id }}">
 			{% if mission.status.value == 'en attente' %}
 			 <input type="hidden" name="action" value="accepter">
-				<button name="btaccepter" type="button" class="btn btn-primary" value="{{ mission.id }}" >Accepter</button>
+				<button name="btaccepter" type="submit" class="btn btn-primary" value="{{ mission.id }}" >Accepter</button>
 			{% elseif mission.status.value == 'en cours' %}
 			      <input type="hidden" name="action" value="rejoindre">
-				<button  name="btrejoindre" type="button" class="btn btn-warning" value="{{ mission.id }}" >Rejoindre</button>
+				<button  name="btrejoindre" type="submit" class="btn btn-warning" value="{{ mission.id }}" >Rejoindre</button>
 
 			{% endif %}
 		</div>

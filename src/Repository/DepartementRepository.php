@@ -79,14 +79,20 @@ class DepartementRepository extends ServiceEntityRepository
 
     public function findActualDepartment($employee): ?Departement
     {
+        $today = new \DateTime();
         // dd('ok');
         return $this->createQueryBuilder('d')
             ->innerJoin('d.deptEmps', 'de')
             ->innerJoin('de.employee', 'e')
             ->where('e.id =:id')
-            ->andwhere('de.to_date =:toDate')
+            ->andwhere('de.to_date >=:today') // > pr une date actif
             ->setParameter('id', $employee->getId())
-            ->setParameter('toDate', '9999-01-01')
+            ->setParameter('today', $today->format('Y-m-d'))
+            //dernier dep a quitter (date de fin plus recent) (decroissant)
+            ->orderBy('de.to_date', 'DESC')
+            /* dernier dep rejoint (date de debut plus recent)
+            ->orderBy('de.from_date', 'DESC')
+            */
             ->setMaxResults(1)
             ->getQuery()
             ->getOneOrNullResult();
@@ -105,7 +111,7 @@ class DepartementRepository extends ServiceEntityRepository
 
 
     /**
-     * Récupère tous les départements associés à un employé.
+     * Récupère des l' historique  départements associés à un employé (meme ceux pas actifs).
      * 
      * @param Employee $employee Employé pour lequel récupérer les départements.
      * 
@@ -116,9 +122,9 @@ class DepartementRepository extends ServiceEntityRepository
         return $this->createQueryBuilder('d')
             ->innerJoin('d.deptEmps', 'de')
             ->where('de.employee = :employee')
-            ->andWhere('de.to_date = :toDate')
+
             ->setParameter('employee', $employee)
-            ->setParameter('toDate', '9999-01-01')
+
             ->getQuery()
             ->getResult(); // pour obtenir une liste de résultats
     }

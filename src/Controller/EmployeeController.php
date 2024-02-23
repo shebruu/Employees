@@ -84,8 +84,11 @@ class EmployeeController extends AbstractController
         //dd($actualdep);
         $employee->actualdep = $actualdep;
         //dd($employee);
+
+        $employee->repoqb_actualDept = $repos->findAllDepartmentsForEmployee($employee);
         return $this->render('employee/show.html.twig', [
             'employee' => $employee,
+            'departments' => $employee->repoqb_actualDept,
             // 'actualdep' => $actualdep
         ]);
     }

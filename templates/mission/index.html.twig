@@ -1,23 +1,43 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Mission index{% endblock %}
+{% block title %}Mission index
+{% endblock %}
 
 {% block body %}
-    
 
 
-    
-        <h1> Liste des missions</h1>
-        <ul>
-        {% for mission in missions %}
-     
-           
-                <li>{{ mission.description }}</li>
+	<h1>
+		Nos missions</h1>
 
-          
-        {% endfor %}
-    
-        </ul>
-     
+
+	<table class="table">
+
+		<table>
+
+			{% for mission in missions %}
+				<tr>
+
+
+					<td>{{ mission.description }}</td>
+
+					<td>
+
+
+						{% if app.user  %}
+							<a href="{{ path('app_mission_show', {'id': mission.id}) }}">show</a>
+						{% endif %}
+					</td>
+				</tr>
+			{% endfor %}
+
+			<tr>
+				<td>
+					<a href="{{ path('app_mission_new') }}">creer une mission</a>
+				</td>
+			</tr>
+
+		</table>
+
+	</table>
 
 {% endblock %}

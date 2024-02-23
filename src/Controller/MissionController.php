@@ -15,7 +15,7 @@ use Symfony\Component\Security\Core\Security;
 use App\Entity\Employee;
 use App\Entity\Status;
 
-#[Route('{/mission')]
+#[Route('/mission')]
 class MissionController extends AbstractController
 {
 
@@ -38,6 +38,7 @@ class MissionController extends AbstractController
 
         $employee = $this->getUser();
         dump($this->getUser());
+
         return $this->render('mission/index.html.twig', [
             'missions' => $missionRepository->findAll(),
         ]);
