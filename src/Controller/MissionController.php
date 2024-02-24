@@ -171,11 +171,20 @@ class MissionController extends AbstractController
     {
         $missionId = $request->request->get('missionId');
         $action = $request->request->get('action');
+        //ne depend pas de l id ds la route
         $user = $this->getUser();
+
         $mission = $entityManager->getRepository(Mission::class)->find($missionId);
-        $employee = $entityManager->getRepository(Employee::class)->find($user);
+        //si on a pas  l' employé en paramconverter
+        //  $employee = $entityManager->getRepository(Employee::class)->find($user);
 
 
+        if ($user !== $employee && !$this->isGranted('ROLE_ADMIN')) {
+            // Refuser l'accès si l'utilisateur n'est pas l'employee concerné ou n'a pas le rôle ADMIN
+            throw $this->createAccessDeniedException('Vous n\'êtes pas autorisé à modifier cette mission.');
+        } else {
+            $user = $employee->getId();
+        }
 
         switch ($action) {
             case 'accepter':

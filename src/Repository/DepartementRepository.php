@@ -25,7 +25,7 @@ class DepartementRepository extends ServiceEntityRepository
     }
 
     /**
-     * Récupère la liste des départements avec des stagiaires et les trie par superviseur décroissant.
+     * Récupère la liste des départements avec des stagiaires; groupé par dep et les trie par superviseur décroissant.
      *
      * @return array Un tableau contenant les départements avec des stagiaires triés par superviseur décroissant.
      */
