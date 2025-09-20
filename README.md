@@ -1,7 +1,8 @@
 # Système de Gestion des Employés
 
-<div align="center">
 
+<div align="center">
+  
 ![Symfony](https://img.shields.io/badge/Symfony-7.0-000000?style=for-the-badge&logo=symfony)
 ![PHP](https://img.shields.io/badge/PHP-8.2+-777BB4?style=for-the-badge&logo=php)
 ![Bootstrap](https://img.shields.io/badge/Bootstrap-5-7952B3?style=for-the-badge&logo=bootstrap)
@@ -9,92 +10,15 @@
 
 </div>
 
- **Application web moderne** de gestion des employés développée avec **Symfony 7.0**, un gestionnaire de ressources humaines, départements, missions et des **statistiques de diversité**.
+ Gestionnaire des employés : Outil RH sous Symfony 7.0 pour gérer les employés, départements, missions et analyser les statistiques de diversité.
 
 ---
+## Technologies utilisées
+- **Backend** : PHP 8.2+, Symfony 7.0, Doctrine ORM, Twig  
+- **Frontend** : Bootstrap 5, Chart.js, Bootstrap Icons, CSS custom  
+- **Base de données** : MySQL/MariaDB, Doctrine Migrations  
+- **Outils** : Webpack Encore, Composer, NPM  
 
-## Fonctionnalités
-
-<table>
-<tr>
-<td width="50%">
-
-### **Authentification & Autorisation**
-- Système de connexion sécurisé
-- Gestion des rôles (Admin/Utilisateur)
-- Contrôle d'accès basé sur les permissions
-
-###  **Gestion des Employés**
-- CRUD des employés
-- Profils détaillés 
-- Gestion des informations personnelles et professionnelles
-- Interface "Mon profil" pour les utilisateurs
-
-### **Gestion des Départements**
-- Administration des départements
-- Attribution des managers
-- Statistiques par département
-- Relations employés-départements
-
-</td>
-<td width="50%">
-
-### **Missions & Projets**
-- Gestion des missions
-- Attribution des projets aux employés
-- Suivi des chefs de projet
-- Interface "Mes missions" et "Mes projets"
-
-### **Women at Work - Statistiques de Diversité**
-- Répartition par genre dans les départements
-- Graphiques (Chart.js)
-- Statistiques des départements les plus/moins représentés
-
-###  **Gestion des Stagiaires**
-- Module dédié aux stagiaires
-- Suivi des superviseurs
-</td>
-</tr>
-</table>
-
----
-
-## Technologies Utilisées
-
-<table>
-<tr>
-<td width="33%">
-
-###  **Backend**
-- ![PHP](https://img.shields.io/badge/PHP-8.2+-777BB4?style=flat-square&logo=php) **PHP 8.2+**
-- ![Symfony](https://img.shields.io/badge/Symfony-7.0-000000?style=flat-square&logo=symfony) **Symfony 7.0**
--  **Doctrine ORM**
--  **Twig**
-
-</td>
-<td width="33%">
-
-### **Frontend**
-- ![Bootstrap](https://img.shields.io/badge/Bootstrap-5-7952B3?style=flat-square&logo=bootstrap) **Bootstrap 5**
-- **Chart.js** 
-- **Bootstrap Icons**
-- **CSS personnalisé**
-
-</td>
-<td width="33%">
-
-### **Base de Données**
-- ![MySQL](https://img.shields.io/badge/MySQL-4479A1?style=flat-square&logo=mysql&logoColor=white) **MySQL/MariaDB**
--  **Doctrine Migrations**
-
-###  **Outils de Développement**
--  **Webpack Encore** (compilation des assets)
--  **Composer** (gestionnaire de dépendances PHP)
--  **NPM** (gestionnaire de dépendances JS)
-
-</td>
-</tr>
-</table>
 
 ---
 ### **Prérequis**
@@ -130,7 +54,8 @@ php bin/console doctrine:database:create
 php bin/console doctrine:migrations:migrate
 ```
 
-**Option B : Import dump SQL RECOMMANDÉ**
+
+**Option B : Import dump SQL ( récommandé) **
 ```bash
 # Créer la base de données vide
 php bin/console doctrine:database:create
@@ -142,11 +67,13 @@ mysql -u [username] -p [database_name] < src/employees.sql
 php bin/console doctrine:migrations:version --add --all
 ```
 
+
 **Option C : Schema Doctrine forcé**
 ```bash
 php bin/console doctrine:database:create
 php bin/console doctrine:schema:create --force
 ```
+
 
 **Option D : Réinitialisation complète**
 ```bash
@@ -154,6 +81,7 @@ php bin/console doctrine:database:drop --force --if-exists
 php bin/console doctrine:database:create
 php bin/console doctrine:schema:create --force
 ```
+
 
 #### **5. Charger les données** *(si Option A ou C utilisée)*
 
@@ -182,7 +110,7 @@ npm run watch
 npm run build
 ```
 
-#### **7. 🖥️ Démarrer le serveur**
+#### **7. Démarrer le serveur**
 ```bash
 php -S localhost:8000 -t public/
 ```
