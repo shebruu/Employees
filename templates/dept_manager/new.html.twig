@@ -1,11 +1,17 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}New DeptManager{% endblock %}
+{% block title %}Nouveau manager de département{% endblock %}
 
 {% block body %}
-    <h1>Create new DeptManager</h1>
-
-    {{ include('dept_manager/_form.html.twig') }}
-
-    <a href="{{ path('app_dept_manager_index') }}">back to list</a>
+<div class="container py-4">
+    <h1 class="mb-4">Créer un nouveau manager de département</h1>
+    <div class="card shadow-sm mb-3">
+        <div class="card-body">
+            {{ include('dept_manager/_form.html.twig') }}
+        </div>
+    </div>
+    <a href="{{ path('app_dept_manager_index') }}" class="btn btn-outline-secondary fw-bold shadow">
+        <i class="bi bi-arrow-left"></i> Retour à la liste
+    </a>
+</div>
 {% endblock %}

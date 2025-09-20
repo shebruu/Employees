@@ -1,23 +1,91 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Mission index{% endblock %}
+{% block title %}Missions{% endblock %}
 
 {% block body %}
-    
+<div class="container py-4">
+        <h1 class="mb-4 display-5 fw-bold text-primary"><i class="bi bi-briefcase"></i> Missions de l'entreprise</h1>
 
-
-    
-        <h1> Liste des missions</h1>
-        <ul>
+        {% set missions_terminees = [] %}
+        {% set missions_en_cours = [] %}
+        {% set missions_non_assignees = [] %}
         {% for mission in missions %}
-     
-           
-                <li>{{ mission.description }}</li>
-
-          
+                {% if mission.status.value == 'terminé' %}
+                        {% set missions_terminees = missions_terminees|merge([mission]) %}
+                {% elseif mission.status.value == 'en cours' %}
+                        {% set missions_en_cours = missions_en_cours|merge([mission]) %}
+                {% else %}
+                        {% set missions_non_assignees = missions_non_assignees|merge([mission]) %}
+                {% endif %}
         {% endfor %}
-    
-        </ul>
-     
 
+        <div class="row g-4 mb-5">
+                <div class="col-12 col-lg-4">
+                        <div class="card border-success shadow h-100">
+                                <div class="card-header bg-success text-white fw-bold">
+                                        <i class="bi bi-check-circle"></i> Missions terminées
+                                </div>
+                                <div class="card-body">
+                                        {% if missions_terminees is not empty %}
+                                                <ul class="list-group list-group-flush">
+                                                        {% for mission in missions_terminees %}
+                                                                <li class="list-group-item d-flex align-items-center">
+                                                                        <i class="bi bi-check2-circle text-success me-2"></i>
+                                                                        <span class="flex-grow-1">{{ mission.description }}</span>
+                                                                        <span class="badge bg-success">Terminé</span>
+                                                                </li>
+                                                        {% endfor %}
+                                                </ul>
+                                        {% else %}
+                                                <div class="alert alert-secondary mb-0">Aucune mission terminée.</div>
+                                        {% endif %}
+                                </div>
+                        </div>
+                </div>
+                <div class="col-12 col-lg-4">
+                        <div class="card border-warning shadow h-100">
+                                <div class="card-header bg-warning text-dark fw-bold">
+                                        <i class="bi bi-hourglass-split"></i> Missions en cours
+                                </div>
+                                <div class="card-body">
+                                        {% if missions_en_cours is not empty %}
+                                                <ul class="list-group list-group-flush">
+                                                        {% for mission in missions_en_cours %}
+                                                                <li class="list-group-item d-flex align-items-center">
+                                                                        <i class="bi bi-play-circle text-warning me-2"></i>
+                                                                        <span class="flex-grow-1">{{ mission.description }}</span>
+                                                                        <span class="badge bg-warning text-dark">En cours</span>
+                                                                </li>
+                                                        {% endfor %}
+                                                </ul>
+                                        {% else %}
+                                                <div class="alert alert-secondary mb-0">Aucune mission en cours.</div>
+                                        {% endif %}
+                                </div>
+                        </div>
+                </div>
+                <div class="col-12 col-lg-4">
+                        <div class="card border-info shadow h-100">
+                                <div class="card-header bg-info  fw-bold">
+                                        <i class="bi bi-question-circle"></i> Missions non assignées
+                                </div>
+                                <div class="card-body">
+                                        {% if missions_non_assignees is not empty %}
+                                                <ul class="list-group list-group-flush">
+                                                        {% for mission in missions_non_assignees %}
+                                                                <li class="list-group-item d-flex align-items-center">
+                                                                        <i class="bi bi-person-dash text-info me-2"></i>
+                                                                        <span class="flex-grow-1">{{ mission.description }}</span>
+                                                                        <span class="badge bg-info ">Non assignée</span>
+                                                                </li>
+                                                        {% endfor %}
+                                                </ul>
+                                        {% else %}
+                                                <div class="alert alert-secondary mb-0">Aucune mission non assignée.</div>
+                                        {% endif %}
+                                </div>
+                        </div>
+                </div>
+        </div>
+</div>
 {% endblock %}

@@ -12,39 +12,61 @@
 {% endblock %}
 
 {% block body %}
-
-   
-
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
-<div id="chartContainer">
-      <canvas id="myChart2"></canvas>
-      </div>
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow mb-4">
+                <div class="card-header bg-info text-white">
+                    <h2 class="mb-0">Departments record femme</h2>
+                </div>
+                <div class="card-body">
+                    <p class="mb-4">Répartition par genre dans les départements.</p>
+                    <div id="chartContainer">
+                        <canvas id="myChart2"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<a href="{{ path('app_women_at_work_ml') }}" class="btn btn-lg btn-info text-white fw-bold mt-3">
+    Voir les statistiques des genres
+</a>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
-             var ctx = document.getElementById('myChart2').getContext('2d');
-        var mychart2 = new Chart(ctx, {
-            type: 'pie',
-            data: {
-                labels: ['Femmes', 'Hommes'],
-                datasets: [{
-                    label: 'Répartition par genre',
-                    data: [{{ pourcentageFemmes }}, {{ pourcentageHommes }}],
-                    backgroundColor: [
-                        'rgba(255, 99, 132, 0.2)',
-                        'rgba(54, 162, 235, 0.2)'
-                    ],
-                    borderColor: [
-                        'rgba(255, 99, 132, 1)',
-                        'rgba(54, 162, 235, 1)'
-                    ],
-                    borderWidth: 1
-                }]
-            },
-                options: {
-        responsive: true,
-        maintainAspectRatio: true
-    }
-          
-        });
-    </script>
+    var ctx = document.getElementById('myChart2').getContext('2d');
+    var mychart2 = new Chart(ctx, {
+        type: 'pie',
+        data: {
+            labels: ['Femmes', 'Hommes'],
+            datasets: [{
+                label: 'Répartition par genre',
+                data: [{{ pourcentageFemmes }}, {{ pourcentageHommes }}],
+                backgroundColor: [
+                    'rgba(255, 99, 132, 0.7)',
+                    'rgba(54, 162, 235, 0.7)'
+                ],
+                borderColor: [
+                    'rgba(255, 99, 132, 1)',
+                    'rgba(54, 162, 235, 1)'
+                ],
+                borderWidth: 2
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    position: 'bottom',
+                    labels: {
+                        font: {
+                            size: 16
+                        }
+                    }
+                }
+            }
+        }
+    });
+</script>
 {% endblock %}

@@ -1,96 +1,104 @@
 {% extends 'base.html.twig' %}
-{#montrer un employé en particulier#}
+{# Affichage détaillé d'un employé #}
 
-{% block title %}Employee
-{% endblock %}
-
+{% block title %}Fiche Employé{% endblock %}
 
 {% block body %}
-	<div class="container">
-		<h1 class="mt-5">Employee</h1>
-		
-		{% if is_granted('ROLE_USER') %}
-		{% if app.user %}
-			<div class="row mt-5">
-				<div class="col-md-4">
-					<div class="profile">
-						<img src="/Employees/images/me.jpg" class="img-fluid rounded-circle" alt="Photo de profil">
-					</div>
+<div class="container py-4">
+	<h1 class="mb-4">Fiche Employé</h1>
+
+	<div class="row mb-4">
+		<div class="col-md-4 mb-3 mb-md-0">
+			<div class="card shadow-sm text-center">
+				<div class="card-body">
+					<img src="/Employees/images/me.jpg" class="img-fluid rounded-circle mb-3" style="max-width: 180px;" alt="Photo de profil">
+					<h4 class="card-title">{{ employee.firstName }} {{ employee.lastName }}</h4>
+					<p class="card-text text-muted">{{ employee.email }}</p>
 				</div>
-				<div class="col-md-8">
-					<div class="menu">
-						<ul class="list-group">
-							<li class="list-group-item">
-								<a href="{{ path('app_mission_mesmissions', {'id': employee.id}) }}">Mes Missions</a>
-							</li>
-							<li class="list-group-item">
-								<a href="{{ path('app_employee_show_controller', {'id': employee.id}) }}">Mes départements</a>
-							</li>
-							<li class="list-group-item">
-								<a href="{{ path ('app_employee_affichermesprojets', { 'id' : app.user.id })}}">
-									Mes  projects</a>
-							</li>
-
-							<li class="list-group-item">
-								<a href="{{ path ('app_employee_affichemesstagiaires', { 'id' : app.user.id })}}">
-									Mes stagiaires
-								</a>
-
-							</li>
-							
-
-						</ul>
-					</div>
+			</div>
+		</div>
+		<div class="col-md-8">
+			{% if app.user %}
+			<div class="card shadow-sm mb-3">
+				<div class="card-body">
+					<h5 class="mb-3">Menu</h5>
+					<ul class="list-group list-group-flush">
+						<li class="list-group-item">
+							{% if app.user.id == employee.id or is_granted('ROLE_ADMIN') %}
+								<a href="{{ path('app_mission_mesmissions', {'id': employee.id}) }}" class="text-decoration-none">Mes Missions</a>
+							{% else %}
+								<span class="text-muted">Mes Missions</span>
+							{% endif %}
+						</li>
+						<li class="list-group-item">
+							{% if app.user.id == employee.id or is_granted('ROLE_ADMIN') %}
+								<a href="{{ path('app_employee_show_controller', {'id': employee.id}) }}" class="text-decoration-none">Mes départements</a>
+							{% else %}
+								<span class="text-muted">Mes départements</span>
+							{% endif %}
+						</li>
+						<li class="list-group-item">
+							{% if app.user.id == employee.id or is_granted('ROLE_ADMIN') %}
+								<a href="{{ path('app_employee_affichermesprojets', { 'id' : employee.id })}}" class="text-decoration-none">Mes projets</a>
+							{% else %}
+								<span class="text-muted">Mes projets</span>
+							{% endif %}
+						</li>
+						<li class="list-group-item">
+							{% if app.user.id == employee.id or is_granted('ROLE_ADMIN') %}
+								<a href="{{ path('app_employee_affichemesstagiaires', { 'id' : employee.id })}}" class="text-decoration-none">Mes stagiaires</a>
+							{% else %}
+								<span class="text-muted">Mes stagiaires</span>
+							{% endif %}
+						</li>
+					</ul>
 				</div>
 			</div>
 			{% endif %}
-		{% endif %}
+			<div class="card shadow-sm">
+				<div class="card-body">
+					<h5 class="mb-3">Informations personnelles</h5>
+					<table class="table table-bordered mb-0">
+						<tbody>
+							<tr>
+								<th scope="row">ID</th>
+								<td>{{ employee.id }}</td>
+							</tr>
+							<tr>
+								<th scope="row">Date de naissance</th>
+								<td>{{ employee.birthDate ? employee.birthDate|date('Y-m-d') : '' }}</td>
+							</tr>
+							<tr>
+								<th scope="row">Genre</th>
+								<td>{{ employee.gender.value }}</td>
+							</tr>
+							<tr>
+								<th scope="row">Date d'embauche</th>
+								<td>{{ employee.hireDate ? employee.hireDate|date('Y-m-d') : '' }}</td>
+							</tr>
+							<tr>
+								<th scope="row">Photo</th>
+								<td>{{ employee.photo }}</td>
+							</tr>
+							<tr>
+								<th scope="row">Département</th>
+								<td>{{ employee.actualdep.deptName }}</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+			</div>
+		</div>
 	</div>
-	<table class="table">
-		<tbody>
-			<tr>
-				<th>Id</th>
-				<td>{{ employee.id }}</td>
-			</tr>
-			<tr>
-				<th>BirthDate</th>
-				<td>{{ employee.birthDate ? employee.birthDate|date('Y-m-d') : '' }}</td>
-			</tr>
-			<tr>
-				<th>FirstName</th>
-				<td>{{ employee.firstName }}</td>
-			</tr>
-			<tr>
-				<th>LastName</th>
-				<td>{{ employee.lastName }}</td>
-			</tr>
-			<tr>
-				<th>Gender</th>
-				<td>{{ employee.gender.value }}</td>
-			</tr>
-			<tr>
-				<th>HireDate</th>
-				<td>{{ employee.hireDate ? employee.hireDate|date('Y-m-d') : '' }}</td>
-			</tr>
-			<tr>
-				<th>Photo</th>
-				<td>{{ employee.photo }}</td>
-			</tr>
-			<tr>
-				<th>Email</th>
-				<td>{{ employee.email }}</td>
-			</tr>
-			<tr>
-				<th>nomdep</th>
-				<td>{{ employee.actualdep.deptName }}</td>
-			</tr>
-		</tbody>
-	</table>
 
-	<a href="{{ path('app_employee_index') }}">back to list</a>
-
-	<a href="{{ path('app_employee_edit', {'id': employee.id}) }}">edit</a>
-
-	{{ include('employee/_delete_form.html.twig') }}
-
+	<div class="d-flex flex-wrap gap-2 mt-3">
+		<a href="{{ path('app_employee_index') }}" class="btn btn-primary fw-bold shadow">
+			<i class="bi bi-arrow-left"></i> Retour à la liste
+		</a>
+		<a href="{{ path('app_employee_edit', {'id': employee.id}) }}" class="btn btn-warning fw-bold shadow">
+			<i class="bi bi-pencil"></i> Modifier
+		</a>
+		{{ include('employee/_delete_form.html.twig', {'button_class': 'btn btn-danger fw-bold shadow'}) }}
+	</div>
+</div>
 {% endblock %}

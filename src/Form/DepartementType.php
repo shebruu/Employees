@@ -14,15 +14,15 @@ class DepartementType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('dept_no')
-            ->add('dept_name')
+            ->add('deptNo')
+            ->add('deptName')
             ->add('description')
             ->add('address')
-            ->add('roi_url')
+            ->add('roiUrl')
             ->add('employees', EntityType::class, [
                 'class' => Employee::class,
-'choice_label' => 'id',
-'multiple' => true,
+                'choice_label' => 'id',
+                'multiple' => true,
             ])
         ;
     }

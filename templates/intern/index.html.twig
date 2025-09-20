@@ -6,54 +6,84 @@
     <h1>Liste des stagiaires</h1>
 
     <form action="{{path('app_intern_manage')}}" method="post">
+        {% if is_granted('ROLE_ADMIN') %}
         <div>
-            <label for="superviseur">Superviseur :</label>
+            <label for="superviseur">Employés sans stagiaire :</label>
             <select name="superviseur" id="superviseur">
             {% for employee in freeEmployees %}
                 <option value="{{ employee.id }}">{{ employee.firstname }} {{ employee.lastname }}</option>
             {% endfor %}
             </select>
         </div>
+        {% endif %}
 
         <table class="table">
             <tbody>
-            {% for department in groupInterns %}
-                <tr>
-                    <td>
-                        <h2>{{ department.deptName }}</h2>
-                        <table>
-                            <thead>
-                                <tr>
-                                    <th>Nom complet</th>
-                                    <th>Date de début</th>
-                                    <th>Date de fin</th>
-                                    <th>Superviseur</th>
-                                    <th>Action</th>
-                                </tr>
-                            </thead>
-                            {% for intern in department.interns %}
-                                <tr>
-                                    <td>{{ intern.fullname }}</td>
-                                    <td>{{ intern.startDate ? intern.startDate|date('Y-m-d') : '' }}</td>
-                                    <td>{{ intern.endDate ? intern.endDate|date('Y-m-d') : '' }}</td>
-                                    <td>{{ intern.superviseur ? intern.superviseur.id ~ ' ' ~ intern.superviseur : '' }}</td>
-                                    <td>
-                                    {% if intern.superviseur is null %}
-                                        <button name="btSupervise" value="{{ intern.id }}">Superviser</button>
-                                    {% else %}
-                                        <button name="btUnsupervise" value="{{ intern.id }}">Ne plus superviser</button>
-                                    {% endif %}
-                                    </td>
-                                </tr>
-                            {% endfor %}
-                        </table>
-                    </td>
-                </tr> 
-            {% else %}
-                <tr>
-                    <td colspan="5">no records found</td>
-                </tr>
-            {% endfor %}
+                {% for department in groupInterns %}
+                    <tr>
+                        <td>
+                            <div class="mt-4">
+                                <h3 class="fw-bold text-primary border-bottom pb-1 mb-3">{{ department.deptName }}</h3>
+                                <div class="table-responsive">
+                                    <table class="table table-bordered align-middle">
+                                        <thead class="table-light">
+                                            <tr>
+                                                <th>Nom complet</th>
+                                                <th>Date de début</th>
+                                                <th>Date de fin</th>
+                                                <th>Superviseur</th>
+                                                {% set showAction = false %}
+                                                {% for intern in department.interns %}
+                                                    {% if intern.superviseur is null or (app.user and intern.superviseur and app.user.id == intern.superviseur.id) %}
+                                                        {% set showAction = true %}
+                                                    {% endif %}
+                                                {% endfor %}
+                                                {% if showAction %}
+                                                    <th>Action</th>
+                                                {% endif %}
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {% for intern in department.interns %}
+                                                <tr>
+                                                    <td class="fw-semibold">{{ intern.fullname }}</td>
+                                                    <td>{{ intern.startDate ? intern.startDate|date('Y-m-d') : '' }}</td>
+                                                    <td>{{ intern.endDate ? intern.endDate|date('Y-m-d') : '' }}</td>
+                                                    <td>
+                                                        {% if intern.superviseur %}
+                                                            <span class="badge bg-info ">{{ intern.superviseur.firstname }} {{ intern.superviseur.lastname }}</span>
+                                                        {% else %}
+                                                            <span class="text-muted">Aucun</span>
+                                                        {% endif %}
+                                                    </td>
+                                                    {% if intern.superviseur is null or (app.user and intern.superviseur and app.user.id == intern.superviseur.id) %}
+                                                        <td>
+                                                            {% if intern.superviseur is null %}
+                                                                <form action="{{ path('app_intern_manage') }}" method="post" class="d-inline">
+                                                                    <input type="hidden" name="internId" value="{{ intern.id }}">
+                                                                    <button name="btSupervise" value="{{ intern.id }}" class="btn btn-success btn-sm">Superviser</button>
+                                                                </form>
+                                                            {% elseif app.user and intern.superviseur and app.user.id == intern.superviseur.id %}
+                                                                <form action="{{ path('app_intern_manage') }}" method="post" class="d-inline">
+                                                                    <input type="hidden" name="internId" value="{{ intern.id }}">
+                                                                    <button name="btUnsupervise" value="{{ intern.id }}" class="btn btn-warning btn-sm">Ne plus superviser</button>
+                                                                </form>
+                                                            {% endif %}
+                                                        </td>
+                                                    {% endif %}
+                                                </tr>
+                                            {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </td>
+                    </tr> 
+                {% else %}
+                    <tr>
+                        <td colspan="5">Aucun stagiaire trouvé.</td>
+                    </tr>
+                {% endfor %}
             </tbody>
         </table>
     </form>

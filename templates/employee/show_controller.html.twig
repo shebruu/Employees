@@ -1,22 +1,28 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Employee
-{% endblock %}
+{% block title %}Départements de {{ employee.firstName }} {{ employee.lastName }}{% endblock %}
 
 {% block body %}
+<div class="container py-4">
+    <h1 class="mb-4">Départements de <span class="text-primary">{{ employee.firstName }} {{ employee.lastName }}</span></h1>
 
-
-
-{# Affiche les départements associés à l'employé #}
-{% if departments is not empty %}
-    <h2>Départements courants</h2>
-    <ul>
-        {% for dept in departments %}
-            <li>{{ dept.deptName }} ({{ dept.deptNo }})</li> {# Remplacez 'name' et 'id' par les propriétés appropriées #}
-        {% endfor %}
-    </ul>
-{% else %}
-    <p>Aucun département n'est actuellement associé à cet employé.</p>
-{% endif %}
-
+    <div class="card shadow-sm mb-4">
+        <div class="card-body">
+            {% if departments is not empty %}
+                <h5 class="card-title mb-3">Départements courants</h5>
+                <ul class="list-group list-group-flush">
+                    {% for dept in departments %}
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            <span class="fw-bold">{{ dept.deptName }}</span>
+                            <span class="badge bg-info">{{ dept.deptNo }}</span>
+                        </li>
+                    {% endfor %}
+                </ul>
+            {% else %}
+                <div class="alert alert-secondary mb-0">Aucun département n'est actuellement associé à cet employé.</div>
+            {% endif %}
+        </div>
+    </div>
+    
+</div>
 {% endblock %}

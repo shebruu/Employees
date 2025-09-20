@@ -7,19 +7,18 @@
 		<div class="collapse navbar-collapse" id="navbarColor01">
 			<ul class="navbar-nav me-auto">
 				<li class="nav-item">
-					<a class="nav-link active" href="#">Home
+					<a class="nav-link active" href="{{ path('home') }}">Home
 						<span class="visually-hidden">(current)</span>
 					</a>
 				</li>
 
-
+		
 				<li class="nav-item dropdown">
-					<a class="nav-link dropdown-toggle show" data-bs-toggle="dropdown" href="{{ path('app_women_at_work_index') }}" role="button" aria-haspopup="true" aria-expanded="true">Women at work</a>
-					<div class="dropdown-menu show" data-bs-popper="static">
-						<a class="dropdown-item" href="{{ path('app_women_at_work_ml') }}">
-							statistique
-						</a>
-
+					<a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="{{ path('app_women_at_work_index') }}" role="button" aria-haspopup="true" aria-expanded="false">Women at work</a>
+					<div class="dropdown-menu" data-bs-popper="static">
+						{% if app.user and is_granted('ROLE_ADMIN') %}
+							<a class="dropdown-item" href="{{ path('app_women_at_work_ml') }}">Statistiques femmes</a>
+						{% endif %}
 					</div>
 				</li>
 				<li class="nav-item">
@@ -27,49 +26,44 @@
 				</li>
 
 				{% if app.user %}
-					{% if is_granted('ROLE_ADMIN') %}
-
-						<li class="nav-item">
-							<a class="nav-link" href="{{ path('app_employee_index') }}">Employees</a>
-						</li>
-
-						<li class="nav-item">
-							<a class="nav-link" href="{{ path ('app_intern_index')}}">
-								stagiaires
-							</a>
-
-						</li>
-
-						<li class="nav-item">
-							<a class="nav-link" href="{{ path ('app_dept_manager_index')}}">Managers</a>
-						</li>
-
-						<li>
-							<a class="nav-link" href="{{ path ('app_mission_index')}}">
-								Missions
-							</a>
-						</li>
-					{% endif %}
-
-
-					{% if is_granted('ROLE_USER') %}
-
-	
-
-
-		
-						
-
-						   <li class="nav-item"><a href="{{ path('app_employee_show', {'id': app.user.id}) }}">Mon profil</a></li>
-         
-
-					{% endif %}
-
+					<li class="nav-item">
+						<a class="nav-link" href="{{ path('app_employee_index') }}">Employees</a>
+					</li>
+					<li class="nav-item">
+						<a class="nav-link" href="{{ path('app_intern_index') }}">stagiaires</a>
+					</li>
+					<li class="nav-item">
+						<a class="nav-link" href="{{ path('app_dept_manager_index') }}">Managers</a>
+					</li>
+					<li class="nav-item">
+						<a class="nav-link" href="{{ path('app_mission_index') }}">Missions</a>
+					</li>
 				{% endif %}
 
 
 			</ul>
 
 		</div>
+		{% if app.user and is_granted('ROLE_USER') %}
+    <ul class="navbar-nav ms-auto">
+        <li class="nav-item">
+            <a class="nav-link fw-bold" href="{{ path('app_employee_show', {'id': app.user.id}) }}">
+                <i class="bi bi-person-circle"></i> Mon profil
+            </a>
+        </li>
+	</ul>
+	{% endif %}
+
+	<div class="d-flex align-items-center ms-auto gap-3">
+		{% if app.user %}
+			
+			<form action="{{ path('app_logout') }}" method="post" class="d-inline">
+				<input type="hidden" name="_csrf_token" value="{{ csrf_token('logout') }}">
+				<button class="btn btn-outline-light btn-sm fw-bold" type="submit">Se déconnecter</button>
+			</form>
+		{% else %}
+			<a href="{{ path('app_login') }}" class="btn btn-outline-light btn-sm fw-bold">Se connecter</a>
+		{% endif %}
+	</div>
 	</div>
 </nav>

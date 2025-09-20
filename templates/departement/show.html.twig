@@ -1,42 +1,80 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Departement{% endblock %}
+{% block title %}Département -
+	{{ departement.deptName }}
+{% endblock %}
 
 {% block body %}
-    <h1>Departement</h1>
+	<div class="container mt-5">
+		<div class="row justify-content-center">
+			<div class="col-lg-8">
+				<div class="card shadow-sm">
+					<div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+						<h2 class="mb-0">Département :
+							{{ departement.deptName }}</h2>
+						<span class="badge bg-light text-primary">#{{ departement.deptNo }}</span>
+					</div>
+					<div class="card-body">
+						<table class="table table-borderless mb-4">
+							<tbody>
 
-    <table class="table">
-        <tbody>
-            <tr>
-                <th>Id</th>
-                <td>{{ departement.id }}</td>
-            </tr>
-            <tr>
-                <th>Dept_no</th>
-                <td>{{ departement.deptNo }}</td>
-            </tr>
-            <tr>
-                <th>Dept_name</th>
-                <td>{{ departement.deptName }}</td>
-            </tr>
-            <tr>
-                <th>Description</th>
-                <td>{{ departement.description }}</td>
-            </tr>
-            <tr>
-                <th>Address</th>
-                <td>{{ departement.address }}</td>
-            </tr>
-            <tr>
-                <th>Roi_url</th>
-                <td>{{ departement.roiUrl }}</td>
-            </tr>
-        </tbody>
-    </table>
+								<tr>
+									<th scope="row">Nom</th>
+									<td>{{ departement.deptName }}</td>
+								</tr>
+								<tr>
+									<th scope="row">Description</th>
+									<td>{{ departement.description }}</td>
+								</tr>
+								<tr>
+									<th scope="row">Adresse</th>
+									<td>{{ departement.address }}</td>
+								</tr>
+								<tr>
+									<th scope="row">Lien ROI</th>
+									<td>
+										{% if departement.roiUrl %}
+											<a href="{{ departement.roiUrl }}" target="_blank">{{ departement.roiUrl }}</a>
+										{% else %}
+											<span class="text-muted">Non renseigné</span>
+										{% endif %}
+									</td>
+								</tr>
+							</tbody>
+						</table>
 
-    <a href="{{ path('app_departement_index') }}">back to list</a>
+						{# Section employés si besoin #}
+						{% if departement.employees is defined and departement.employees|length > 0 %}
+							<h5 class="mt-4">Employés du département :</h5>
+							<ul class="list-group mb-4">
+								{% for employee in departement.employees %}
+									<li class="list-group-item">
+										{{ employee.firstname }}
+										{{ employee.lastname }}
+									</li>
+								{% endfor %}
+							</ul>
+						{% endif %}
 
-    <a href="{{ path('app_departement_edit', {'id': departement.id}) }}">edit</a>
-
-    {{ include('departement/_delete_form.html.twig') }}
-{% endblock %}
+						<div class="d-flex justify-content-between">
+							<a href="{{ path('app_departement_index') }}" class="btn btn-outline-secondary">
+								<i class="bi bi-arrow-left"></i>
+								Retour à la liste
+							</a>
+							{% if is_granted('ROLE_ADMIN') %}
+								<div>
+									<a href="{{ path('app_departement_edit', {'id': departement.id}) }}" class="btn btn-primary me-2">
+										<i class="bi bi-pencil"></i>
+										Modifier
+									</a>
+									{# Afficher le bouton Supprimer uniquement aux admins #}
+									{{ include('departement/_delete_form.html.twig', { departement: departement }) }}
+								</div>
+							{% endif %}
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>{% endblock %}

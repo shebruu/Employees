@@ -1,59 +1,131 @@
+{# templates/home/index.html.twig #}
 {% extends 'base.html.twig' %}
 
 {% block title %}Accueil{% endblock %}
 
 {% block body %}
-    <div class="container ">
+<div class="container py-5">
 
-
-        <div class="header">
-            <h1>Bienvenue sur la page d'accueil !</h1>
-        </div>
-
-        <div class="about-us">
-            <section>
-                <h2>À propos de nous</h2>
-                <p><strong>Qui sommes-nous ?</strong></p>
-                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et
-                    dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut
-                    a</p>
-            </section>
-        </div>
-
-        <div class="press-releases">
-            <section>
-                <h2>Communiqués de presse</h2>
-                <ul>
-                    {% for link in link %}
-                    <li>
-                        ID: {{ link.id }} - <a href="{{ link.url }}" target="_blank">{{ link.url }}</a> <a
-                            href="{{ path('download_pdf', {'linkId': link.id}) }}" target="_blank">Télécharger en
-                            PDF</a>
-                    </li>
-                    {% endfor %}
-                </ul>
-            </section>
-        </div>
-
-        <div class="documents">
-            <section>
-                <h2>Documents</h2>
-            </section>
-        </div>
-
-        <div class="headquarters-location">
-            <section>
-                       {% include "/partials/_map.html.twig" %}
-            </section>
-        </div>
-
-        <div class="app-download">
-            <section>
-                <h2>Téléchargement de l’application via QR Code</h2>
-                {# Afficher l'image du QR Code en utilisant le chemin 'qr_code' #}
-                {# <img src="{{ path('qr_code') }}" alt="QR Code"> #}
-            </section>
-        </div>
-
+  {# ————————————————— Hero ————————————————— #}
+  <div class="row mb-4">
+    <div class="col-12 text-center">
+      <h1 class="display-5 fw-bold text-primary mb-2">
+        {% if app.user %}
+          Bonjour {{ app.user.firstName }}{% if is_granted('ROLE_ADMIN') %} {% endif %}
+        {% else %}
+          Bonjour visiteur !
+        {% endif %}
+      </h1>
+      <p class="lead">Bienvenue sur la plateforme de gestion des employés et statistiques Women at Work.</p>
     </div>
+  </div>
+
+  {# ————————————————— 2 colonnes : stats / photos ————————————————— #}
+  <div class="row mb-5 g-4">
+    <div class="col-12 col-lg-6">
+      <div class="card shadow-sm h-100">
+        <div class="card-header bg-info text-white fw-bold">
+          <i class="bi bi-bar-chart"></i> Statistiques Women at Work
+        </div>
+        <div class="card-body">
+          <ul class="list-group list-group-flush">
+            <li class="list-group-item d-flex justify-content-between">
+              <span>Femmes employées</span>
+              <span class="fw-bold">{{ stats.femmesEmployees ?? '—' }}</span>
+            </li>
+            <li class="list-group-item d-flex justify-content-between">
+              <span>Managers femmes</span>
+              <span class="fw-bold">{{ stats.managersFemmes ?? '—' }}</span>
+            </li>
+            <li class="list-group-item d-flex justify-content-between">
+              <span>Projets portés par des femmes</span>
+              <span class="fw-bold">{{ stats.projetsFemmes ?? '—' }}</span>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-12 col-lg-6">
+      <div class="card shadow-sm h-100">
+        <div class="card-header bg-secondary text-white fw-bold">
+          <i class="bi bi-images"></i> Quelques photos
+        </div>
+        <div class="card-body">
+          <div class="row g-2">
+            <div class="col-6 col-md-4">
+              <img src="{{ asset('images/me.jpg') }}" class="img-fluid rounded shadow-sm" alt="Photo 1">
+            </div>
+            <div class="col-6 col-md-4">
+              <img src="{{ asset('images/photo2.jpg') }}" class="img-fluid rounded shadow-sm" alt="Photo 2">
+            </div>
+            <div class="col-6 col-md-4">
+              <img src="{{ asset('images/photo3.jpg') }}" class="img-fluid rounded shadow-sm" alt="Photo 3">
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  {# ————————————————— À propos ————————————————— #}
+  <section class="mb-5">
+    <h2 class="h3 mb-3">À propos de nous</h2>
+    <p class="mb-1"><strong>Qui sommes-nous&nbsp;?</strong></p>
+    <p class="text-muted">
+      Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+      Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+    </p>
+  </section>
+
+       
+                
+  {# ————————————————— Communiqués de presse ————————————————— #}
+  <section class="mb-5">
+    <h2 class="h3 mb-3">Communiqués de presse</h2>
+
+    {# Astuce : dans le contrôleur, passe une variable 'links'
+       (un tableau/collection) au template. Ex: return $this->render('home/index.html.twig', ['links' => $links]); #}
+
+    {% if links is defined and links|length > 0 %}
+      <ul class="list-group">
+        {% for item in links %}
+          <li class="list-group-item d-flex align-items-center justify-content-between">
+            <span>ID: {{ item.id }}</span>
+            <span class="text-truncate" style="max-width:60%">
+              <a href="{{ item.url }}" target="_blank" rel="noopener">{{ item.url }}</a>
+            </span>
+            <a class="btn btn-sm btn-outline-primary"
+               href="{{ path('download_pdf', {'linkId': item.id}) }}"
+               target="_blank" rel="noopener">
+              Télécharger en PDF
+            </a>
+          </li>
+        {% endfor %}
+      </ul>
+    {% else %}
+      <p class="text-muted">Aucun communiqué disponible pour le moment.</p>
+    {% endif %}
+  </section>
+
+  {# ————————————————— Documents ————————————————— #}
+  <section class="mb-5">
+    <h2 class="h3 mb-3">Documents</h2>
+    {# Ton contenu ici #}
+  </section>
+
+  {# ————————————————— Carte siège social ————————————————— #}
+  <section class="mb-5">
+    {% include 'partials/_map.html.twig' %}
+  </section>
+
+  {# ————————————————— App / QR Code ————————————————— #}
+  <section class="mb-3">
+    <h2 class="h3 mb-3">Téléchargement de l’application via QR Code</h2>
+    {# Exemple si tu as une route qui génère un PNG/SVG :
+       <img src="{{ path('qr_code') }}" alt="QR Code" class="img-fluid" />
+    #}
+  </section>
+
+</div>
 {% endblock %}

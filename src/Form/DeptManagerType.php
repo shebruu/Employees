@@ -17,18 +17,20 @@ class DeptManagerType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-
-            ->add('deptName')
-            ->add('fromDate')
-            ->add('toDate')
             ->add('departement', EntityType::class, [
                 'class' => Departement::class,
-                'choice_label' => 'id',
+                'choice_label' => function ($departement) {
+                    return $departement->getDeptName();
+                },
             ])
             ->add('employee', EntityType::class, [
                 'class' => Employee::class,
-                'choice_label' => 'id',
-            ]);
+                'choice_label' => function ($employee) {
+                    return $employee->getFirstName() . ' ' . $employee->getLastName();
+                },
+            ])
+            ->add('fromDate')
+            ->add('toDate');
     }
 
     public function configureOptions(OptionsResolver $resolver): void

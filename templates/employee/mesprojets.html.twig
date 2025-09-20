@@ -3,34 +3,50 @@
 {% block title %}Mes projets{% endblock %}
 
 {% block body %}
-
-    <h2>Liste des projets</h2>
-
-<table class="table table-hover">
-    <tbody>
-        {% for project in projectsWithemp %}
-       <tr>
-                <td colspan="3"><strong>Nom du projet :</strong> {{ project.description }} 
-           <br>
-                <strong>Chef :</strong> {{ project.chefDeProjet.firstName }} {{ project.chefDeProjet.lastName }}</td>
-            </tr>
-            <tr>
-                <td colspan="3"><strong>Employés associés :</strong></td>
-            </tr>
-            {% for employee in project.employees %}
-                <tr>
-				
-                    <td>{{ employee.firstName }} {{ employee.lastName }}</td>
-                    <td>
-        
-					<form action="{{ path('app_projet_supprimer', {'id':employee.id}) }}" method="post">
-								<button type="submit" class="btn btn-danger disabled"> Retirer</button>
-							</form>
-							</td>
-                </tr>
+<div class="container py-4">
+    <div class="d-flex align-items-center mb-4">
+        <h2 class="mb-0 text-primary"><i class="bi bi-kanban-fill me-2"></i> Mes projets</h2>
+    </div>
+    {% if projectsWithemp is not empty %}
+        <div class="row g-4">
+            {% for project in projectsWithemp %}
+                <div class="col-12">
+                    <div class="card shadow-sm mb-3">
+                        <div class="card-header bg-info text-white d-flex justify-content-between align-items-center">
+                            <span class="fw-bold">Projet #{{ project.id }}</span>
+                            <span class="badge bg-light text-info">{{ project.employees|length }} employé(s)</span>
+                        </div>
+                        <div class="card-body">
+                            <h5 class="card-title mb-2">{{ project.description }}</h5>
+                            <p class="mb-1"><span class="fw-bold">Chef de projet :</span> {{ project.chefDeProjet.firstName }} {{ project.chefDeProjet.lastName }}</p>
+                            <div class="mb-2">
+                                <span class="fw-bold">Employés associés :</span>
+                                {% if project.employees is not empty %}
+                                    <ul class="list-group list-group-flush mt-2">
+                                        {% for employee in project.employees %}
+                                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                                <span>{{ employee.firstName }} {{ employee.lastName }}</span>
+                                                <form action="{{ path('app_projet_supprimer', {'id':employee.id}) }}" method="post" class="mb-0">
+                                                    <button type="submit" class="btn btn-outline-danger btn-sm disabled" title="Retirer bientôt disponible">
+                                                        <i class="bi bi-x-circle"></i> Retirer
+                                                    </button>
+                                                </form>
+                                            </li>
+                                        {% endfor %}
+                                    </ul>
+                                {% else %}
+                                    <span class="text-muted">Aucun employé associé.</span>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
             {% endfor %}
-        {% endfor %}
-    </tbody>
-</table>
-
+        </div>
+    {% else %}
+        <div class="alert alert-info text-center mt-5">
+            <i class="bi bi-kanban"></i> Aucun projet à afficher.
+        </div>
+    {% endif %}
+</div>
 {% endblock %}

@@ -59,11 +59,29 @@ class Departement
         $this->interns = new ArrayCollection();
         $this->deptManagers = new ArrayCollection();
     }
+    public function getAddress(): ?string
+    {
+        return $this->address;
+    }
+
+    public function setAddress(string $address): static
+    {
+        $this->address = $address;
+        return $this;
+    }
+
     public function getId(): ?string
     {
         return $this->id;
     }
 
+    /**
+     * @return Collection<int, Employee>
+     */
+    public function getEmployees(): Collection
+    {
+        return $this->employees;
+    }
 
     public function getDeptNo(): ?string
     {
@@ -105,17 +123,7 @@ class Departement
         return $this;
     }
 
-    public function getAddress(): ?string
-    {
-        return $this->address;
-    }
 
-    public function setAdress(string $adress): static
-    {
-        $this->address = $adress;
-
-        return $this;
-    }
 
     public function getRoiUrl(): ?string
     {

@@ -18,6 +18,8 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
+
 
 #[Route('/dept-manager')]
 class DeptManagerController extends AbstractController
@@ -45,15 +47,39 @@ class DeptManagerController extends AbstractController
     #[Route('/new', name: 'app_dept_manager_new', methods: ['GET', 'POST'])]
     public function new(Request $request, EntityManagerInterface $entityManager): Response
     {
+
+        // Sécurité : accessible uniquement aux admins
+        $this->denyAccessUnlessGranted('ROLE_ADMIN');
+
         $deptManager = new DeptManager();
         $form = $this->createForm(DeptManagerType::class, $deptManager);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager->persist($deptManager);
-            $entityManager->flush();
+            // Vérification d'unicité du manager par département et période
+            $departement = $deptManager->getDepartement();
+            $fromDate = $deptManager->getFromDate();
+            $toDate = $deptManager->getToDate();
 
-            return $this->redirectToRoute('app_dept_manager_index', [], Response::HTTP_SEE_OTHER);
+            $repo = $entityManager->getRepository(DeptManager::class);
+            $qb = $repo->createQueryBuilder('dm');
+            $qb->where('dm.departement = :departement')
+                ->andWhere('(:fromDate <= dm.toDate OR dm.toDate IS NULL)')
+                ->andWhere('(:toDate >= dm.fromDate OR :toDate IS NULL)')
+                ->setParameter('departement', $departement)
+                ->setParameter('fromDate', $fromDate)
+                ->setParameter('toDate', $toDate);
+
+            $existing = $qb->getQuery()->getResult();
+
+            if (count($existing) > 0) {
+                $this->addFlash('danger', 'Il existe déjà un manager pour ce département sur la période sélectionnée.');
+            } else {
+                $entityManager->persist($deptManager);
+                $entityManager->flush();
+
+                return $this->redirectToRoute('app_dept_manager_index', [], Response::HTTP_SEE_OTHER);
+            }
         }
 
         return $this->render('dept_manager/new.html.twig', [

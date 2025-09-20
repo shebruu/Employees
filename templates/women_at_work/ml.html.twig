@@ -3,49 +3,72 @@
 
 {% block body %}
 
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-10">
+            <div class="card shadow mb-4">
+                <div class="card-header bg-info text-white">
+                    <h2 class="mb-0">Statistique des genres employés</h2>
+                </div>
+                <div class="card-body">
+                    <p class="mb-4">Comparaison du nombre d’employées dans les départements les plus et les moins représentés.</p>
+                    <div class="chart-responsive" style="height:400px;">
+                        <canvas id="myChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<canvas id="myChart"></canvas>
-
-
-
 <script>
-
-
 var ctx = document.getElementById('myChart').getContext('2d');
-
-   var myChart = new Chart(ctx, {
-          type: 'bar',
+var myChart = new Chart(ctx, {
+    type: 'bar',
     data: {
         labels: {{ (topFemaleDepartments|map(department => department.dept_name) | merge(bottomFemaleDepartments|map(department => department.dept_name)))|json_encode|raw }},
-        datasets: [{
-            label: 'Nombre d\'employées dans les départements les plus représentés',
-            data: {{ topFemaleDepartments|map(department => department.count)|json_encode|raw }},
-            backgroundColor: 'rgba(54, 162, 235, 0.6)',
-            borderColor: 'rgba(54, 162, 235, 1)',
-            borderWidth: 1
-        }, {
-            label: 'Nombre d\'employées dans les départements les moins représentés',
-            data: {{ bottomFemaleDepartments|map(department => department.count)|json_encode|raw }},
-            backgroundColor: 'rgba(255, 99, 132, 0.6)',
-            borderColor: 'rgba(255, 99, 132, 1)',
-            borderWidth: 1
-        }]
-   
-        },
-        options: {
-                scales: {
-                y: {
-                    beginAtZero: true,
-                    stepSize: 1, 
-                    ticks: {
-                        precision: 0 
+        datasets: [
+            {
+                label: "Départements les plus représentés",
+                data: {{ topFemaleDepartments|map(department => department.count)|json_encode|raw }},
+                backgroundColor: 'rgba(54, 162, 235, 0.7)',
+                borderColor: 'rgba(54, 162, 235, 1)',
+                borderWidth: 2
+            },
+            {
+                label: "Départements les moins représentés",
+                data: {{ bottomFemaleDepartments|map(department => department.count)|json_encode|raw }},
+                backgroundColor: 'rgba(255, 99, 132, 0.7)',
+                borderColor: 'rgba(255, 99, 132, 1)',
+                borderWidth: 2
+            }
+        ]
+    },
+    options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+            legend: {
+                position: 'bottom',
+                labels: {
+                    font: {
+                        size: 16
                     }
                 }
-            },
-       
-       
+            }
+        },
+        scales: {
+            y: {
+                beginAtZero: true,
+                stepSize: 1,
+                ticks: {
+                    precision: 0
+                }
+            }
         }
-    });
+    }
+});
 </script>
 
 
