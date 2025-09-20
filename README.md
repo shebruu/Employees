@@ -48,14 +48,14 @@ cp .env .env.local
 
 #### **4. Créer la base de données**
 
-**Option A : Migrations Doctrine**
+Option A : Migrations Doctrine**
 ```bash
 php bin/console doctrine:database:create
 php bin/console doctrine:migrations:migrate
 ```
 
 
-**Option B : Import dump SQL ( récommandé) **
+Option B : Import dump SQL ( récommandé) **
 ```bash
 # Créer la base de données vide
 php bin/console doctrine:database:create
@@ -68,14 +68,14 @@ php bin/console doctrine:migrations:version --add --all
 ```
 
 
-**Option C : Schema Doctrine forcé**
+Option C : Schema Doctrine forcé**
 ```bash
 php bin/console doctrine:database:create
 php bin/console doctrine:schema:create --force
 ```
 
 
-**Option D : Réinitialisation complète**
+Option D : Réinitialisation complète**
 ```bash
 php bin/console doctrine:database:drop --force --if-exists
 php bin/console doctrine:database:create
